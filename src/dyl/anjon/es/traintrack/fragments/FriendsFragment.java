@@ -1,4 +1,4 @@
-package dyl.anjon.es.traintrack;
+package dyl.anjon.es.traintrack.fragments;
 
 import java.util.ArrayList;
 
@@ -14,38 +14,32 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import dyl.anjon.es.traintrack.R;
+import dyl.anjon.es.traintrack.adapters.FriendRowAdapter;
+import dyl.anjon.es.traintrack.models.Friend;
 
-public class TrainStationsFragment extends Fragment {
+public class FriendsFragment extends Fragment {
 
-	/**
-	 * The fragment argument representing the section number for this fragment.
-	 */
-	public static final String ARG_SECTION_NUMBER = "section_number";
-
-	public TrainStationsFragment() {
+	public FriendsFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.train_stations_fragment,
-				container, false);
-		
-		ArrayList<String> stringList = new ArrayList<String>();
-		stringList.add(Integer.toString(getArguments().getInt(
-				ARG_SECTION_NUMBER)));
-		for (int i = 0; i< 30; i++) {
-			stringList.add(i + "Cardiff Central");
-		}
-		
+		View rootView = inflater.inflate(R.layout.friends_fragment, container,
+				false);
+
+		ArrayList<Friend> friends = new ArrayList<Friend>();
+		friends.add(new Friend("Alice Timms"));
+
 		ListView list = (ListView) rootView.findViewById(R.id.list);
-		final RowAdapter adapter = new RowAdapter(inflater, stringList);
+		final FriendRowAdapter adapter = new FriendRowAdapter(inflater, friends);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
-				String string = (String) adapter.getItem(index);
-				Log.i("STATION HIT", string);
+				Friend friend = (Friend) adapter.getItem(index);
+				Log.i("Friend HIT", friend.getName());
 				return;
 			}
 

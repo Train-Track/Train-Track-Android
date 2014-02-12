@@ -1,6 +1,9 @@
 package dyl.anjon.es.traintrack;
 
 import java.util.Locale;
+
+import dyl.anjon.es.traintrack.fragments.FriendsFragment;
+import dyl.anjon.es.traintrack.fragments.TrainStationsFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -63,13 +66,15 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a TrainStationsFragment with the page number as its lone argument.
-            Fragment fragment = new TrainStationsFragment();
-            Bundle args = new Bundle();
-            args.putInt(TrainStationsFragment.ARG_SECTION_NUMBER, position + 1);
-            fragment.setArguments(args);
-            return fragment;
+            switch (position) {
+	            case 0:
+	                return new TrainStationsFragment();
+	            case 1:
+	                return new TrainStationsFragment();
+	            case 2:
+	                return new FriendsFragment();
+	        }
+            return new TrainStationsFragment();
         }
 
         @Override

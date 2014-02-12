@@ -1,4 +1,4 @@
-package dyl.anjon.es.traintrack;
+package dyl.anjon.es.traintrack.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,15 +11,17 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import dyl.anjon.es.traintrack.R;
+import dyl.anjon.es.traintrack.models.Friend;
 
-public class RowAdapter extends BaseAdapter implements Filterable {
+public class FriendRowAdapter extends BaseAdapter implements Filterable {
 
-	private List<String> rowList;
-	private List<String> origRowList;
+	private List<Friend> rowList;
+	private List<Friend> origRowList;
 	private LayoutInflater inflater = null;
 
-	public RowAdapter(LayoutInflater inflater, ArrayList<String> strings) {
-		this.rowList = strings;
+	public FriendRowAdapter(LayoutInflater inflater, ArrayList<Friend> friends) {
+		this.rowList = friends;
 		this.inflater = inflater;
 	}
 
@@ -27,7 +29,7 @@ public class RowAdapter extends BaseAdapter implements Filterable {
 		return rowList.size();
 	}
 
-	public String getItem(int position) {
+	public Friend getItem(int position) {
 		return rowList.get(position);
 	}
 
@@ -36,11 +38,10 @@ public class RowAdapter extends BaseAdapter implements Filterable {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View v = convertView;
-		String string = rowList.get(position);
-		v = inflater.inflate(R.layout.row_station, null);
-		TextView title = (TextView) v.findViewById(R.id.name);
-		title.setText(string);
+		View v = inflater.inflate(R.layout.row_station, null);
+		Friend friend = rowList.get(position);
+		TextView name = (TextView) v.findViewById(R.id.name);
+		name.setText(friend.getName());
 		return v;
 	}
 
@@ -51,17 +52,17 @@ public class RowAdapter extends BaseAdapter implements Filterable {
 			@Override
 			protected void publishResults(CharSequence constraint,
 					FilterResults results) {
-				rowList = (List<String>) results.values;
+				rowList = (List<Friend>) results.values;
 				notifyDataSetChanged();
 			}
 
 			@Override
 			protected FilterResults performFiltering(CharSequence constraint) {
 				FilterResults results = new FilterResults();
-				List<String> FilteredArrList = new ArrayList<String>();
+				List<Friend> FilteredArrList = new ArrayList<Friend>();
 
 				if (origRowList == null) {
-					origRowList = new ArrayList<String>(rowList);
+					origRowList = new ArrayList<Friend>(rowList);
 				}
 
 				if (constraint == null || constraint.length() == 0) {
@@ -71,10 +72,10 @@ public class RowAdapter extends BaseAdapter implements Filterable {
 					constraint = constraint.toString().toLowerCase(
 							Locale.ENGLISH);
 					for (int i = 0; i < origRowList.size(); i++) {
-						String string = origRowList.get(i);
-						if (string.toLowerCase(Locale.UK).contains(
-								constraint.toString())) {
-							FilteredArrList.add(string);
+						Friend friend = origRowList.get(i);
+						if (friend.getName().toLowerCase(Locale.UK)
+								.contains(constraint.toString())) {
+							FilteredArrList.add(friend);
 						}
 					}
 					results.count = FilteredArrList.size();

@@ -6,8 +6,16 @@
     android:layout_height="fill_parent">
  
     <TextView
+        android:id="@+id/crs_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:padding="10sp"
+        android:textIsSelectable="false" />
+    
+    <TextView
         android:id="@+id/name"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
         android:padding="10sp"
