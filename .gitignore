@@ -1,0 +1,10 @@
+
+.project
+
+.classpath
+
+*.prefs
+
+bin/*
+
+gen/*
