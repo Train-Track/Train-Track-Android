@@ -1,22 +1,13 @@
 package dyl.anjon.es.traintrack;
 
 import java.util.Locale;
-
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 
@@ -73,8 +64,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a DummySectionFragment (defined as a static inner class
-            // below) with the page number as its lone argument.
+            // Return a TrainStationsFragment with the page number as its lone argument.
             Fragment fragment = new TrainStationsFragment();
             Bundle args = new Bundle();
             args.putInt(TrainStationsFragment.ARG_SECTION_NUMBER, position + 1);
