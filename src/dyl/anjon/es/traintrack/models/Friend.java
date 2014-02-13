@@ -23,4 +23,12 @@ public class Friend {
 		this.name = name;
 	}
 
+	/**
+	 * @return the name
+	 */
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
 }

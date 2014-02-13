@@ -32,7 +32,7 @@ public class TrainStationsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.train_stations_fragment,
+		View rootView = inflater.inflate(R.layout.fragment_train_stations,
 				container, false);
 		
 		ArrayList<TrainStation> stations = new ArrayList<TrainStation>();

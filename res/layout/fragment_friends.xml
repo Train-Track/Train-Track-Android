@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TrainStationsFragment" >
+    tools:context=".FriendsFragment" >
     
     <!-- Fix to prevent automatic focus on EditText -->
     <LinearLayout
@@ -13,15 +13,13 @@
         android:focusable="true"
         android:focusableInTouchMode="true" />
     
-    <EditText
+   <EditText
         android:id="@+id/search"
         android:layout_width="fill_parent"
-        android:hint="@string/find_a_station"
+        android:hint="@string/find_a_friend"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:textSize="20sp" >
-
-        <requestFocus />
     </EditText>
 
     <ListView

@@ -72,4 +72,12 @@ public class TrainStation {
 		this.longitude = longitude;
 	}
 
+	/**
+	 * @return the name
+	 */
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
 }

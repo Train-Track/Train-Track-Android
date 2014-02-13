@@ -38,10 +38,10 @@ public class FriendRowAdapter extends BaseAdapter implements Filterable {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View v = inflater.inflate(R.layout.row_station, null);
+		View v = inflater.inflate(R.layout.row_friend, null);
 		Friend friend = rowList.get(position);
 		TextView name = (TextView) v.findViewById(R.id.name);
-		name.setText(friend.getName());
+		name.setText(friend.toString());
 		return v;
 	}
 
