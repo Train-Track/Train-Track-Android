@@ -4,36 +4,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".StationsFragment" >
-    
+
     <!-- Fix to prevent automatic focus on EditText -->
+
     <LinearLayout
         android:id="@+id/nothing"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:focusable="true"
         android:focusableInTouchMode="true" />
-    
+
     <EditText
         android:id="@+id/search"
         android:layout_width="fill_parent"
-        android:hint="@string/find_a_station"
         android:layout_height="wrap_content"
+        android:hint="@string/find_a_station"
         android:inputType="text"
         android:textSize="20sp" >
     </EditText>
 
-    <ExpandableListView
-        android:id="@+id/expandableListView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ExpandableListView>
-
     <ListView
-         android:id="@+id/list"
-         android:layout_width="fill_parent"
-         android:layout_height="fill_parent"
-         android:listSelector="#ff5533"
-         android:overScrollMode="never"
-         android:scrollingCache="true" />
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:listSelector="#ff5533"
+        android:overScrollMode="never"
+        android:scrollingCache="true" />
 
 </LinearLayout>

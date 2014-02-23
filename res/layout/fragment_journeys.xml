@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".JourneysFragment" >
-    
+
     <ListView
-         android:id="@+id/list"
-         android:layout_width="fill_parent"
-         android:layout_height="fill_parent"
-         android:listSelector="#ff5533"
-         android:overScrollMode="never"
-         android:scrollingCache="true" />
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:listSelector="#ff5533"
+        android:overScrollMode="never"
+        android:scrollingCache="true" />
 
 </LinearLayout>

@@ -2,11 +2,11 @@ package dyl.anjon.es.traintrack.fragments;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import dyl.anjon.es.traintrack.R;
+import dyl.anjon.es.traintrack.StationActivity;
 import dyl.anjon.es.traintrack.adapters.StationRowAdapter;
+import dyl.anjon.es.traintrack.db.StationDatabaseHandler;
 import dyl.anjon.es.traintrack.models.Station;
 
 public class StationsFragment extends Fragment {
@@ -29,8 +31,9 @@ public class StationsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_stations, container,
 				false);
 
-		ArrayList<Station> stations = new ArrayList<Station>();
-		stations.add(new Station("CDF", "Cardiff Central"));
+		StationDatabaseHandler db = new StationDatabaseHandler(getActivity());
+		ArrayList<Station> stations = db.getAllStations();
+		db.close();
 
 		ListView list = (ListView) rootView.findViewById(R.id.list);
 		final StationRowAdapter adapter = new StationRowAdapter(inflater,
@@ -40,7 +43,10 @@ public class StationsFragment extends Fragment {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
 				Station station = (Station) adapter.getItem(index);
-				Log.i("STATION HIT", station.getName());
+				Intent intent = new Intent().setClass(getActivity(),
+						StationActivity.class);
+				intent.putExtra("id", station.getId());
+				startActivity(intent);
 				return;
 			}
 

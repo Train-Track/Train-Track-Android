@@ -11,7 +11,6 @@ public class JourneyLeg {
 	public JourneyLeg(Station origin, Station destination) {
 		this.setOrigin(origin);
 		this.setDestination(destination);
-		this.setDepartureTime(departureTime);
 	}
 
 	/**

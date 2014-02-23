@@ -11,5 +11,6 @@
     <string name="find_a_station">Find a station</string>
     <string name="find_a_friend">Find a friend</string>
     <string name="add_journey">+ Add Journey</string>
+    <string name="favourite">Favourite</string>
     
 </resources>

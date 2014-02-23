@@ -1,15 +1,37 @@
 package dyl.anjon.es.traintrack.models;
 
+import java.util.ArrayList;
+
 public class Station {
 
+	private int id;
 	private String crsCode;
 	private String name;
 	private long latitude;
 	private long longitude;
 
+	/**
+	 * @param crsCode
+	 * @param name
+	 */
 	public Station(String crsCode, String name) {
 		this.setCrsCode(crsCode);
 		this.setName(name);
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
@@ -78,6 +100,28 @@ public class Station {
 	@Override
 	public String toString() {
 		return this.getName();
+	}
+
+	public ArrayList<Schedule> getSchedules() {
+		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+		// TODO: Get real schedules
+
+		Station cardiff = new Station("CDF", "Cardiff Central");
+		ScheduleLocation origin = new ScheduleLocation();
+		origin.setStation(cardiff);
+		origin.setPlatform("2");
+
+		Station bristol = new Station("BRI", "Bristol Temple Meads");
+		ScheduleLocation destination = new ScheduleLocation();
+		destination.setStation(bristol);
+		destination.setPlatform("13");
+
+		Schedule schedule = new Schedule();
+		schedule.addScheduleLocation(origin);
+		schedule.addScheduleLocation(destination);
+		schedules.add(schedule);
+
+		return schedules;
 	}
 
 }
