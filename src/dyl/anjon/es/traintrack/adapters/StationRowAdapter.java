@@ -12,16 +12,16 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
-import dyl.anjon.es.traintrack.models.TrainStation;
+import dyl.anjon.es.traintrack.models.Station;
 
-public class TrainStationRowAdapter extends BaseAdapter implements Filterable {
+public class StationRowAdapter extends BaseAdapter implements Filterable {
 
-	private List<TrainStation> rowList;
-	private List<TrainStation> origRowList;
+	private List<Station> rowList;
+	private List<Station> origRowList;
 	private LayoutInflater inflater = null;
 
-	public TrainStationRowAdapter(LayoutInflater inflater,
-			ArrayList<TrainStation> stations) {
+	public StationRowAdapter(LayoutInflater inflater,
+			ArrayList<Station> stations) {
 		this.rowList = stations;
 		this.inflater = inflater;
 	}
@@ -30,7 +30,7 @@ public class TrainStationRowAdapter extends BaseAdapter implements Filterable {
 		return rowList.size();
 	}
 
-	public TrainStation getItem(int position) {
+	public Station getItem(int position) {
 		return rowList.get(position);
 	}
 
@@ -40,7 +40,7 @@ public class TrainStationRowAdapter extends BaseAdapter implements Filterable {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_station, null);
-		TrainStation station = rowList.get(position);
+		Station station = rowList.get(position);
 		TextView name = (TextView) v.findViewById(R.id.name);
 		name.setText(station.getName());
 		TextView crsCode = (TextView) v.findViewById(R.id.crs_code);
@@ -55,17 +55,17 @@ public class TrainStationRowAdapter extends BaseAdapter implements Filterable {
 			@Override
 			protected void publishResults(CharSequence constraint,
 					FilterResults results) {
-				rowList = (List<TrainStation>) results.values;
+				rowList = (List<Station>) results.values;
 				notifyDataSetChanged();
 			}
 
 			@Override
 			protected FilterResults performFiltering(CharSequence constraint) {
 				FilterResults results = new FilterResults();
-				List<TrainStation> FilteredArrList = new ArrayList<TrainStation>();
+				List<Station> list = new ArrayList<Station>();
 
 				if (origRowList == null) {
-					origRowList = new ArrayList<TrainStation>(rowList);
+					origRowList = new ArrayList<Station>(rowList);
 				}
 
 				if (constraint == null || constraint.length() == 0) {
@@ -73,16 +73,18 @@ public class TrainStationRowAdapter extends BaseAdapter implements Filterable {
 					results.values = origRowList;
 				} else {
 					constraint = constraint.toString().toLowerCase(
-							Locale.ENGLISH);
+							Locale.ENGLISH).toString();
 					for (int i = 0; i < origRowList.size(); i++) {
-						TrainStation station = origRowList.get(i);
-						if (station.getName().toLowerCase(Locale.UK)
-								.contains(constraint.toString())) {
-							FilteredArrList.add(station);
+						Station station = origRowList.get(i);
+						if ((station.getName().toLowerCase(Locale.UK)
+								.contains(constraint.toString()))
+								|| (station.getCrsCode().toLowerCase(Locale.UK)
+										.contains(constraint))) {
+							list.add(station);
 						}
 					}
-					results.count = FilteredArrList.size();
-					results.values = FilteredArrList;
+					results.count = list.size();
+					results.values = list;
 				}
 				return results;
 			}
@@ -90,5 +92,4 @@ public class TrainStationRowAdapter extends BaseAdapter implements Filterable {
 		return filter;
 
 	}
-
 }

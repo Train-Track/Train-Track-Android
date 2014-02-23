@@ -2,10 +2,6 @@ package dyl.anjon.es.traintrack.fragments;
 
 import java.util.ArrayList;
 
-import dyl.anjon.es.traintrack.R;
-import dyl.anjon.es.traintrack.adapters.TrainStationRowAdapter;
-import dyl.anjon.es.traintrack.models.TrainStation;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -18,34 +14,32 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import dyl.anjon.es.traintrack.R;
+import dyl.anjon.es.traintrack.adapters.StationRowAdapter;
+import dyl.anjon.es.traintrack.models.Station;
 
-public class TrainStationsFragment extends Fragment {
+public class StationsFragment extends Fragment {
 
-	/**
-	 * The fragment argument representing the section number for this fragment.
-	 */
-	public static final String ARG_SECTION_NUMBER = "section_number";
-
-	public TrainStationsFragment() {
+	public StationsFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_train_stations,
-				container, false);
-		
-		ArrayList<TrainStation> stations = new ArrayList<TrainStation>();
-		stations.add(new TrainStation("CDF", "Cardiff Central"));
-		
-		
+		View rootView = inflater.inflate(R.layout.fragment_stations, container,
+				false);
+
+		ArrayList<Station> stations = new ArrayList<Station>();
+		stations.add(new Station("CDF", "Cardiff Central"));
+
 		ListView list = (ListView) rootView.findViewById(R.id.list);
-		final TrainStationRowAdapter adapter = new TrainStationRowAdapter(inflater, stations);
+		final StationRowAdapter adapter = new StationRowAdapter(inflater,
+				stations);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
-				TrainStation station = (TrainStation) adapter.getItem(index);
+				Station station = (Station) adapter.getItem(index);
 				Log.i("STATION HIT", station.getName());
 				return;
 			}

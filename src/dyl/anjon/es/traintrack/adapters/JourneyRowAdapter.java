@@ -16,6 +16,10 @@ public class JourneyRowAdapter extends BaseAdapter {
 	private List<Journey> rowList;
 	private LayoutInflater inflater = null;
 
+	/**
+	 * @param inflater
+	 * @param journeys
+	 */
 	public JourneyRowAdapter(LayoutInflater inflater,
 			ArrayList<Journey> journeys) {
 		this.rowList = journeys;

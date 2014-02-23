@@ -15,7 +15,7 @@ import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.adapters.JourneyRowAdapter;
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
-import dyl.anjon.es.traintrack.models.TrainStation;
+import dyl.anjon.es.traintrack.models.Station;
 
 public class JourneysFragment extends Fragment {
 
@@ -29,8 +29,8 @@ public class JourneysFragment extends Fragment {
 				false);
 
 		ArrayList<Journey> journeys = new ArrayList<Journey>();
-		TrainStation origin = new TrainStation("BRI", "Bristol Temple Meads");
-		TrainStation destination = new TrainStation("CDF", "Cardiff Central");
+		Station origin = new Station("BRI", "Bristol Temple Meads");
+		Station destination = new Station("CDF", "Cardiff Central");
 		JourneyLeg journeyLeg = new JourneyLeg(origin, destination);
 		Journey journey = new Journey();
 		journey.addJourneyLeg(journeyLeg);

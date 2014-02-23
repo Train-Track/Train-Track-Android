@@ -1,13 +1,13 @@
 package dyl.anjon.es.traintrack.models;
 
-public class TrainStation {
+public class Station {
 
 	private String crsCode;
 	private String name;
 	private long latitude;
 	private long longitude;
 
-	public TrainStation(String crsCode, String name) {
+	public Station(String crsCode, String name) {
 		this.setCrsCode(crsCode);
 		this.setName(name);
 	}

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TrainStationsFragment" >
+    tools:context=".StationsFragment" >
     
     <!-- Fix to prevent automatic focus on EditText -->
     <LinearLayout
@@ -21,6 +21,12 @@
         android:inputType="text"
         android:textSize="20sp" >
     </EditText>
+
+    <ExpandableListView
+        android:id="@+id/expandableListView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ExpandableListView>
 
     <ListView
          android:id="@+id/list"

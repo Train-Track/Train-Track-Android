@@ -28,7 +28,7 @@ public class Journey {
 	/**
 	 * @return the origin
 	 */
-	public TrainStation getOrigin() {
+	public Station getOrigin() {
 		if (this.getJourneyLegs().isEmpty()) {
 			return null;
 		}
@@ -40,7 +40,7 @@ public class Journey {
 	/**
 	 * @return the destination
 	 */
-	public TrainStation getDestination() {
+	public Station getDestination() {
 		if (this.getJourneyLegs().isEmpty()) {
 			return null;
 		}

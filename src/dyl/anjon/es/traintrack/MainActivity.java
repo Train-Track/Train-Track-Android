@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import dyl.anjon.es.traintrack.fragments.FriendsFragment;
 import dyl.anjon.es.traintrack.fragments.JourneysFragment;
-import dyl.anjon.es.traintrack.fragments.TrainStationsFragment;
+import dyl.anjon.es.traintrack.fragments.StationsFragment;
 
 public class MainActivity extends FragmentActivity {
 
@@ -63,13 +63,13 @@ public class MainActivity extends FragmentActivity {
 		public Fragment getItem(int position) {
 			switch (position) {
 			case 0:
-				return new TrainStationsFragment();
+				return new StationsFragment();
 			case 1:
 				return new JourneysFragment();
 			case 2:
 				return new FriendsFragment();
 			}
-			return new TrainStationsFragment();
+			return new StationsFragment();
 		}
 
 		@Override

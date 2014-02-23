@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class JourneyLeg {
 
-	private TrainStation origin;
-	private TrainStation destination;
+	private Station origin;
+	private Station destination;
 	private Date departureTime;
 
-	public JourneyLeg(TrainStation origin, TrainStation destination) {
+	public JourneyLeg(Station origin, Station destination) {
 		this.setOrigin(origin);
 		this.setDestination(destination);
 		this.setDepartureTime(departureTime);
@@ -17,7 +17,7 @@ public class JourneyLeg {
 	/**
 	 * @return the origin
 	 */
-	public TrainStation getOrigin() {
+	public Station getOrigin() {
 		return origin;
 	}
 
@@ -25,14 +25,14 @@ public class JourneyLeg {
 	 * @param origin
 	 *            the origin to set
 	 */
-	public void setOrigin(TrainStation origin) {
+	public void setOrigin(Station origin) {
 		this.origin = origin;
 	}
 
 	/**
 	 * @return the destination
 	 */
-	public TrainStation getDestination() {
+	public Station getDestination() {
 		return destination;
 	}
 
@@ -40,7 +40,7 @@ public class JourneyLeg {
 	 * @param destinaion
 	 *            the destination to set
 	 */
-	public void setDestination(TrainStation destination) {
+	public void setDestination(Station destination) {
 		this.destination = destination;
 	}
 
