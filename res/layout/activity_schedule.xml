@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="10sp" >
 
         <TextView
@@ -17,6 +17,15 @@
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
             android:textSize="30sp" />
+        
+        <TextView
+            android:id="@+id/toc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            android:textSize="16sp"
+            android:paddingTop="10sp" />
+        
     </LinearLayout>
 
     <ListView

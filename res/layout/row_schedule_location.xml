@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textIsSelectable="false"
-        android:textSize="30sp" />
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/station"
@@ -20,7 +20,7 @@
         android:layout_weight="5"
         android:paddingLeft="10sp"
         android:textIsSelectable="false"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <TextView
@@ -30,6 +30,6 @@
         android:layout_weight="1"
         android:paddingLeft="10sp"
         android:textIsSelectable="false"
-        android:textSize="30sp" />
+        android:textSize="24sp" />
 
 </LinearLayout>

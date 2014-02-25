@@ -156,7 +156,7 @@ public class Station {
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getWritableDatabase();
 		
-		Cursor cursor = db.rawQuery("SELECT * FROM stations", null);
+		Cursor cursor = db.rawQuery("SELECT * FROM stations ORDER BY name ASC", null);
 		if (cursor.moveToFirst()) {
 			do {
 				Station station = new Station(cursor.getString(1),
@@ -171,7 +171,7 @@ public class Station {
 	
 	/**
 	 * @param context
-	 * @return all stations
+	 * @return all schedules
 	 */
 	public ArrayList<Schedule> getSchedules(Context context) {
 		ArrayList<Schedule> schedules = new ArrayList<Schedule>();

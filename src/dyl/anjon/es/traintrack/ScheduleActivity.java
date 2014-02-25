@@ -33,6 +33,9 @@ public class ScheduleActivity extends Activity {
 
 		final TextView name = (TextView) findViewById(R.id.name);
 		name.setText(schedule.getOrigin(this).toString() + " to " + schedule.getDestination(this).toString());
+		
+		final TextView toc = (TextView) findViewById(R.id.toc);
+		toc.setText(schedule.getTrainOperatingCompany());
 
 		final ScheduleLocationRowAdapter adapter = new ScheduleLocationRowAdapter(
 				LayoutInflater.from(this), schedule.getScheduleLocations(this), station);
