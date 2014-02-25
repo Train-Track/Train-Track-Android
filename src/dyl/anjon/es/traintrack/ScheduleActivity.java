@@ -3,6 +3,7 @@ package dyl.anjon.es.traintrack;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -10,39 +11,38 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import dyl.anjon.es.traintrack.adapters.ScheduleRowAdapter;
+import dyl.anjon.es.traintrack.adapters.ScheduleLocationRowAdapter;
 import dyl.anjon.es.traintrack.models.Schedule;
+import dyl.anjon.es.traintrack.models.ScheduleLocation;
 import dyl.anjon.es.traintrack.models.Station;
 
-public class StationActivity extends Activity {
+public class ScheduleActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_station);
+		setContentView(R.layout.activity_schedule);
 
 		final Intent intent = getIntent();
-		final int stationId = intent.getIntExtra("station_id", 0);
-		final Station station = Station.get(this, stationId);
+		
+		int schedule_id = intent.getIntExtra("schedule_id", 0);
+		Schedule schedule = Schedule.get(this, schedule_id);
+		
+		int station_id = intent.getIntExtra("station_id", 0);
+		Station station = Station.get(this, station_id);
 
 		final TextView name = (TextView) findViewById(R.id.name);
-		name.setText(station.getName());
-		final TextView crsCode = (TextView) findViewById(R.id.crs_code);
-		crsCode.setText(station.getCrsCode());
+		name.setText(schedule.getOrigin(this).toString() + " to " + schedule.getDestination(this).toString());
 
-		final ScheduleRowAdapter adapter = new ScheduleRowAdapter(
-				LayoutInflater.from(this), station.getSchedules(this), station);
+		final ScheduleLocationRowAdapter adapter = new ScheduleLocationRowAdapter(
+				LayoutInflater.from(this), schedule.getScheduleLocations(this), station);
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
-				Schedule schedule = (Schedule) adapter.getItem(index);
-				Intent intent = new Intent().setClass(getApplicationContext(),
-						ScheduleActivity.class);
-				intent.putExtra("schedule_id", schedule.getId());
-				intent.putExtra("station_id", station.getId());
-				startActivity(intent);
+				ScheduleLocation scheduleLocation = (ScheduleLocation) adapter.getItem(index);
+				Log.i("CLICK!", scheduleLocation.toString());
 				return;
 			}
 

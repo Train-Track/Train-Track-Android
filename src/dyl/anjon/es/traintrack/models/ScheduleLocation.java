@@ -1,14 +1,61 @@
 package dyl.anjon.es.traintrack.models;
 
-import java.util.Date;
 
 public class ScheduleLocation {
 
+	private int id;
+	private int scheduleId;
+	private int stationId;
 	private Station station;
-	private Date time;
+	private String time;
 	private String platform;
 
 	public ScheduleLocation() {
+	}
+
+	/**
+	 * @return the ID of the schedule location
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the schedule ID
+	 */
+	public int getScheduleId() {
+		return scheduleId;
+	}
+
+	/**
+	 * @param schedule
+	 *            ID this entry is apart of
+	 */
+	public void setScheduleId(int scheduleId) {
+		this.scheduleId = scheduleId;
+	}
+
+	/**
+	 * @return the station ID
+	 */
+	public int getStationId() {
+		return stationId;
+	}
+
+	/**
+	 * @param station
+	 *            ID this entry is apart of
+	 */
+	public void setStationId(int stationId) {
+		this.stationId = stationId;
 	}
 
 	/**
@@ -29,16 +76,16 @@ public class ScheduleLocation {
 	/**
 	 * @return the time
 	 */
-	public Date getTime() {
+	public String getTime() {
 		return time;
 	}
 
 	/**
-	 * @param time
+	 * @param string
 	 *            the time to set
 	 */
-	public void setTime(Date time) {
-		this.time = time;
+	public void setTime(String string) {
+		this.time = string;
 	}
 
 	/**
@@ -49,7 +96,8 @@ public class ScheduleLocation {
 	}
 
 	/**
-	 * @param platform the platform to set
+	 * @param platform
+	 *            the platform to set
 	 */
 	public void setPlatform(String platform) {
 		this.platform = platform;

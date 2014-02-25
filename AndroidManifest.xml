@@ -28,6 +28,11 @@
             android:label="@string/app_name" >
         </activity>
         
+        <activity
+            android:name="dyl.anjon.es.traintrack.ScheduleActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
     </application>
 
 </manifest>

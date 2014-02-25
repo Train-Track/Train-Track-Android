@@ -17,7 +17,6 @@ import android.widget.ListView;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.StationActivity;
 import dyl.anjon.es.traintrack.adapters.StationRowAdapter;
-import dyl.anjon.es.traintrack.db.StationDatabaseHandler;
 import dyl.anjon.es.traintrack.models.Station;
 
 public class StationsFragment extends Fragment {
@@ -31,9 +30,7 @@ public class StationsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_stations, container,
 				false);
 
-		StationDatabaseHandler db = new StationDatabaseHandler(getActivity());
-		ArrayList<Station> stations = db.getAllStations();
-		db.close();
+		ArrayList<Station> stations = Station.getAll(getActivity());
 
 		ListView list = (ListView) rootView.findViewById(R.id.list);
 		final StationRowAdapter adapter = new StationRowAdapter(inflater,
@@ -45,7 +42,7 @@ public class StationsFragment extends Fragment {
 				Station station = (Station) adapter.getItem(index);
 				Intent intent = new Intent().setClass(getActivity(),
 						StationActivity.class);
-				intent.putExtra("id", station.getId());
+				intent.putExtra("station_id", station.getId());
 				startActivity(intent);
 				return;
 			}

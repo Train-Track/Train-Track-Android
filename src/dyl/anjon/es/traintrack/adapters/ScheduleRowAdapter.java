@@ -9,28 +9,30 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.models.Schedule;
+import dyl.anjon.es.traintrack.models.Station;
 
 public class ScheduleRowAdapter extends BaseAdapter {
 
-	private ArrayList<Schedule> rowList;
+	private ArrayList<Schedule> schedules;
 	private LayoutInflater inflater = null;
 
 	/**
 	 * @param inflater
-	 * @param schedules
+	 * @param schedules to be displayed
+	 * @param station the schedule is being seen from
 	 */
 	public ScheduleRowAdapter(LayoutInflater inflater,
-			ArrayList<Schedule> schedules) {
-		this.rowList = schedules;
+			ArrayList<Schedule> schedules, Station station) {
+		this.schedules = schedules;
 		this.inflater = inflater;
 	}
 
 	public int getCount() {
-		return rowList.size();
+		return schedules.size();
 	}
 
 	public Schedule getItem(int position) {
-		return rowList.get(position);
+		return schedules.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -38,10 +40,10 @@ public class ScheduleRowAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View v = inflater.inflate(R.layout.row_schedule, null);
-		Schedule schedule = rowList.get(position);
-		TextView name = (TextView) v.findViewById(R.id.name);
-		name.setText(schedule.toString());
+		final View v = inflater.inflate(R.layout.row_schedule, null);
+		Schedule schedule = schedules.get(position);
+		final TextView destination = (TextView) v.findViewById(R.id.destination);
+		destination.setText(schedule.getDestination(inflater.getContext()).toString());
 		return v;
 	}
 

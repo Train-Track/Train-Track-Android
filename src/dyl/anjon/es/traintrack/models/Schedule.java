@@ -2,61 +2,134 @@ package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import dyl.anjon.es.traintrack.db.DatabaseHandler;
+
 public class Schedule {
 
-	private ArrayList<ScheduleLocation> scheduleLocations;
+	private int id;
+	private String trainOperatingCompany;
 
 	public Schedule() {
-		this.scheduleLocations = new ArrayList<ScheduleLocation>();
 	}
 
 	/**
-	 * @return the schedule locations
+	 * @return the schedule id
 	 */
-	public ArrayList<ScheduleLocation> getScheduleLocations() {
-		return scheduleLocations;
+	public int getId() {
+		return id;
 	}
 
 	/**
-	 * @param scheduleLocation
-	 *            the schedule location to add
+	 * @param id
+	 *            the schedule id
 	 */
-	public void addScheduleLocation(ScheduleLocation scheduleLocation) {
-		this.scheduleLocations.add(scheduleLocation);
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the name of the company operating the train
+	 */
+	public String getTrainOperatingCompany() {
+		return trainOperatingCompany;
+	}
+
+	/**
+	 * @param trainOperatingCompany
+	 *            the name of the company running the train
+	 */
+	public void setTrainOperatingCompany(String trainOperatingCompany) {
+		this.trainOperatingCompany = trainOperatingCompany;
 	}
 
 	/**
 	 * @return the origin
 	 */
-	public Station getOrigin() {
-		if (this.getScheduleLocations().isEmpty()) {
-			return null;
+	public Station getOrigin(Context context) {
+		if (this.getScheduleLocations(context).isEmpty()) {
+			return new Station("", "Unknown");
 		}
 
-		return this.getScheduleLocations().get(0).getStation();
+		return this.getScheduleLocations(context).get(0).getStation();
 	}
-
 
 	/**
 	 * @return the destination
 	 */
-	public Station getDestination() {
-		if (this.getScheduleLocations().isEmpty()) {
+	public Station getDestination(Context context) {
+		if (this.getScheduleLocations(context).isEmpty()) {
+			return new Station("", "Unknown");
+		}
+
+		int last = this.getScheduleLocations(context).size();
+		return this.getScheduleLocations(context).get(last - 1).getStation();
+	}
+
+	/**
+	 * @param station
+	 * @return ScheduleLocation where the station is the station provided
+	 */
+	public ScheduleLocation at(Context context, Station station) {
+		for (int i = 0; i < this.getScheduleLocations(context).size(); i++) {
+			if (this.getScheduleLocations(context).get(i).getStation().equals(station))
+				return this.getScheduleLocations(context).get(i);
+		}
+		return null;
+	}
+
+	/**
+	 * @return the schedule locations
+	 */
+	public ArrayList<ScheduleLocation> getScheduleLocations(Context context) {
+		ArrayList<ScheduleLocation> scheduleLocations = new ArrayList<ScheduleLocation>();
+		
+		DatabaseHandler dbh = new DatabaseHandler(context);
+		SQLiteDatabase db = dbh.getWritableDatabase();
+		
+		Cursor cursor = db.query("schedule_locations", new String[] { "id", "schedule_id", "station_id", "time", "platform" },
+				 "schedule_id = ?", new String[] { String.valueOf(this.id) }, null, null,
+				null, null);
+		if (cursor.moveToFirst()) {
+			do {
+				ScheduleLocation scheduleLocation = new ScheduleLocation();
+				scheduleLocation.setId(cursor.getInt(0));
+				scheduleLocation.setScheduleId(cursor.getInt(1));
+				scheduleLocation.setStationId(cursor.getInt(2));
+				scheduleLocation.setStation(Station.get(context, cursor.getInt(2)));
+				scheduleLocation.setTime(cursor.getString(3));
+				scheduleLocation.setPlatform(cursor.getString(4));
+				scheduleLocations.add(scheduleLocation);
+			} while (cursor.moveToNext());
+		}
+		return scheduleLocations;
+	}
+	
+	/**
+	 * @param context
+	 * @param id
+	 * @return the schedule selected
+	 */
+	public static Schedule get(Context context, int id) {
+		DatabaseHandler dbh = new DatabaseHandler(context);
+		SQLiteDatabase db = dbh.getWritableDatabase();
+		
+		Cursor cursor = db.query("schedules", new String[] { "id", "toc_name" },
+				 "id = ?", new String[] { String.valueOf(id) }, null, null,
+				null, null);
+		if (cursor != null) {
+			cursor.moveToFirst();
+		} else {
 			return null;
 		}
 
-		int last = this.getScheduleLocations().size();
-		return this.getScheduleLocations().get(last - 1).getStation();
-	}
+		Schedule schedule = new Schedule();
+		schedule.setId(cursor.getInt(0));
+		schedule.setTrainOperatingCompany(cursor.getString(1));
 
-
-	/**
-	 * @return the origin and destination
-	 */
-	@Override
-	public String toString() {
-		return this.getOrigin().toString() + " to "
-				+ this.getDestination().toString();
+		return schedule;
 	}
 
 }
