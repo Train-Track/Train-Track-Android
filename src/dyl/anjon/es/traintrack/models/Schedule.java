@@ -48,24 +48,34 @@ public class Schedule {
 	/**
 	 * @return the origin
 	 */
-	public Station getOrigin(Context context) {
+	public ScheduleLocation getOrigin(Context context) {
 		if (this.getScheduleLocations(context).isEmpty()) {
-			return new Station("", "Unknown");
+			Station station = new Station("", "Unknown");
+			ScheduleLocation scheduleLocation = new ScheduleLocation();
+			scheduleLocation.setStation(station);
+			scheduleLocation.setTime("?");
+			scheduleLocation.setPlatform("?");
+			return scheduleLocation;
 		}
 
-		return this.getScheduleLocations(context).get(0).getStation();
+		return this.getScheduleLocations(context).get(0);
 	}
 
 	/**
 	 * @return the destination
 	 */
-	public Station getDestination(Context context) {
+	public ScheduleLocation getDestination(Context context) {
 		if (this.getScheduleLocations(context).isEmpty()) {
-			return new Station("", "Unknown");
+			Station station = new Station("", "Unknown");
+			ScheduleLocation scheduleLocation = new ScheduleLocation();
+			scheduleLocation.setStation(station);
+			scheduleLocation.setTime("?");
+			scheduleLocation.setPlatform("?");
+			return scheduleLocation;
 		}
 
 		int last = this.getScheduleLocations(context).size();
-		return this.getScheduleLocations(context).get(last - 1).getStation();
+		return this.getScheduleLocations(context).get(last - 1);
 	}
 
 	/**
@@ -74,7 +84,8 @@ public class Schedule {
 	 */
 	public ScheduleLocation at(Context context, Station station) {
 		for (int i = 0; i < this.getScheduleLocations(context).size(); i++) {
-			if (this.getScheduleLocations(context).get(i).getStation().equals(station))
+			if (this.getScheduleLocations(context).get(i).getStation()
+					.equals(station))
 				return this.getScheduleLocations(context).get(i);
 		}
 		return null;
@@ -85,20 +96,22 @@ public class Schedule {
 	 */
 	public ArrayList<ScheduleLocation> getScheduleLocations(Context context) {
 		ArrayList<ScheduleLocation> scheduleLocations = new ArrayList<ScheduleLocation>();
-		
+
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getWritableDatabase();
-		
-		Cursor cursor = db.query("schedule_locations", new String[] { "id", "schedule_id", "station_id", "time", "platform" },
-				 "schedule_id = ?", new String[] { String.valueOf(this.id) }, null, null,
-				null, null);
+
+		Cursor cursor = db.query("schedule_locations", new String[] { "id",
+				"schedule_id", "station_id", "time", "platform" },
+				"schedule_id = ?", new String[] { String.valueOf(this.id) },
+				null, null, null, null);
 		if (cursor.moveToFirst()) {
 			do {
 				ScheduleLocation scheduleLocation = new ScheduleLocation();
 				scheduleLocation.setId(cursor.getInt(0));
 				scheduleLocation.setScheduleId(cursor.getInt(1));
 				scheduleLocation.setStationId(cursor.getInt(2));
-				scheduleLocation.setStation(Station.get(context, cursor.getInt(2)));
+				scheduleLocation.setStation(Station.get(context,
+						cursor.getInt(2)));
 				scheduleLocation.setTime(cursor.getString(3));
 				scheduleLocation.setPlatform(cursor.getString(4));
 				scheduleLocations.add(scheduleLocation);
@@ -106,7 +119,7 @@ public class Schedule {
 		}
 		return scheduleLocations;
 	}
-	
+
 	/**
 	 * @param context
 	 * @param id
@@ -115,10 +128,10 @@ public class Schedule {
 	public static Schedule get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getWritableDatabase();
-		
-		Cursor cursor = db.query("schedules", new String[] { "id", "toc_name" },
-				 "id = ?", new String[] { String.valueOf(id) }, null, null,
-				null, null);
+
+		Cursor cursor = db.query("schedules",
+				new String[] { "id", "toc_name" }, "id = ?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
 		} else {

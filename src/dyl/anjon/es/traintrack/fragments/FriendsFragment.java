@@ -29,8 +29,7 @@ public class FriendsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_friends, container,
 				false);
 
-		ArrayList<Friend> friends = new ArrayList<Friend>();
-		friends.add(new Friend("Alice Timms"));
+		ArrayList<Friend> friends = Friend.getAll(getActivity());
 
 		ListView list = (ListView) rootView.findViewById(R.id.list);
 		final FriendRowAdapter adapter = new FriendRowAdapter(inflater, friends);
