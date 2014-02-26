@@ -98,7 +98,7 @@ public class Schedule {
 		ArrayList<ScheduleLocation> scheduleLocations = new ArrayList<ScheduleLocation>();
 
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
+		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("schedule_locations", new String[] { "id",
 				"schedule_id", "station_id", "time", "platform" },
@@ -117,6 +117,8 @@ public class Schedule {
 				scheduleLocations.add(scheduleLocation);
 			} while (cursor.moveToNext());
 		}
+		dbh.close();
+
 		return scheduleLocations;
 	}
 
@@ -127,7 +129,7 @@ public class Schedule {
 	 */
 	public static Schedule get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
+		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("schedules",
 				new String[] { "id", "toc_name" }, "id = ?",
@@ -141,6 +143,7 @@ public class Schedule {
 		Schedule schedule = new Schedule();
 		schedule.setId(cursor.getInt(0));
 		schedule.setTrainOperatingCompany(cursor.getString(1));
+		dbh.close();
 
 		return schedule;
 	}

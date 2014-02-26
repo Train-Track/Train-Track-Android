@@ -61,7 +61,7 @@ public class Friend {
 	 */
 	public static Friend get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
+		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("friends", new String[] { "id", "name" },
 				"id = ?", new String[] { String.valueOf(id) }, null, null,
@@ -74,6 +74,7 @@ public class Friend {
 
 		Friend friend = new Friend(cursor.getString(1));
 		friend.setId(cursor.getInt(0));
+		dbh.close();
 
 		return friend;
 	}
@@ -86,7 +87,7 @@ public class Friend {
 		ArrayList<Friend> friends = new ArrayList<Friend>();
 
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
+		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.rawQuery("SELECT * FROM friends ORDER BY name ASC",
 				null);
@@ -97,6 +98,8 @@ public class Friend {
 				friends.add(friend);
 			} while (cursor.moveToNext());
 		}
+		dbh.close();
+
 		return friends;
 	}
 

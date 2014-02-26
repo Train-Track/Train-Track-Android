@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
 
 public class Station {
@@ -127,36 +126,36 @@ public class Station {
 	 */
 	public static Station get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
-		
-		Cursor cursor = db.query("stations", new String[] { "id", "crs_code", "name" },
-				 "id = ?", new String[] { String.valueOf(id) }, null, null,
-				null, null);
+		SQLiteDatabase db = dbh.getReadableDatabase();
+
+		Cursor cursor = db.query("stations", new String[] { "id", "crs_code",
+				"name" }, "id = ?", new String[] { String.valueOf(id) }, null,
+				null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
 		} else {
 			return null;
 		}
 
-		Station station = new Station(cursor.getString(1),
-				cursor.getString(2));
+		Station station = new Station(cursor.getString(1), cursor.getString(2));
 		station.setId(cursor.getInt(0));
+		dbh.close();
 
 		return station;
 	}
-	
-	
+
 	/**
 	 * @param context
 	 * @return all stations
 	 */
 	public static ArrayList<Station> getAll(Context context) {
 		ArrayList<Station> stations = new ArrayList<Station>();
-	
+
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
-		
-		Cursor cursor = db.rawQuery("SELECT * FROM stations ORDER BY name ASC", null);
+		SQLiteDatabase db = dbh.getReadableDatabase();
+
+		Cursor cursor = db.rawQuery("SELECT * FROM stations ORDER BY name ASC",
+				null);
 		if (cursor.moveToFirst()) {
 			do {
 				Station station = new Station(cursor.getString(1),
@@ -165,30 +164,32 @@ public class Station {
 				stations.add(station);
 			} while (cursor.moveToNext());
 		}
+
+		dbh.close();
 		return stations;
 	}
 
-	
 	/**
 	 * @param context
 	 * @return all schedules
 	 */
 	public ArrayList<Schedule> getSchedules(Context context) {
 		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
-	
+
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
-		
-		Cursor cursor = db.query("schedule_locations", new String[] { "schedule_id" },
-				 "station_id = ?", new String[] { String.valueOf(this.getId()) }, null, null,
+		SQLiteDatabase db = dbh.getReadableDatabase();
+
+		Cursor cursor = db.query("schedule_locations",
+				new String[] { "schedule_id" }, "station_id = ?",
+				new String[] { String.valueOf(this.getId()) }, null, null,
 				null, null);
 		if (cursor.moveToFirst()) {
 			do {
 				schedules.add(Schedule.get(context, cursor.getInt(0)));
 			} while (cursor.moveToNext());
 		}
-		
-		
+		dbh.close();
+
 		return schedules;
 	}
 

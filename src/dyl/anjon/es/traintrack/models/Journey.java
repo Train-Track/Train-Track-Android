@@ -76,7 +76,7 @@ public class Journey {
 		ArrayList<JourneyLeg> journeyLegs = new ArrayList<JourneyLeg>();
 
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
+		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("journey_legs", new String[] { "id",
 				"journey_id", "schedule_id", "origin_station_id",
@@ -99,6 +99,8 @@ public class Journey {
 				journeyLegs.add(journeyLeg);
 			} while (cursor.moveToNext());
 		}
+		dbh.close();
+
 		return journeyLegs;
 	}
 
@@ -110,7 +112,7 @@ public class Journey {
 		ArrayList<Journey> journeys = new ArrayList<Journey>();
 
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
+		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.rawQuery("SELECT * FROM journeys", null);
 		if (cursor.moveToFirst()) {
@@ -121,6 +123,7 @@ public class Journey {
 				journeys.add(journey);
 			} while (cursor.moveToNext());
 		}
+		dbh.close();
 		return journeys;
 	}
 
@@ -131,7 +134,7 @@ public class Journey {
 	 */
 	public static Journey get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getWritableDatabase();
+		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("journeys", new String[] { "id" }, "id = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
@@ -143,6 +146,8 @@ public class Journey {
 
 		Journey journey = new Journey();
 		journey.setId(cursor.getInt(0));
+		dbh.close();
+
 		return journey;
 	}
 
