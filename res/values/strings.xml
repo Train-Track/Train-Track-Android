@@ -6,11 +6,11 @@
     <string name="title_section1">Stations</string>
     <string name="title_section2">Journeys</string>
     <string name="title_section3">Friends</string>
-    <string name="action_login">Login</string>
-    <string name="action_logout">Logout</string>
     <string name="find_a_station">Find a station</string>
     <string name="find_a_friend">Find a friend</string>
     <string name="add_journey">+ Add Journey</string>
-    <string name="favourite">Favourite</string>
+    <string name="favourite">+ Favourite</string>
+    <string name="share_facebook">Share to Facebook</string>
+    <string name="share_public">Share with Public</string>
     
 </resources>

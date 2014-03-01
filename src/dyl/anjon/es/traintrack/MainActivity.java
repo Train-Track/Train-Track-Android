@@ -2,15 +2,16 @@ package dyl.anjon.es.traintrack;
 
 import java.util.Locale;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import dyl.anjon.es.traintrack.fragments.FriendsFragment;
 import dyl.anjon.es.traintrack.fragments.JourneysFragment;
 import dyl.anjon.es.traintrack.fragments.StationsFragment;
@@ -42,7 +43,14 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.add_journey:
-			Log.i("BUTTON", "Add Journey");
+			mViewPager.setCurrentItem(0);
+			Toast.makeText(getApplicationContext(),
+					"Choose departing station...", Toast.LENGTH_LONG).show();
+			return true;
+		case R.id.action_settings:
+			Intent intent = new Intent().setClass(getApplicationContext(),
+					SettingsActivity.class);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
