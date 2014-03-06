@@ -3,7 +3,6 @@ package dyl.anjon.es.traintrack;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,11 +23,11 @@ public class ScheduleActivity extends Activity {
 
 		final Intent intent = getIntent();
 
-		int schedule_id = intent.getIntExtra("schedule_id", 0);
-		Schedule schedule = Schedule.get(this, schedule_id);
+		final int scheduleId = intent.getIntExtra("schedule_id", 0);
+		Schedule schedule = Schedule.get(this, scheduleId);
 
-		int station_id = intent.getIntExtra("station_id", 0);
-		Station station = Station.get(this, station_id);
+		final int stationId = intent.getIntExtra("station_id", 0);
+		Station station = Station.get(this, stationId);
 
 		final TextView name = (TextView) findViewById(R.id.name);
 		name.setText(schedule.getOrigin(this).getTime() + " "
@@ -48,7 +47,14 @@ public class ScheduleActivity extends Activity {
 					long x) {
 				ScheduleLocation scheduleLocation = (ScheduleLocation) adapter
 						.getItem(index);
-				Log.i("CLICK!", scheduleLocation.toString());
+
+				Intent intent = new Intent().setClass(getApplicationContext(),
+						JourneyLegActivity.class);
+				intent.putExtra("schedule_id", scheduleId);
+				intent.putExtra("origin_station_id", stationId);
+				intent.putExtra("destination_station_id",
+						scheduleLocation.getStationId());
+				startActivity(intent);
 				return;
 			}
 

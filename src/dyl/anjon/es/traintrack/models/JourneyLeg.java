@@ -1,5 +1,10 @@
 package dyl.anjon.es.traintrack.models;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import dyl.anjon.es.traintrack.db.DatabaseHandler;
+
 public class JourneyLeg {
 
 	private int id;
@@ -162,6 +167,40 @@ public class JourneyLeg {
 	public String toString() {
 		return this.getOrigin().toString() + " to "
 				+ this.getDestination().toString();
+	}
+
+	/**
+	 * @param context
+	 * @param id
+	 * @return the journey leg selected
+	 */
+	public static JourneyLeg get(Context context, int id) {
+		DatabaseHandler dbh = new DatabaseHandler(context);
+		SQLiteDatabase db = dbh.getReadableDatabase();
+		Cursor cursor = db.query("journey_legs", new String[] { "id",
+				"journey_id", "schedule_id", "origin_station_id",
+				"destination_station_id", "departure_time", "arrival_time" },
+				"id = ?", new String[] { String.valueOf(id) }, null, null,
+				null, null);
+		if (cursor != null) {
+			cursor.moveToFirst();
+		} else {
+			return null;
+		}
+
+		JourneyLeg journeyLeg = new JourneyLeg();
+		journeyLeg.setId(cursor.getInt(0));
+		journeyLeg.setJourneyId(cursor.getInt(1));
+		journeyLeg.setScheduleId(cursor.getInt(2));
+		journeyLeg.setOriginStationId(cursor.getInt(3));
+		journeyLeg.setOrigin(Station.get(context, cursor.getInt(3)));
+		journeyLeg.setDestinationStationId(cursor.getInt(4));
+		journeyLeg.setDestination(Station.get(context, cursor.getInt(4)));
+		journeyLeg.setDepartureTime(cursor.getString(5));
+		journeyLeg.setArrivalTime(cursor.getString(6));
+		dbh.close();
+
+		return journeyLeg;
 	}
 
 }

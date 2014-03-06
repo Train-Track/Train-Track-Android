@@ -35,6 +35,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="dyl.anjon.es.traintrack.JourneyLegActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="dyl.anjon.es.traintrack.SettingsActivity"
             android:label="@string/app_name" >
         </activity>
