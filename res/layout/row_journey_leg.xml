@@ -7,10 +7,9 @@
 
     <TextView
         android:id="@+id/name"
+        style="@style/Row"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textIsSelectable="false"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textIsSelectable="false" />
 
 </LinearLayout>

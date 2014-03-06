@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/row"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -8,10 +7,9 @@
 
     <TextView
         android:id="@+id/name"
+        style="@style/Row"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textIsSelectable="false"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textIsSelectable="false" />
 
 </LinearLayout>

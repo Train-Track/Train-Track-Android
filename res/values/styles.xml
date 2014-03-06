@@ -17,4 +17,14 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="SettingsCheckBox">
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="Row">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
 </resources>

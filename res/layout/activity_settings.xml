@@ -12,17 +12,18 @@
 
         <CheckBox
             android:id="@+id/share_to_facebook"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
+            style="@style/SettingsCheckBox"
             android:text="@string/share_facebook" />
 
         <CheckBox
             android:id="@+id/share_to_public"
-            android:layout_width="wrap_content"
+            style="@style/SettingsCheckBox"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
             android:text="@string/share_public" />
+
     </LinearLayout>
 
 </ScrollView>
