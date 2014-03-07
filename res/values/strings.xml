@@ -12,5 +12,6 @@
     <string name="favourite">+ Favourite</string>
     <string name="share_facebook">Share to Facebook</string>
     <string name="share_public">Share with Public</string>
+    <string name="save">Save</string>
     
 </resources>

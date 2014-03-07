@@ -1,5 +1,7 @@
 package dyl.anjon.es.traintrack;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +18,8 @@ import dyl.anjon.es.traintrack.models.Station;
 
 public class ScheduleActivity extends Activity {
 
+	private int scheduleLocationId;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,6 +32,14 @@ public class ScheduleActivity extends Activity {
 
 		final int stationId = intent.getIntExtra("station_id", 0);
 		Station station = Station.get(this, stationId);
+
+		ArrayList<ScheduleLocation> scheduleLocations = schedule
+				.getScheduleLocations(this);
+		for (int i = 0; i < scheduleLocations.size(); i++) {
+			if (scheduleLocations.get(i).getStation().equals(station)) {
+				scheduleLocationId = scheduleLocations.get(i).getId();
+			}
+		}
 
 		final TextView name = (TextView) findViewById(R.id.name);
 		name.setText(schedule.getOrigin(this).getTime() + " "
@@ -51,9 +63,10 @@ public class ScheduleActivity extends Activity {
 				Intent intent = new Intent().setClass(getApplicationContext(),
 						JourneyLegActivity.class);
 				intent.putExtra("schedule_id", scheduleId);
-				intent.putExtra("origin_station_id", stationId);
-				intent.putExtra("destination_station_id",
-						scheduleLocation.getStationId());
+				intent.putExtra("origin_schedule_location_id",
+						scheduleLocationId);
+				intent.putExtra("destination_schedule_location_id",
+						scheduleLocation.getId());
 				startActivity(intent);
 				return;
 			}
