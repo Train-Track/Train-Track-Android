@@ -20,8 +20,10 @@ public class ScheduleRowAdapter extends BaseAdapter {
 
 	/**
 	 * @param inflater
-	 * @param schedules to be displayed
-	 * @param station the schedule is being seen from
+	 * @param schedules
+	 *            to be displayed
+	 * @param station
+	 *            the schedule is being seen from
 	 */
 	public ScheduleRowAdapter(LayoutInflater inflater,
 			ArrayList<Schedule> schedules, Station station) {
@@ -45,14 +47,21 @@ public class ScheduleRowAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final View v = inflater.inflate(R.layout.row_schedule, null);
 		final Schedule schedule = schedules.get(position);
-		final ScheduleLocation scheduleLocation = schedule.at(inflater.getContext(), station);
-		final TextView destination = (TextView) v.findViewById(R.id.destination);
-		destination.setText(schedule.getDestination(inflater.getContext()).toString());
+		final ScheduleLocation scheduleLocation = schedule.at(
+				inflater.getContext(), station);
+		final TextView destination = (TextView) v
+				.findViewById(R.id.destination);
+		ScheduleLocation destinationScheduleLocation = schedule
+				.getDestination(inflater.getContext());
+		if (destinationScheduleLocation.getStation().equals(station)) {
+			destination.setText("Terminates Here");
+		} else {
+			destination.setText(destinationScheduleLocation.toString());
+		}
 		final TextView time = (TextView) v.findViewById(R.id.time);
 		time.setText(scheduleLocation.getTime());
 		final TextView platform = (TextView) v.findViewById(R.id.platform);
 		platform.setText(scheduleLocation.getPlatform());
 		return v;
 	}
-
 }

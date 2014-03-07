@@ -53,6 +53,7 @@ public class ScheduleLocationRowAdapter extends BaseAdapter {
 		station.setText(scheduleLocation.getStation().toString());
 		if (scheduleLocation.getStation().equals(this.station)) {
 			station.setTextColor(Color.RED);
+			v.setEnabled(false);
 		}
 		final TextView platform = (TextView) v.findViewById(R.id.platform);
 		platform.setText(scheduleLocation.getPlatform().toString());

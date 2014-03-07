@@ -57,6 +57,11 @@ public class ScheduleActivity extends Activity {
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
+
+				if (!view.isEnabled()) {
+					return;
+				}
+
 				ScheduleLocation scheduleLocation = (ScheduleLocation) adapter
 						.getItem(index);
 
