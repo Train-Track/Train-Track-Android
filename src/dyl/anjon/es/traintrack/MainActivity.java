@@ -2,6 +2,8 @@ package dyl.anjon.es.traintrack;
 
 import java.util.Locale;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -98,6 +100,20 @@ public class MainActivity extends FragmentActivity {
 			}
 			return null;
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this)
+				.setTitle("Quit")
+				.setMessage("Are you sure you want to quit?")
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								finish();
+							}
+						}).setNegativeButton("No", null).show();
 	}
 
 }
