@@ -49,6 +49,7 @@ public class ScheduleRowAdapter extends BaseAdapter {
 		final Schedule schedule = schedules.get(position);
 		final ScheduleLocation scheduleLocation = schedule.at(
 				inflater.getContext(), station);
+
 		final TextView destination = (TextView) v
 				.findViewById(R.id.destination);
 		ScheduleLocation destinationScheduleLocation = schedule
@@ -58,10 +59,22 @@ public class ScheduleRowAdapter extends BaseAdapter {
 		} else {
 			destination.setText(destinationScheduleLocation.toString());
 		}
+
+		final TextView origin = (TextView) v.findViewById(R.id.origin);
+		ScheduleLocation originScheduleLocation = schedule.getOrigin(inflater
+				.getContext());
+		if (originScheduleLocation.getStation().equals(station)) {
+			origin.setText("Starts Here");
+		} else {
+			origin.setText("From " + originScheduleLocation.toString());
+		}
+
 		final TextView time = (TextView) v.findViewById(R.id.time);
 		time.setText(scheduleLocation.getTime());
+
 		final TextView platform = (TextView) v.findViewById(R.id.platform);
 		platform.setText(scheduleLocation.getPlatform());
+
 		return v;
 	}
 }
