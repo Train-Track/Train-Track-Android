@@ -13,5 +13,8 @@
     <string name="share_facebook">Share to Facebook</string>
     <string name="share_public">Share with Public</string>
     <string name="save">Save</string>
+    <string name="platform">Platform</string>
+    <string name="departure">Departure</string>
+    <string name="arrival">Arrival</string>
     
 </resources>

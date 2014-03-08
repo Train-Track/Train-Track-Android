@@ -21,7 +21,7 @@ public class JourneyActivity extends Activity {
 		setContentView(R.layout.activity_journey);
 
 		final Intent intent = getIntent();
-		int journeyId = intent.getIntExtra("journey_id", 0);
+		final int journeyId = intent.getIntExtra("journey_id", 0);
 
 		Journey journey = Journey.get(this, journeyId);
 		final TextView name = (TextView) findViewById(R.id.name);
@@ -39,6 +39,7 @@ public class JourneyActivity extends Activity {
 				Intent intent = new Intent().setClass(getApplicationContext(),
 						JourneyLegActivity.class);
 				intent.putExtra("journey_leg_id", journeyLeg.getId());
+				intent.putExtra("journey_id", journeyId);
 				startActivity(intent);
 				return;
 			}

@@ -12,7 +12,13 @@
         android:padding="10dp" >
 
         <TextView
-            android:id="@+id/origin"
+            style="@style/Row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/departure" />
+
+        <TextView
+            android:id="@+id/departure_station"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
@@ -25,7 +31,19 @@
             android:textIsSelectable="false" />
 
         <TextView
-            android:id="@+id/destination"
+            android:id="@+id/departure_platform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false" />
+
+        <TextView
+            style="@style/Row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/arrival" />
+
+        <TextView
+            android:id="@+id/arrival_station"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
@@ -33,6 +51,12 @@
 
         <TextView
             android:id="@+id/arrival_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false" />
+
+        <TextView
+            android:id="@+id/arrival_platform"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textIsSelectable="false" />

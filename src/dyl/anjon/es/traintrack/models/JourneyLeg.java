@@ -16,6 +16,8 @@ public class JourneyLeg {
 	private Station destination;
 	private String departureTime;
 	private String arrivalTime;
+	private String departurePlatform;
+	private String arrivalPlatform;
 
 	public JourneyLeg() {
 	}
@@ -161,6 +163,36 @@ public class JourneyLeg {
 	}
 
 	/**
+	 * @return the departurePlatform
+	 */
+	public String getDeparturePlatform() {
+		return departurePlatform;
+	}
+
+	/**
+	 * @param departurePlatform
+	 *            the departurePlatform to set
+	 */
+	public void setDeparturePlatform(String departurePlatform) {
+		this.departurePlatform = departurePlatform;
+	}
+
+	/**
+	 * @return the arrivalPlatform
+	 */
+	public String getArrivalPlatform() {
+		return arrivalPlatform;
+	}
+
+	/**
+	 * @param arrivalPlatform
+	 *            the arrivalPlatform to set
+	 */
+	public void setArrivalPlatform(String arrivalPlatform) {
+		this.arrivalPlatform = arrivalPlatform;
+	}
+
+	/**
 	 * @return the name
 	 */
 	@Override
@@ -179,9 +211,9 @@ public class JourneyLeg {
 		SQLiteDatabase db = dbh.getReadableDatabase();
 		Cursor cursor = db.query("journey_legs", new String[] { "id",
 				"journey_id", "schedule_id", "origin_station_id",
-				"destination_station_id", "departure_time", "arrival_time" },
-				"id = ?", new String[] { String.valueOf(id) }, null, null,
-				null, null);
+				"destination_station_id", "departure_time", "arrival_time",
+				"departure_platform", "arrival_platform" }, "id = ?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
 		} else {
@@ -198,6 +230,8 @@ public class JourneyLeg {
 		journeyLeg.setDestination(Station.get(context, cursor.getInt(4)));
 		journeyLeg.setDepartureTime(cursor.getString(5));
 		journeyLeg.setArrivalTime(cursor.getString(6));
+		journeyLeg.setDeparturePlatform(cursor.getString(7));
+		journeyLeg.setArrivalPlatform(cursor.getString(8));
 		dbh.close();
 
 		return journeyLeg;

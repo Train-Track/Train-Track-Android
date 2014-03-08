@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	private static final String DATABASE_NAME = "train_track";
 
 	public DatabaseHandler(Context context) {
@@ -126,7 +126,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put("user_id", "18:24");
 		long journeyId = db.insert("journeys", null, values);
 		// create journey legs table
-		db.execSQL("CREATE TABLE journey_legs (id INTEGER PRIMARY KEY, journey_id INTEGER, schedule_id INTEGER, origin_station_id INTEGER, destination_station_id INTEGER, departure_time TEXT, arrival_time TEXT)");
+		db.execSQL("CREATE TABLE journey_legs (id INTEGER PRIMARY KEY, journey_id INTEGER, schedule_id INTEGER, origin_station_id INTEGER, destination_station_id INTEGER, departure_time TEXT, arrival_time TEXT, departure_platform TEXT, arrival_platform TEXT)");
 		// 1 CGN - CDF
 		values = new ContentValues();
 		values.put("journey_id", journeyId);
@@ -135,6 +135,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put("destination_station_id", cdf);
 		values.put("departure_time", "17:15");
 		values.put("arrival_time", "17:27");
+		values.put("departure_platform", "2");
+		values.put("arrival_platform", "6");
 		db.insert("journey_legs", null, values);
 		// 2 CDF - BRI
 		values = new ContentValues();
@@ -144,6 +146,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put("destination_station_id", bri);
 		values.put("departure_time", "17:30");
 		values.put("arrival_time", "18:24");
+		values.put("departure_platform", "2");
+		values.put("arrival_platform", "11");
 		db.insert("journey_legs", null, values);
 
 		// create friends
@@ -161,7 +165,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS stations");
 		db.execSQL("DROP TABLE IF EXISTS friends");
 		db.execSQL("DROP TABLE IF EXISTS journeys");
-		db.execSQL("DROP TABLE IF EXISTS journey_legss");
+		db.execSQL("DROP TABLE IF EXISTS journey_legs");
 		onCreate(db);
 	}
 

@@ -1,6 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".JourneyLegActivity" >
@@ -12,7 +11,13 @@
         android:padding="10dp" >
 
         <TextView
-            android:id="@+id/origin"
+            style="@style/Row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/departure" />
+
+        <TextView
+            android:id="@+id/departure_station"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
@@ -23,8 +28,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <EditText
+            android:id="@+id/departure_platform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/platform"
+            android:inputType="textCapCharacters" />
+
         <TextView
-            android:id="@+id/destination"
+            style="@style/Row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/arrival" />
+
+        <TextView
+            android:id="@+id/arrival_station"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
@@ -35,12 +54,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <EditText
+            android:id="@+id/arrival_platform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/platform"
+            android:inputType="textCapCharacters" />
+
         <Button
             android:id="@+id/save"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/save" />
-
     </LinearLayout>
 
 </ScrollView>
