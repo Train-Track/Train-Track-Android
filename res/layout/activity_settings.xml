@@ -10,11 +10,17 @@
         android:orientation="vertical"
         android:padding="10dp" >
 
-        <CheckBox
-            android:id="@+id/share_to_facebook"
+        <TextView
+            android:id="@+id/user_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:textSize="24sp" />
+
+        <CheckBox
+            android:id="@+id/share_to_facebook"
             style="@style/SettingsCheckBox"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="@string/share_facebook" />
 
         <CheckBox
@@ -23,7 +29,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/share_public" />
-
     </LinearLayout>
 
 </ScrollView>
