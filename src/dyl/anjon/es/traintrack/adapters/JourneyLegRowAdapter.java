@@ -42,8 +42,7 @@ public class JourneyLegRowAdapter extends BaseAdapter {
 		View v = inflater.inflate(R.layout.row_journey_leg, null);
 		JourneyLeg journeyLeg = rowList.get(position);
 		TextView name = (TextView) v.findViewById(R.id.name);
-		name.setText(journeyLeg.getOrigin().toString() + " to "
-				+ journeyLeg.getDestination().toString());
+		name.setText(journeyLeg.toString());
 		return v;
 	}
 

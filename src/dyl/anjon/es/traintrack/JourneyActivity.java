@@ -24,6 +24,10 @@ public class JourneyActivity extends Activity {
 		final int journeyId = intent.getIntExtra("journey_id", 0);
 
 		Journey journey = Journey.get(this, journeyId);
+		if (journey == null) {
+			finish();
+		}
+
 		final TextView name = (TextView) findViewById(R.id.name);
 		name.setText(journey.getOrigin(this).toString() + " to "
 				+ journey.getDestination(this).toString());

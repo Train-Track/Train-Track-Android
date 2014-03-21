@@ -1,5 +1,6 @@
 package dyl.anjon.es.traintrack.models;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,6 +21,7 @@ public class JourneyLeg {
 	private String arrivalPlatform;
 
 	public JourneyLeg() {
+		this.setId(0);
 	}
 
 	public JourneyLeg(Station origin, Station destination) {
@@ -232,9 +234,31 @@ public class JourneyLeg {
 		journeyLeg.setArrivalTime(cursor.getString(6));
 		journeyLeg.setDeparturePlatform(cursor.getString(7));
 		journeyLeg.setArrivalPlatform(cursor.getString(8));
+		cursor.close();
 		dbh.close();
 
 		return journeyLeg;
+	}
+
+	public JourneyLeg save(Context context) {
+		if (this.getId() == 0) {
+			DatabaseHandler dbh = new DatabaseHandler(context);
+			SQLiteDatabase db = dbh.getWritableDatabase();
+			ContentValues values = new ContentValues();
+			values.put("journey_id", this.getJourneyId());
+			values.put("schedule_id", this.getScheduleId());
+			values.put("origin_station_id", this.getOriginStationId());
+			values.put("destination_station_id", this.getDestinationStationId());
+			values.put("departure_time", this.getDepartureTime());
+			values.put("arrival_time", this.getArrivalTime());
+			values.put("departure_platform", this.getDeparturePlatform());
+			values.put("arrival_platform", this.getArrivalPlatform());
+			long id = db.insert("journey_legs", null, values);
+			if (id > 0) {
+				this.setId((int) id);
+			}
+		}
+		return this;
 	}
 
 }

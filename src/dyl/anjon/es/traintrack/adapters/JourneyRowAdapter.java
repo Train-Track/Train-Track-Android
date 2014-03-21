@@ -46,5 +46,10 @@ public class JourneyRowAdapter extends BaseAdapter {
 				+ journey.getDestination(inflater.getContext()).toString());
 		return v;
 	}
+	
+	public void refresh(ArrayList<Journey> journeys) {
+		this.rowList = journeys;
+		this.notifyDataSetChanged();
+	}
 
 }

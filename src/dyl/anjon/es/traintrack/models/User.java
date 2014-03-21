@@ -7,12 +7,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
 
-public class Friend {
+public class User {
 
 	private int id;
 	private String name;
+	private String facebookId;
+	private boolean friend;
 
-	public Friend(String name) {
+	public User(String name) {
 		this.setName(name);
 	}
 
@@ -47,6 +49,36 @@ public class Friend {
 	}
 
 	/**
+	 * @return the facebookId
+	 */
+	public String getFacebookId() {
+		return facebookId;
+	}
+
+	/**
+	 * @param facebookId
+	 *            the facebookId to set
+	 */
+	public void setFacebookId(String facebookId) {
+		this.facebookId = facebookId;
+	}
+
+	/**
+	 * @return the friend
+	 */
+	public boolean isFriend() {
+		return friend;
+	}
+
+	/**
+	 * @param friend
+	 *            the friend to set
+	 */
+	public void setFriend(boolean friend) {
+		this.friend = friend;
+	}
+
+	/**
 	 * @return the name
 	 */
 	@Override
@@ -57,9 +89,9 @@ public class Friend {
 	/**
 	 * @param context
 	 * @param id
-	 * @return the friend selected
+	 * @return the user selected
 	 */
-	public static Friend get(Context context, int id) {
+	public static User get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
@@ -72,35 +104,37 @@ public class Friend {
 			return null;
 		}
 
-		Friend friend = new Friend(cursor.getString(1));
-		friend.setId(cursor.getInt(0));
+		User user = new User(cursor.getString(1));
+		user.setId(cursor.getInt(0));
+		cursor.close();
 		dbh.close();
 
-		return friend;
+		return user;
 	}
 
 	/**
 	 * @param context
-	 * @return all friends
+	 * @return all users who are friends
 	 */
-	public static ArrayList<Friend> getAll(Context context) {
-		ArrayList<Friend> friends = new ArrayList<Friend>();
+	public static ArrayList<User> getAllFriends(Context context) {
+		ArrayList<User> users = new ArrayList<User>();
 
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
-		Cursor cursor = db.rawQuery("SELECT * FROM friends ORDER BY name ASC",
-				null);
+		Cursor cursor = db.rawQuery(
+				"SELECT * FROM users WHERE friend = 1 ORDER BY name ASC", null);
 		if (cursor.moveToFirst()) {
 			do {
-				Friend friend = new Friend(cursor.getString(1));
-				friend.setId(cursor.getInt(0));
-				friends.add(friend);
+				User user = new User(cursor.getString(1));
+				user.setId(cursor.getInt(0));
+				users.add(user);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		dbh.close();
 
-		return friends;
+		return users;
 	}
 
 }

@@ -15,30 +15,30 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import dyl.anjon.es.traintrack.R;
-import dyl.anjon.es.traintrack.adapters.FriendRowAdapter;
-import dyl.anjon.es.traintrack.models.Friend;
+import dyl.anjon.es.traintrack.adapters.UserRowAdapter;
+import dyl.anjon.es.traintrack.models.User;
 
-public class FriendsFragment extends Fragment {
+public class UsersFragment extends Fragment {
 
-	public FriendsFragment() {
+	public UsersFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_friends, container,
+		View rootView = inflater.inflate(R.layout.fragment_users, container,
 				false);
 
-		ArrayList<Friend> friends = Friend.getAll(getActivity());
+		ArrayList<User> users = User.getAllFriends(getActivity());
 
 		ListView list = (ListView) rootView.findViewById(R.id.list);
-		final FriendRowAdapter adapter = new FriendRowAdapter(inflater, friends);
+		final UserRowAdapter adapter = new UserRowAdapter(inflater, users);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
-				Friend friend = (Friend) adapter.getItem(index);
-				Log.i("Friend HIT", friend.getName());
+				User user = (User) adapter.getItem(index);
+				Log.i("User HIT", user.getName());
 				return;
 			}
 

@@ -42,7 +42,7 @@ public class StationActivity extends Activity {
 						ScheduleActivity.class);
 				intent.putExtra("schedule_id", schedule.getId());
 				intent.putExtra("station_id", station.getId());
-				startActivity(intent);
+				startActivityForResult(intent, 1);
 				return;
 			}
 
@@ -54,6 +54,19 @@ public class StationActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.station, menu);
 		return true;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			if (getParent() == null) {
+				setResult(Activity.RESULT_OK);
+			} else {
+				getParent().setResult(Activity.RESULT_OK);
+			}
+			finish();
+		}
 	}
 
 }

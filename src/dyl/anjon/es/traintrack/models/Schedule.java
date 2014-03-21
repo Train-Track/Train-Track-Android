@@ -11,8 +11,11 @@ public class Schedule {
 
 	private int id;
 	private String trainOperatingCompany;
+	private ArrayList<ScheduleLocation> scheduleLocations;
 
 	public Schedule() {
+		this.id = 0;
+		this.scheduleLocations = new ArrayList<ScheduleLocation>();
 	}
 
 	/**
@@ -49,7 +52,10 @@ public class Schedule {
 	 * @return the origin
 	 */
 	public ScheduleLocation getOrigin(Context context) {
-		if (this.getScheduleLocations(context).isEmpty()) {
+		if (this.scheduleLocations.isEmpty()) {
+			this.scheduleLocations = this.getScheduleLocations(context);
+		}
+		if (this.scheduleLocations.isEmpty()) {
 			Station station = new Station("", "Unknown");
 			ScheduleLocation scheduleLocation = new ScheduleLocation();
 			scheduleLocation.setStation(station);
@@ -58,14 +64,17 @@ public class Schedule {
 			return scheduleLocation;
 		}
 
-		return this.getScheduleLocations(context).get(0);
+		return this.scheduleLocations.get(0);
 	}
 
 	/**
 	 * @return the destination
 	 */
 	public ScheduleLocation getDestination(Context context) {
-		if (this.getScheduleLocations(context).isEmpty()) {
+		if (this.scheduleLocations.isEmpty()) {
+			this.scheduleLocations = this.getScheduleLocations(context);
+		}
+		if (this.scheduleLocations.isEmpty()) {
 			Station station = new Station("", "Unknown");
 			ScheduleLocation scheduleLocation = new ScheduleLocation();
 			scheduleLocation.setStation(station);
@@ -74,8 +83,8 @@ public class Schedule {
 			return scheduleLocation;
 		}
 
-		int last = this.getScheduleLocations(context).size();
-		return this.getScheduleLocations(context).get(last - 1);
+		int last = this.scheduleLocations.size();
+		return this.scheduleLocations.get(last - 1);
 	}
 
 	/**
@@ -83,10 +92,13 @@ public class Schedule {
 	 * @return ScheduleLocation where the station is the station provided
 	 */
 	public ScheduleLocation at(Context context, Station station) {
-		for (int i = 0; i < this.getScheduleLocations(context).size(); i++) {
-			if (this.getScheduleLocations(context).get(i).getStation()
+		if (this.scheduleLocations.isEmpty()) {
+			this.scheduleLocations = this.getScheduleLocations(context);
+		}
+		for (int i = 0; i < this.scheduleLocations.size(); i++) {
+			if (this.scheduleLocations.get(i).getStation()
 					.equals(station))
-				return this.getScheduleLocations(context).get(i);
+				return this.scheduleLocations.get(i);
 		}
 		return null;
 	}
@@ -117,6 +129,7 @@ public class Schedule {
 				scheduleLocations.add(scheduleLocation);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		dbh.close();
 
 		return scheduleLocations;
@@ -143,6 +156,7 @@ public class Schedule {
 		Schedule schedule = new Schedule();
 		schedule.setId(cursor.getInt(0));
 		schedule.setTrainOperatingCompany(cursor.getString(1));
+		cursor.close();
 		dbh.close();
 
 		return schedule;

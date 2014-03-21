@@ -1,5 +1,6 @@
 package dyl.anjon.es.traintrack.db;
 
+import dyl.anjon.es.traintrack.utils.Utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,11 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "train_track";
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		Utils.log("Database is going to be used again");
 	}
 
 	@Override
@@ -123,7 +125,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// create journeys
 		db.execSQL("CREATE TABLE journeys (id INTEGER PRIMARY KEY, user_id INTEGER)");
 		values = new ContentValues();
-		values.put("user_id", "18:24");
+		values.put("user_id", "1");
 		long journeyId = db.insert("journeys", null, values);
 		// create journey legs table
 		db.execSQL("CREATE TABLE journey_legs (id INTEGER PRIMARY KEY, journey_id INTEGER, schedule_id INTEGER, origin_station_id INTEGER, destination_station_id INTEGER, departure_time TEXT, arrival_time TEXT, departure_platform TEXT, arrival_platform TEXT)");
@@ -151,10 +153,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.insert("journey_legs", null, values);
 
 		// create friends
-		db.execSQL("CREATE TABLE friends (id INTEGER PRIMARY KEY, name TEXT)");
+		db.execSQL("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, facebook_id TEXT, friend BOOLEAN)");
+		values = new ContentValues();
+		values.put("name", "Dylan Jones");
+		values.put("facebook_id", "123456789");
+		values.put("friend", false);
+		db.insert("users", null, values);
 		values = new ContentValues();
 		values.put("name", "Alice Timms");
-		db.insert("friends", null, values);
+		values.put("facebook_id", "123456");
+		values.put("friend", true);
+		db.insert("users", null, values);
 
 	}
 
@@ -163,7 +172,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS schedules");
 		db.execSQL("DROP TABLE IF EXISTS schedule_locations");
 		db.execSQL("DROP TABLE IF EXISTS stations");
-		db.execSQL("DROP TABLE IF EXISTS friends");
+		db.execSQL("DROP TABLE IF EXISTS users");
 		db.execSQL("DROP TABLE IF EXISTS journeys");
 		db.execSQL("DROP TABLE IF EXISTS journey_legs");
 		onCreate(db);

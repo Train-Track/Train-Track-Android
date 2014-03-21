@@ -141,6 +141,7 @@ public class ScheduleLocation {
 		scheduleLocation.setStation(Station.get(context, cursor.getInt(2)));
 		scheduleLocation.setPlatform(cursor.getString(3));
 		scheduleLocation.setTime(cursor.getString(4));
+		cursor.close();
 		dbh.close();
 
 		return scheduleLocation;

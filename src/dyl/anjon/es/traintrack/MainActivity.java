@@ -23,9 +23,9 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 
-import dyl.anjon.es.traintrack.fragments.FriendsFragment;
 import dyl.anjon.es.traintrack.fragments.JourneysFragment;
 import dyl.anjon.es.traintrack.fragments.StationsFragment;
+import dyl.anjon.es.traintrack.fragments.UsersFragment;
 
 public class MainActivity extends FragmentActivity {
 
@@ -151,7 +151,7 @@ public class MainActivity extends FragmentActivity {
 			case 1:
 				return new JourneysFragment();
 			case 2:
-				return new FriendsFragment();
+				return new UsersFragment();
 			}
 			return new StationsFragment();
 		}

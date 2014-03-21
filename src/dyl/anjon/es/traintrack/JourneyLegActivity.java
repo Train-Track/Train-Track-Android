@@ -1,6 +1,7 @@
 package dyl.anjon.es.traintrack;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,8 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
 import dyl.anjon.es.traintrack.models.ScheduleLocation;
+import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class JourneyLegActivity extends Activity {
 
@@ -19,6 +23,7 @@ public class JourneyLegActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		final Intent intent = getIntent();
+		final Context context = getApplicationContext();
 		final int journeyLegId = intent.getIntExtra("journey_leg_id", 0);
 		final int journeyId = intent.getIntExtra("journey_id", 0);
 
@@ -28,17 +33,17 @@ public class JourneyLegActivity extends Activity {
 			JourneyLeg journeyLeg = JourneyLeg.get(this, journeyLegId);
 
 			TextView departureStation = (TextView) findViewById(R.id.departure_station);
-			departureStation.setText(journeyLeg.getOrigin().toString());			
+			departureStation.setText(journeyLeg.getOrigin().toString());
 
 			TextView departureTime = (TextView) findViewById(R.id.departure_time);
 			departureTime.setText(journeyLeg.getDepartureTime());
-			
+
 			TextView departurePlatform = (TextView) findViewById(R.id.departure_platform);
 			departurePlatform.setText(journeyLeg.getDeparturePlatform());
-			
+
 			TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
 			arrivalStation.setText(journeyLeg.getDestination().toString());
-			
+
 			TextView arrivalTime = (TextView) findViewById(R.id.arrival_time);
 			arrivalTime.setText(journeyLeg.getArrivalTime());
 
@@ -53,14 +58,14 @@ public class JourneyLegActivity extends Activity {
 
 			int originScheduleLocationId = intent.getIntExtra(
 					"origin_schedule_location_id", 0);
-			ScheduleLocation originScheduleLocation = ScheduleLocation.get(
-					this, originScheduleLocationId);
+			final ScheduleLocation originScheduleLocation = ScheduleLocation
+					.get(this, originScheduleLocationId);
+			final Station originStation = originScheduleLocation.getStation();
 
-			TextView departureStation = (TextView) findViewById(R.id.departure_station);
-			departureStation.setText(originScheduleLocation.getStation()
-					.toString());
+			final TextView departureStation = (TextView) findViewById(R.id.departure_station);
+			departureStation.setText(originStation.toString());
 
-			TimePicker departureTime = (TimePicker) findViewById(R.id.departure_time);
+			final TimePicker departureTime = (TimePicker) findViewById(R.id.departure_time);
 			int departureHour = Integer.valueOf(originScheduleLocation
 					.getTime().split(":")[0]);
 			departureTime.setCurrentHour(departureHour);
@@ -68,19 +73,20 @@ public class JourneyLegActivity extends Activity {
 					.getTime().split(":")[1]);
 			departureTime.setCurrentMinute(departureMinute);
 
-			EditText departurePlatform = (EditText) findViewById(R.id.departure_platform);
+			final EditText departurePlatform = (EditText) findViewById(R.id.departure_platform);
 			departurePlatform.setText(originScheduleLocation.getPlatform());
 
-			int destinationScheduleLocationId = intent.getIntExtra(
+			final int destinationScheduleLocationId = intent.getIntExtra(
 					"destination_schedule_location_id", 0);
-			ScheduleLocation destinationScheduleLocation = ScheduleLocation
+			final ScheduleLocation destinationScheduleLocation = ScheduleLocation
 					.get(this, destinationScheduleLocationId);
+			final Station destinationStation = destinationScheduleLocation
+					.getStation();
 
-			TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
-			arrivalStation.setText(destinationScheduleLocation.getStation()
-					.toString());
+			final TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
+			arrivalStation.setText(destinationStation.toString());
 
-			TimePicker arrivalTime = (TimePicker) findViewById(R.id.arrival_time);
+			final TimePicker arrivalTime = (TimePicker) findViewById(R.id.arrival_time);
 			int arrivalHour = Integer.valueOf(destinationScheduleLocation
 					.getTime().split(":")[0]);
 			arrivalTime.setCurrentHour(arrivalHour);
@@ -88,17 +94,56 @@ public class JourneyLegActivity extends Activity {
 					.getTime().split(":")[1]);
 			arrivalTime.setCurrentMinute(arrivalMinute);
 
-			EditText arrivalPlatform = (EditText) findViewById(R.id.arrival_platform);
+			final EditText arrivalPlatform = (EditText) findViewById(R.id.arrival_platform);
 			arrivalPlatform.setText(destinationScheduleLocation.getPlatform());
 
 			saveButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
+					Journey journey = new Journey();
 					if (journeyId == 0) {
-						// create new journey
+						journey = journey.save(context);
+					} else {
+						journey = Journey.get(context, journeyId);
 					}
 
-					// create new journey leg
+					Utils.log("New journey with ID: " + journey.getId());
+
+					JourneyLeg journeyLeg = new JourneyLeg();
+					journeyLeg.setJourneyId(journey.getId());
+					journeyLeg.setScheduleId(scheduleId);
+
+					journeyLeg.setOriginStationId(originStation.getId());
+					journeyLeg.setOrigin(originStation);
+					journeyLeg.setDepartureTime(departureTime.getCurrentHour()
+							+ ":" + departureTime.getCurrentMinute());
+					journeyLeg.setDeparturePlatform(departurePlatform.getText()
+							.toString());
+
+					journeyLeg.setDestinationStationId(destinationStation
+							.getId());
+					journeyLeg.setDestination(destinationStation);
+					journeyLeg.setArrivalTime(arrivalTime.getCurrentHour()
+							+ ":" + arrivalTime.getCurrentMinute());
+					journeyLeg.setArrivalPlatform(arrivalPlatform.getText()
+							.toString());
+
+					journeyLeg = journeyLeg.save(context);
+					Utils.log("New journey leg with ID: " + journeyLeg.getId());
+
+					if (journeyId == 0) {
+						Intent intent = new Intent().setClass(
+								getApplicationContext(), JourneyActivity.class);
+						intent.putExtra("journey_id", journey.getId());
+						startActivity(intent);
+					}
+
+					if (getParent() == null) {
+						setResult(Activity.RESULT_OK);
+					} else {
+						getParent().setResult(Activity.RESULT_OK);
+					}
+					finish();
 
 				}
 			});

@@ -139,6 +139,7 @@ public class Station {
 
 		Station station = new Station(cursor.getString(1), cursor.getString(2));
 		station.setId(cursor.getInt(0));
+		cursor.close();
 		dbh.close();
 
 		return station;
@@ -164,7 +165,7 @@ public class Station {
 				stations.add(station);
 			} while (cursor.moveToNext());
 		}
-
+		cursor.close();
 		dbh.close();
 		return stations;
 	}
@@ -188,6 +189,7 @@ public class Station {
 				schedules.add(Schedule.get(context, cursor.getInt(0)));
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		dbh.close();
 
 		return schedules;

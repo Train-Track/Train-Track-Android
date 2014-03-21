@@ -72,12 +72,25 @@ public class ScheduleActivity extends Activity {
 						scheduleLocationId);
 				intent.putExtra("destination_schedule_location_id",
 						scheduleLocation.getId());
-				startActivity(intent);
+				startActivityForResult(intent, 1);
 				return;
 			}
 
 		});
 
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			if (getParent() == null) {
+				setResult(Activity.RESULT_OK);
+			} else {
+				getParent().setResult(Activity.RESULT_OK);
+			}
+			finish();
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,8 +12,11 @@ public class Journey {
 
 	private int id;
 	private int userId;
+	private ArrayList<JourneyLeg> journeyLegs;
 
 	public Journey() {
+		this.setId(0);
+		this.journeyLegs = new ArrayList<JourneyLeg>();
 	}
 
 	/**
@@ -49,23 +53,29 @@ public class Journey {
 	 * @return the origin
 	 */
 	public Station getOrigin(Context context) {
-		if (this.getJourneyLegs(context).isEmpty()) {
+		if (this.journeyLegs.isEmpty()) {
+			this.journeyLegs = this.getJourneyLegs(context);
+		}
+		if (this.journeyLegs.isEmpty()) {
 			return new Station("", "Unknown");
 		}
 
-		return this.getJourneyLegs(context).get(0).getOrigin();
+		return this.journeyLegs.get(0).getOrigin();
 	}
 
 	/**
 	 * @return the destination
 	 */
 	public Station getDestination(Context context) {
-		if (this.getJourneyLegs(context).isEmpty()) {
+		if (this.journeyLegs.isEmpty()) {
+			this.journeyLegs = this.getJourneyLegs(context);
+		}
+		if (this.journeyLegs.isEmpty()) {
 			return new Station("", "Unknown");
 		}
 
-		int last = this.getJourneyLegs(context).size();
-		return this.getJourneyLegs(context).get(last - 1).getDestination();
+		int last = this.journeyLegs.size();
+		return this.journeyLegs.get(last - 1).getDestination();
 	}
 
 	/**
@@ -99,6 +109,7 @@ public class Journey {
 				journeyLegs.add(journeyLeg);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		dbh.close();
 
 		return journeyLegs;
@@ -123,6 +134,7 @@ public class Journey {
 				journeys.add(journey);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		dbh.close();
 		return journeys;
 	}
@@ -130,7 +142,7 @@ public class Journey {
 	/**
 	 * @param context
 	 * @param id
-	 * @return the schedule selected
+	 * @return the journey selected
 	 */
 	public static Journey get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
@@ -149,6 +161,45 @@ public class Journey {
 		dbh.close();
 
 		return journey;
+	}
+
+	/**
+	 * @param context
+	 * @return the journey saved along with local id
+	 */
+	public Journey save(Context context) {
+		if (this.id == 0) {
+			DatabaseHandler dbh = new DatabaseHandler(context);
+			SQLiteDatabase db = dbh.getWritableDatabase();
+			ContentValues values = new ContentValues();
+			values.put("user_id", "1");
+			long id = db.insert("journeys", null, values);
+			if (id > 0) {
+				this.setId((int) id);
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * @param context
+	 * @return true if delete was successful or false if it was not
+	 */
+	public boolean delete(Context context) {
+		if (this.id != 0) {
+			DatabaseHandler dbh = new DatabaseHandler(context);
+			SQLiteDatabase db = dbh.getWritableDatabase();
+			int rowsDeleted = db.delete("journey_legs", "journey_id = ?",
+					new String[] { String.valueOf(this.id) });
+			rowsDeleted = db.delete("journeys", "id = ?",
+					new String[] { String.valueOf(this.id) });
+			if (rowsDeleted == 0) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return true;
 	}
 
 }
