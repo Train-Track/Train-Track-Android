@@ -4,19 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
 import dyl.anjon.es.traintrack.models.ScheduleLocation;
 import dyl.anjon.es.traintrack.models.Station;
-import dyl.anjon.es.traintrack.utils.Utils;
 
 public class JourneyLegActivity extends Activity {
+
+	private JourneyLeg journeyLeg;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class JourneyLegActivity extends Activity {
 		if (journeyLegId != 0) {
 
 			setContentView(R.layout.activity_journey_leg);
-			JourneyLeg journeyLeg = JourneyLeg.get(this, journeyLegId);
+			journeyLeg = JourneyLeg.get(this, journeyLegId);
 
 			TextView departureStation = (TextView) findViewById(R.id.departure_station);
 			departureStation.setText(journeyLeg.getOrigin().toString());
@@ -107,8 +111,6 @@ public class JourneyLegActivity extends Activity {
 						journey = Journey.get(context, journeyId);
 					}
 
-					Utils.log("New journey with ID: " + journey.getId());
-
 					JourneyLeg journeyLeg = new JourneyLeg();
 					journeyLeg.setJourneyId(journey.getId());
 					journeyLeg.setScheduleId(scheduleId);
@@ -129,7 +131,6 @@ public class JourneyLegActivity extends Activity {
 							.toString());
 
 					journeyLeg = journeyLeg.save(context);
-					Utils.log("New journey leg with ID: " + journeyLeg.getId());
 
 					if (journeyId == 0) {
 						Intent intent = new Intent().setClass(
@@ -150,6 +151,28 @@ public class JourneyLegActivity extends Activity {
 
 		}
 
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.journey_leg, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.delete_journey_leg:
+			boolean success = journeyLeg.delete(getApplicationContext());
+			if (success) {
+				Toast.makeText(getApplicationContext(),
+						"Journey leg was deleted", Toast.LENGTH_SHORT).show();
+				finish();
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }

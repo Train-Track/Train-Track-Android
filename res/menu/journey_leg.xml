@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/delete_journey_leg"
+        android:orderInCategory="1"
+        android:showAsAction="never"
+        android:title="@string/delete_journey_leg"/>
+
+</menu>

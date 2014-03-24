@@ -4,6 +4,7 @@
         android:id="@+id/favourite"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="@string/favourite" />
+        android:title="@string/favourite"
+        android:icon="@android:drawable/btn_star_big_off" />
 
 </menu>

@@ -70,6 +70,12 @@ public class JourneyActivity extends Activity {
 		case R.id.add_journey_leg:
 			Toast.makeText(getApplicationContext(), "Add journey leg",
 					Toast.LENGTH_LONG).show();
+			Intent intent = new Intent().setClass(getApplicationContext(),
+					StationActivity.class);
+			intent.putExtra("station_id", journey.getDestination(this).getId());
+			intent.putExtra("journey_id", journeyId);
+			startActivity(intent);
+			finish();
 			return true;
 		case R.id.delete_journey:
 			boolean success = journey.delete(getApplicationContext());

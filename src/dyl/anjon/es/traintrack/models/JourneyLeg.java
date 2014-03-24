@@ -261,4 +261,23 @@ public class JourneyLeg {
 		return this;
 	}
 
+	/**
+	 * @param context
+	 * @return true if delete was successful or false if it was not
+	 */
+	public boolean delete(Context context) {
+		if (this.id != 0) {
+			DatabaseHandler dbh = new DatabaseHandler(context);
+			SQLiteDatabase db = dbh.getWritableDatabase();
+			int rowsDeleted = db.delete("journey_legs", "id = ?",
+					new String[] { String.valueOf(this.id) });
+			if (rowsDeleted == 0) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return true;
+	}
+
 }

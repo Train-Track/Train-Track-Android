@@ -27,6 +27,8 @@ public class ScheduleActivity extends Activity {
 
 		final Intent intent = getIntent();
 
+		final int journeyId = intent.getIntExtra("journey_id", 0);
+
 		final int scheduleId = intent.getIntExtra("schedule_id", 0);
 		Schedule schedule = Schedule.get(this, scheduleId);
 
@@ -67,6 +69,7 @@ public class ScheduleActivity extends Activity {
 
 				Intent intent = new Intent().setClass(getApplicationContext(),
 						JourneyLegActivity.class);
+				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("schedule_id", scheduleId);
 				intent.putExtra("origin_schedule_location_id",
 						scheduleLocationId);

@@ -2,6 +2,7 @@ package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,14 +15,23 @@ public class Station {
 	private String name;
 	private long latitude;
 	private long longitude;
+	private boolean favourite;
+
+	public Station() {
+		this.setCrsCode("");
+		this.setName("Unknown");
+		this.setFavourite(false);
+	}
 
 	/**
 	 * @param crsCode
 	 * @param name
+	 * @param favourite
 	 */
-	public Station(String crsCode, String name) {
+	public Station(String crsCode, String name, boolean favourite) {
 		this.setCrsCode(crsCode);
 		this.setName(name);
+		this.setFavourite(favourite);
 	}
 
 	/**
@@ -100,6 +110,21 @@ public class Station {
 	}
 
 	/**
+	 * @return the favourite
+	 */
+	public boolean isFavourite() {
+		return favourite;
+	}
+
+	/**
+	 * @param favourite
+	 *            the favourite to set
+	 */
+	public void setFavourite(boolean favourite) {
+		this.favourite = favourite;
+	}
+
+	/**
 	 * @return the name
 	 */
 	@Override
@@ -129,16 +154,21 @@ public class Station {
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("stations", new String[] { "id", "crs_code",
-				"name" }, "id = ?", new String[] { String.valueOf(id) }, null,
-				null, null, null);
+				"name", "latitude", "longitude", "favourite" }, "id = ?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
 		} else {
 			return null;
 		}
 
-		Station station = new Station(cursor.getString(1), cursor.getString(2));
+		Station station = new Station();
 		station.setId(cursor.getInt(0));
+		station.setCrsCode(cursor.getString(1));
+		station.setName(cursor.getString(2));
+		station.setLatitude(cursor.getLong(3));
+		station.setLongitude(cursor.getLong(4));
+		station.setFavourite(cursor.getInt(5) == 1);
 		cursor.close();
 		dbh.close();
 
@@ -159,9 +189,13 @@ public class Station {
 				null);
 		if (cursor.moveToFirst()) {
 			do {
-				Station station = new Station(cursor.getString(1),
-						cursor.getString(2));
+				Station station = new Station();
 				station.setId(cursor.getInt(0));
+				station.setCrsCode(cursor.getString(1));
+				station.setName(cursor.getString(2));
+				station.setLatitude(cursor.getLong(3));
+				station.setLongitude(cursor.getLong(4));
+				station.setFavourite(cursor.getInt(5) == 1);
 				stations.add(station);
 			} while (cursor.moveToNext());
 		}
@@ -193,6 +227,22 @@ public class Station {
 		dbh.close();
 
 		return schedules;
+	}
+
+	public Station save(Context context) {
+		if (this.getId() != 0) {
+			DatabaseHandler dbh = new DatabaseHandler(context);
+			SQLiteDatabase db = dbh.getWritableDatabase();
+			ContentValues values = new ContentValues();
+			values.put("crs_code", this.getCrsCode());
+			values.put("name", this.getName());
+			values.put("latitude", this.getLatitude());
+			values.put("longitude", this.getLongitude());
+			values.put("favourite", this.isFavourite());
+			db.update("stations", values, "id = ?",
+					new String[] { String.valueOf(this.getId()) });
+		}
+		return this;
 	}
 
 }

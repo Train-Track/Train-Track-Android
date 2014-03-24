@@ -4,6 +4,7 @@
     <string name="app_name">Train Track</string>
     <string name="app_id">272514462916508</string>
     <string name="delete_journey">Delete Journey</string>
+    <string name="delete_journey_leg">Delete Journey Leg</string>
     <string name="settings">Settings</string>
     <string name="title_section1">Stations</string>
     <string name="title_section2">Journeys</string>

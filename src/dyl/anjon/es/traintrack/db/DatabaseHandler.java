@@ -21,41 +21,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ContentValues values;
 
 		// create stations
-		db.execSQL("CREATE TABLE stations (id INTEGER PRIMARY KEY, crs_code TEXT, name TEXT, latitude NUMERIC, longitude NUMERIC)");
+		db.execSQL("CREATE TABLE stations (id INTEGER PRIMARY KEY, crs_code TEXT, name TEXT, latitude NUMERIC, longitude NUMERIC, favourite BOOLEAN)");
 		// 1
 		values = new ContentValues();
 		values.put("name", "Cardiff Central");
 		values.put("crs_code", "CDF");
+		values.put("favourite", false);
 		long cdf = db.insert("stations", null, values);
 		// 2
 		values = new ContentValues();
 		values.put("name", "Newport (Gwent)");
 		values.put("crs_code", "NPT");
+		values.put("favourite", false);
 		long npt = db.insert("stations", null, values);
 		// 3
 		values = new ContentValues();
 		values.put("name", "Severn Tunnel Junction");
 		values.put("crs_code", "STJ");
+		values.put("favourite", false);
 		long sjt = db.insert("stations", null, values);
 		// 4
 		values = new ContentValues();
 		values.put("name", "Filton Abbey Wood");
 		values.put("crs_code", "FAW");
+		values.put("favourite", false);
 		long faw = db.insert("stations", null, values);
 		// 5
 		values = new ContentValues();
 		values.put("name", "Bristol Temple Meads");
 		values.put("crs_code", "BRI");
+		values.put("favourite", false);
 		long bri = db.insert("stations", null, values);
 		// 6
 		values = new ContentValues();
 		values.put("name", "Grangetown");
 		values.put("crs_code", "GTN");
+		values.put("favourite", false);
 		long gtn = db.insert("stations", null, values);
 		// 7
 		values = new ContentValues();
 		values.put("name", "Cogan");
 		values.put("crs_code", "CGN");
+		values.put("favourite", false);
 		long cgn = db.insert("stations", null, values);
 
 		// create schedules

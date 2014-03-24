@@ -56,7 +56,7 @@ public class Schedule {
 			this.scheduleLocations = this.getScheduleLocations(context);
 		}
 		if (this.scheduleLocations.isEmpty()) {
-			Station station = new Station("", "Unknown");
+			Station station = new Station();
 			ScheduleLocation scheduleLocation = new ScheduleLocation();
 			scheduleLocation.setStation(station);
 			scheduleLocation.setTime("?");
@@ -75,7 +75,7 @@ public class Schedule {
 			this.scheduleLocations = this.getScheduleLocations(context);
 		}
 		if (this.scheduleLocations.isEmpty()) {
-			Station station = new Station("", "Unknown");
+			Station station = new Station();
 			ScheduleLocation scheduleLocation = new ScheduleLocation();
 			scheduleLocation.setStation(station);
 			scheduleLocation.setTime("?");

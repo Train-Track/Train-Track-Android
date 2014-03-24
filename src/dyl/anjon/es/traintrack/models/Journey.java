@@ -57,7 +57,7 @@ public class Journey {
 			this.journeyLegs = this.getJourneyLegs(context);
 		}
 		if (this.journeyLegs.isEmpty()) {
-			return new Station("", "Unknown");
+			return new Station();
 		}
 
 		return this.journeyLegs.get(0).getOrigin();
@@ -71,7 +71,7 @@ public class Journey {
 			this.journeyLegs = this.getJourneyLegs(context);
 		}
 		if (this.journeyLegs.isEmpty()) {
-			return new Station("", "Unknown");
+			return new Station();
 		}
 
 		int last = this.journeyLegs.size();
