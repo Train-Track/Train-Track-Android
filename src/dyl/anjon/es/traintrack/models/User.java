@@ -2,6 +2,7 @@ package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +16,7 @@ public class User {
 	private boolean friend;
 
 	public User(String name) {
+		this.setId(0);
 		this.setName(name);
 	}
 
@@ -94,18 +96,18 @@ public class User {
 	public static User get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getReadableDatabase();
-
-		Cursor cursor = db.query("friends", new String[] { "id", "name" },
-				"id = ?", new String[] { String.valueOf(id) }, null, null,
-				null, null);
-		if (cursor != null) {
-			cursor.moveToFirst();
-		} else {
-			return null;
+		User user = null;
+		Cursor cursor = db.query("users", new String[] { "id", "name",
+				"facebook_id", "friend" }, "id = ?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
+		if (cursor.moveToFirst()) {
+			do {
+				user = new User(cursor.getString(1));
+				user.setId(cursor.getInt(0));
+				user.setFacebookId(cursor.getString(2));
+				user.setFriend(cursor.getInt(3) == 1);
+			} while (cursor.moveToNext());
 		}
-
-		User user = new User(cursor.getString(1));
-		user.setId(cursor.getInt(0));
 		cursor.close();
 		dbh.close();
 
@@ -122,8 +124,10 @@ public class User {
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
-		Cursor cursor = db.rawQuery(
-				"SELECT * FROM users WHERE friend = 1 ORDER BY name ASC", null);
+		Cursor cursor = db
+				.rawQuery(
+						"SELECT * FROM users WHERE friend != 1 ORDER BY name ASC",
+						null);
 		if (cursor.moveToFirst()) {
 			do {
 				User user = new User(cursor.getString(1));
@@ -135,6 +139,26 @@ public class User {
 		dbh.close();
 
 		return users;
+	}
+
+	public User save(Context context) {
+		DatabaseHandler dbh = new DatabaseHandler(context);
+		SQLiteDatabase db = dbh.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put("name", this.getName());
+		values.put("facebook_id", this.getFacebookId());
+
+		if (this.getId() != 0) {
+			db.update("users", values, "id = ?",
+					new String[] { String.valueOf(this.getId()) });			
+		} else {
+			long id = db.insert("users", null, values);
+			if (id > 0) {
+				this.setId((int) id);
+			}
+		}
+
+		return this;
 	}
 
 }

@@ -14,7 +14,7 @@ public class Schedule {
 	private ArrayList<ScheduleLocation> scheduleLocations;
 
 	public Schedule() {
-		this.id = 0;
+		this.setId(0);
 		this.scheduleLocations = new ArrayList<ScheduleLocation>();
 	}
 

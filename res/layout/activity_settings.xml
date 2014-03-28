@@ -29,6 +29,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/share_public" />
+
+        <Button
+            android:id="@+id/connect_facebook"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/connect_facebook" />
     </LinearLayout>
 
 </ScrollView>

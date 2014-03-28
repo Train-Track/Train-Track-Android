@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class Journey {
 
@@ -172,7 +173,7 @@ public class Journey {
 			DatabaseHandler dbh = new DatabaseHandler(context);
 			SQLiteDatabase db = dbh.getWritableDatabase();
 			ContentValues values = new ContentValues();
-			values.put("user_id", "1");
+			values.put("user_id", Utils.getSession().getUser().getId());
 			long id = db.insert("journeys", null, values);
 			if (id > 0) {
 				this.setId((int) id);
