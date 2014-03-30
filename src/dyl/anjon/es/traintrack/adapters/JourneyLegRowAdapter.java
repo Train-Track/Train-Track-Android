@@ -46,4 +46,9 @@ public class JourneyLegRowAdapter extends BaseAdapter {
 		return v;
 	}
 
+	public void refresh(ArrayList<JourneyLeg> journeyLegs) {
+		this.rowList = journeyLegs;
+		this.notifyDataSetChanged();
+	}
+
 }

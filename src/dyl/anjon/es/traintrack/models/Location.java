@@ -188,9 +188,9 @@ public class Location {
 		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
 				"name", "latitude", "longitude", "favourite", "station" }, "id = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
-		if (cursor != null) {
-			cursor.moveToFirst();
-		} else {
+		if (cursor == null) {
+			return null;
+		} else if(!cursor.moveToFirst()) {
 			return null;
 		}
 

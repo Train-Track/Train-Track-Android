@@ -15,8 +15,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
-import dyl.anjon.es.traintrack.models.ScheduleLocation;
 import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.ScheduleLocation;
 
 public class JourneyLegActivity extends Activity {
 
@@ -167,6 +167,10 @@ public class JourneyLegActivity extends Activity {
 			if (success) {
 				Toast.makeText(getApplicationContext(),
 						"Journey leg was deleted", Toast.LENGTH_SHORT).show();
+				Journey journey = Journey.get(getApplicationContext(), journeyLeg.getJourneyId());
+				if (journey.getJourneyLegs(getApplicationContext()).size() == 0) {
+					journey.delete(getApplicationContext());
+				}
 				finish();
 			}
 			return true;

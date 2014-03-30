@@ -1,5 +1,7 @@
 package dyl.anjon.es.traintrack;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ public class JourneyActivity extends Activity {
 
 	private int journeyId = 0;
 	private Journey journey;
+	private JourneyLegRowAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +41,8 @@ public class JourneyActivity extends Activity {
 		name.setText(journey.getOrigin(this).toString() + " to "
 				+ journey.getDestination(this).toString());
 
-		final JourneyLegRowAdapter adapter = new JourneyLegRowAdapter(
-				LayoutInflater.from(this), journey.getJourneyLegs(this));
+		adapter = new JourneyLegRowAdapter(LayoutInflater.from(this),
+				journey.getJourneyLegs(this));
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -72,7 +75,7 @@ public class JourneyActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 			Intent intent = new Intent().setClass(getApplicationContext(),
 					LocationActivity.class);
-			intent.putExtra("station_id", journey.getDestination(this).getId());
+			intent.putExtra("location_id", journey.getDestination(this).getId());
 			intent.putExtra("journey_id", journeyId);
 			startActivity(intent);
 			finish();
@@ -88,6 +91,15 @@ public class JourneyActivity extends Activity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	public void onResume() {
+		super.onResume();
+		ArrayList<JourneyLeg> journeyLegs = journey.getJourneyLegs(this);
+		if (journeyLegs.size() == 0) {
+			finish();
+		}
+		adapter.refresh(journeyLegs);
 	}
 
 }
