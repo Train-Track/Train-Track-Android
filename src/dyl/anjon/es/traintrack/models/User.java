@@ -10,6 +10,8 @@ import dyl.anjon.es.traintrack.db.DatabaseHandler;
 
 public class User {
 
+	public static final String TABLE_NAME = "users";
+
 	private int id;
 	private String name;
 	private String facebookId;

@@ -12,17 +12,17 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.models.Location;
 
-public class StationRowAdapter extends BaseAdapter implements Filterable {
+public class LocationRowAdapter extends BaseAdapter implements Filterable {
 
-	private List<Station> rowList;
-	private List<Station> origRowList;
+	private List<Location> rowList;
+	private List<Location> origRowList;
 	private LayoutInflater inflater = null;
 
-	public StationRowAdapter(LayoutInflater inflater,
-			ArrayList<Station> stations) {
-		this.rowList = stations;
+	public LocationRowAdapter(LayoutInflater inflater,
+			ArrayList<Location> locations) {
+		this.rowList = locations;
 		this.inflater = inflater;
 	}
 
@@ -30,7 +30,7 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
 		return rowList.size();
 	}
 
-	public Station getItem(int position) {
+	public Location getItem(int position) {
 		return rowList.get(position);
 	}
 
@@ -40,11 +40,11 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_station, null);
-		Station station = rowList.get(position);
+		Location location = rowList.get(position);
 		TextView name = (TextView) v.findViewById(R.id.name);
-		name.setText(station.getName());
+		name.setText(location.getName());
 		TextView crsCode = (TextView) v.findViewById(R.id.crs_code);
-		crsCode.setText(station.getCrsCode());
+		crsCode.setText(location.getCrsCode());
 		return v;
 	}
 
@@ -55,17 +55,17 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
 			@Override
 			protected void publishResults(CharSequence constraint,
 					FilterResults results) {
-				rowList = (List<Station>) results.values;
+				rowList = (List<Location>) results.values;
 				notifyDataSetChanged();
 			}
 
 			@Override
 			protected FilterResults performFiltering(CharSequence constraint) {
 				FilterResults results = new FilterResults();
-				List<Station> list = new ArrayList<Station>();
+				List<Location> list = new ArrayList<Location>();
 
 				if (origRowList == null) {
-					origRowList = new ArrayList<Station>(rowList);
+					origRowList = new ArrayList<Location>(rowList);
 				}
 
 				if (constraint == null || constraint.length() == 0) {
@@ -75,12 +75,12 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
 					constraint = constraint.toString().toLowerCase(
 							Locale.ENGLISH).toString();
 					for (int i = 0; i < origRowList.size(); i++) {
-						Station station = origRowList.get(i);
-						if ((station.getName().toLowerCase(Locale.UK)
+						Location location = origRowList.get(i);
+						if ((location.getName().toLowerCase(Locale.UK)
 								.contains(constraint.toString()))
-								|| (station.getCrsCode().toLowerCase(Locale.UK)
+								|| (location.getCrsCode().toLowerCase(Locale.UK)
 										.contains(constraint))) {
-							list.add(station);
+							list.add(location);
 						}
 					}
 					results.count = list.size();

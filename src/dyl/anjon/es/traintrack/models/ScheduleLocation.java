@@ -8,10 +8,12 @@ import dyl.anjon.es.traintrack.db.DatabaseHandler;
 
 public class ScheduleLocation {
 
+	public static final String TABLE_NAME = "schedule_locations";
+
 	private int id;
 	private int scheduleId;
-	private int stationId;
-	private Station station;
+	private int locationId;
+	private Location location;
 	private String time;
 	private String platform;
 
@@ -49,33 +51,33 @@ public class ScheduleLocation {
 	}
 
 	/**
-	 * @return the station ID
+	 * @return the location ID
 	 */
-	public int getStationId() {
-		return stationId;
+	public int getLocationId() {
+		return locationId;
 	}
 
 	/**
-	 * @param station
+	 * @param location
 	 *            ID this entry is apart of
 	 */
-	public void setStationId(int stationId) {
-		this.stationId = stationId;
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
 	}
 
 	/**
-	 * @return the station
+	 * @return the location
 	 */
-	public Station getStation() {
-		return station;
+	public Location getLocation() {
+		return location;
 	}
 
 	/**
-	 * @param station
-	 *            the station to set
+	 * @param location
+	 *            the location to set
 	 */
-	public void setStation(Station station) {
-		this.station = station;
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 	/**
@@ -109,11 +111,11 @@ public class ScheduleLocation {
 	}
 
 	/**
-	 * @return the station name
+	 * @return the location name
 	 */
 	@Override
 	public String toString() {
-		return this.getStation().toString();
+		return this.getLocation().toString();
 	}
 	
 	/**
@@ -125,8 +127,8 @@ public class ScheduleLocation {
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
-		Cursor cursor = db.query("schedule_locations",
-				new String[] { "id", "schedule_id", "station_id", "platform", "time" }, "id = ?",
+		Cursor cursor = db.query(TABLE_NAME,
+				new String[] { "id", "schedule_id", "location_id", "platform", "time" }, "id = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
@@ -137,8 +139,8 @@ public class ScheduleLocation {
 		ScheduleLocation scheduleLocation = new ScheduleLocation();
 		scheduleLocation.setId(cursor.getInt(0));
 		scheduleLocation.setScheduleId(cursor.getInt(1));
-		scheduleLocation.setStationId(cursor.getInt(2));
-		scheduleLocation.setStation(Station.get(context, cursor.getInt(2)));
+		scheduleLocation.setLocationId(cursor.getInt(2));
+		scheduleLocation.setLocation(Location.get(context, cursor.getInt(2)));
 		scheduleLocation.setPlatform(cursor.getString(3));
 		scheduleLocation.setTime(cursor.getString(4));
 		cursor.close();

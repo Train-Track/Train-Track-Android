@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
 import com.facebook.Request;
 import com.facebook.Request.Callback;
@@ -16,40 +13,19 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 
+import dyl.anjon.es.traintrack.fragments.SettingsFragment;
 import dyl.anjon.es.traintrack.models.User;
-import dyl.anjon.es.traintrack.utils.Utils;
 
 public class SettingsActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_settings);
-
-		Button facebook = (Button) findViewById(R.id.connect_facebook);
-		Utils session = Utils.getSession();
-
-		if (session.isLoggedIn()) {
-			facebook.setText("Disconnect from Facebook");
-			facebook.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					facebookLogout();
-				}
-
-			});
-		} else {
-			facebook.setText("Connect to Facebook");
-			facebook.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					facebookLogin();
-				}
-
-			});
-		}
+		//setContentView(R.layout.activity_settings);
+		
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
 
 	}
 

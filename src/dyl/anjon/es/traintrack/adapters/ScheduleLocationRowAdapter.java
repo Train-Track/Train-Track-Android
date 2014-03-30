@@ -10,26 +10,26 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.models.ScheduleLocation;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.models.Location;
 
 public class ScheduleLocationRowAdapter extends BaseAdapter {
 
 	private ArrayList<ScheduleLocation> scheduleLocations;
 	private LayoutInflater inflater = null;
-	private Station station = null;
+	private Location location = null;
 
 	/**
 	 * @param inflater
 	 * @param schedules
 	 *            to be displayed
-	 * @param station
+	 * @param location
 	 *            the schedule is being seen from
 	 */
 	public ScheduleLocationRowAdapter(LayoutInflater inflater,
-			ArrayList<ScheduleLocation> scheduleLocations, Station station) {
+			ArrayList<ScheduleLocation> scheduleLocations, Location location) {
 		this.scheduleLocations = scheduleLocations;
 		this.inflater = inflater;
-		this.station = station;
+		this.location = location;
 	}
 
 	public int getCount() {
@@ -50,8 +50,8 @@ public class ScheduleLocationRowAdapter extends BaseAdapter {
 		final TextView time = (TextView) v.findViewById(R.id.time);
 		time.setText(scheduleLocation.getTime().toString());
 		final TextView station = (TextView) v.findViewById(R.id.station);
-		station.setText(scheduleLocation.getStation().toString());
-		if (scheduleLocation.getStation().equals(this.station)) {
+		station.setText(scheduleLocation.getLocation().toString());
+		if (scheduleLocation.getLocation().equals(this.location)) {
 			station.setTextColor(Color.RED);
 			v.setEnabled(false);
 		}

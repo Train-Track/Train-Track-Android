@@ -10,26 +10,26 @@ import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.models.Schedule;
 import dyl.anjon.es.traintrack.models.ScheduleLocation;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.models.Location;
 
 public class ScheduleRowAdapter extends BaseAdapter {
 
 	private ArrayList<Schedule> schedules;
 	private LayoutInflater inflater = null;
-	private Station station;
+	private Location location;
 
 	/**
 	 * @param inflater
 	 * @param schedules
 	 *            to be displayed
-	 * @param station
+	 * @param location
 	 *            the schedule is being seen from
 	 */
 	public ScheduleRowAdapter(LayoutInflater inflater,
-			ArrayList<Schedule> schedules, Station station) {
+			ArrayList<Schedule> schedules, Location location) {
 		this.schedules = schedules;
 		this.inflater = inflater;
-		this.station = station;
+		this.location = location;
 	}
 
 	public int getCount() {
@@ -48,13 +48,13 @@ public class ScheduleRowAdapter extends BaseAdapter {
 		final View v = inflater.inflate(R.layout.row_schedule, null);
 		final Schedule schedule = schedules.get(position);
 		final ScheduleLocation scheduleLocation = schedule.at(
-				inflater.getContext(), station);
+				inflater.getContext(), location);
 
 		final TextView destination = (TextView) v
 				.findViewById(R.id.destination);
 		ScheduleLocation destinationScheduleLocation = schedule
 				.getDestination(inflater.getContext());
-		if (destinationScheduleLocation.getStation().equals(station)) {
+		if (destinationScheduleLocation.getLocation().equals(location)) {
 			destination.setText("Terminates Here");
 		} else {
 			destination.setText(destinationScheduleLocation.toString());
@@ -63,7 +63,7 @@ public class ScheduleRowAdapter extends BaseAdapter {
 		final TextView origin = (TextView) v.findViewById(R.id.origin);
 		ScheduleLocation originScheduleLocation = schedule.getOrigin(inflater
 				.getContext());
-		if (originScheduleLocation.getStation().equals(station)) {
+		if (originScheduleLocation.getLocation().equals(location)) {
 			origin.setText("Starts Here");
 		} else {
 			origin.setText("From " + originScheduleLocation.toString());

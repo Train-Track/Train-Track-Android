@@ -8,13 +8,15 @@ import dyl.anjon.es.traintrack.db.DatabaseHandler;
 
 public class JourneyLeg {
 
+	public static final String TABLE_NAME = "journey_legs";
+
 	private int id;
 	private int journeyId;
 	private int scheduleId;
-	private int originStationId;
-	private int destinationStationId;
-	private Station origin;
-	private Station destination;
+	private int originId;
+	private int destinationId;
+	private Location origin;
+	private Location destination;
 	private String departureTime;
 	private String arrivalTime;
 	private String departurePlatform;
@@ -24,7 +26,7 @@ public class JourneyLeg {
 		this.setId(0);
 	}
 
-	public JourneyLeg(Station origin, Station destination) {
+	public JourneyLeg(Location origin, Location destination) {
 		this.setOrigin(origin);
 		this.setDestination(destination);
 	}
@@ -75,39 +77,39 @@ public class JourneyLeg {
 	}
 
 	/**
-	 * @return the id of the origin station
+	 * @return the id of the origin
 	 */
-	public int getOriginStationId() {
-		return originStationId;
+	public int getOriginId() {
+		return originId;
 	}
 
 	/**
 	 * @param id
-	 *            the id of the origin station to set
+	 *            the id of the origin to set
 	 */
-	public void setOriginStationId(int originStationId) {
-		this.originStationId = originStationId;
+	public void setOriginId(int originId) {
+		this.originId = originId;
 	}
 
 	/**
-	 * @return the id of the destination station
+	 * @return the id of the destination
 	 */
-	public int getDestinationStationId() {
-		return destinationStationId;
+	public int getDestinationId() {
+		return destinationId;
 	}
 
 	/**
 	 * @param id
-	 *            the id of the destination station to set
+	 *            the id of the destination to set
 	 */
-	public void setDestinationStationId(int destinationStationId) {
-		this.destinationStationId = destinationStationId;
+	public void setDestinationId(int destinationId) {
+		this.destinationId = destinationId;
 	}
 
 	/**
 	 * @return the origin
 	 */
-	public Station getOrigin() {
+	public Location getOrigin() {
 		return origin;
 	}
 
@@ -115,14 +117,14 @@ public class JourneyLeg {
 	 * @param origin
 	 *            the origin to set
 	 */
-	public void setOrigin(Station origin) {
+	public void setOrigin(Location origin) {
 		this.origin = origin;
 	}
 
 	/**
 	 * @return the destination
 	 */
-	public Station getDestination() {
+	public Location getDestination() {
 		return destination;
 	}
 
@@ -130,7 +132,7 @@ public class JourneyLeg {
 	 * @param destinaion
 	 *            the destination to set
 	 */
-	public void setDestination(Station destination) {
+	public void setDestination(Location destination) {
 		this.destination = destination;
 	}
 
@@ -212,8 +214,8 @@ public class JourneyLeg {
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getReadableDatabase();
 		Cursor cursor = db.query("journey_legs", new String[] { "id",
-				"journey_id", "schedule_id", "origin_station_id",
-				"destination_station_id", "departure_time", "arrival_time",
+				"journey_id", "schedule_id", "origin_id",
+				"destination_id", "departure_time", "arrival_time",
 				"departure_platform", "arrival_platform" }, "id = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null) {
@@ -226,10 +228,10 @@ public class JourneyLeg {
 		journeyLeg.setId(cursor.getInt(0));
 		journeyLeg.setJourneyId(cursor.getInt(1));
 		journeyLeg.setScheduleId(cursor.getInt(2));
-		journeyLeg.setOriginStationId(cursor.getInt(3));
-		journeyLeg.setOrigin(Station.get(context, cursor.getInt(3)));
-		journeyLeg.setDestinationStationId(cursor.getInt(4));
-		journeyLeg.setDestination(Station.get(context, cursor.getInt(4)));
+		journeyLeg.setOriginId(cursor.getInt(3));
+		journeyLeg.setOrigin(Location.get(context, cursor.getInt(3)));
+		journeyLeg.setDestinationId(cursor.getInt(4));
+		journeyLeg.setDestination(Location.get(context, cursor.getInt(4)));
 		journeyLeg.setDepartureTime(cursor.getString(5));
 		journeyLeg.setArrivalTime(cursor.getString(6));
 		journeyLeg.setDeparturePlatform(cursor.getString(7));
@@ -247,8 +249,8 @@ public class JourneyLeg {
 			ContentValues values = new ContentValues();
 			values.put("journey_id", this.getJourneyId());
 			values.put("schedule_id", this.getScheduleId());
-			values.put("origin_station_id", this.getOriginStationId());
-			values.put("destination_station_id", this.getDestinationStationId());
+			values.put("origin_id", this.getOriginId());
+			values.put("destination_id", this.getDestinationId());
 			values.put("departure_time", this.getDepartureTime());
 			values.put("arrival_time", this.getArrivalTime());
 			values.put("departure_platform", this.getDeparturePlatform());

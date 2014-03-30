@@ -13,29 +13,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.adapters.ScheduleRowAdapter;
 import dyl.anjon.es.traintrack.models.Schedule;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.models.Location;
 
-public class StationActivity extends Activity {
+public class LocationActivity extends Activity {
 
-	private Station station;
+	private Location location;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_station);
+		setContentView(R.layout.activity_location);
 
 		final Intent intent = getIntent();
-		final int stationId = intent.getIntExtra("station_id", 0);
-		station = Station.get(this, stationId);
+		final int locationId = intent.getIntExtra("location_id", 0);
+		location = Location.get(this, locationId);
 		final int journeyId = intent.getIntExtra("journey_id", 0);
 
 		final TextView name = (TextView) findViewById(R.id.name);
-		name.setText(station.getName());
+		name.setText(location.getName());
 		final TextView crsCode = (TextView) findViewById(R.id.crs_code);
-		crsCode.setText(station.getCrsCode());
+		crsCode.setText(location.getCrsCode());
 
 		final ScheduleRowAdapter adapter = new ScheduleRowAdapter(
-				LayoutInflater.from(this), station.getSchedules(this), station);
+				LayoutInflater.from(this), location.getSchedules(this), location);
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -46,7 +46,7 @@ public class StationActivity extends Activity {
 						ScheduleActivity.class);
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("schedule_id", schedule.getId());
-				intent.putExtra("station_id", station.getId());
+				intent.putExtra("location_id", location.getId());
 				startActivityForResult(intent, 1);
 				return;
 			}
@@ -58,7 +58,7 @@ public class StationActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.station, menu);
-		if (station.isFavourite()) {
+		if (location.isFavourite()) {
 			menu.getItem(0).setIcon(android.R.drawable.btn_star_big_on);
 		}
 		return true;
@@ -68,14 +68,14 @@ public class StationActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.favourite:
-			if (!station.isFavourite()) {
-				station.setFavourite(true);
+			if (!location.isFavourite()) {
+				location.setFavourite(true);
 				item.setIcon(android.R.drawable.btn_star_big_on);
 			} else {
 				item.setIcon(android.R.drawable.btn_star_big_off);
-				station.setFavourite(false);
+				location.setFavourite(false);
 			}
-			station.save(getApplicationContext());
+			location.save(getApplicationContext());
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

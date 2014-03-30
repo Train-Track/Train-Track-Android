@@ -15,34 +15,34 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import dyl.anjon.es.traintrack.R;
-import dyl.anjon.es.traintrack.StationActivity;
-import dyl.anjon.es.traintrack.adapters.StationRowAdapter;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.LocationActivity;
+import dyl.anjon.es.traintrack.adapters.LocationRowAdapter;
+import dyl.anjon.es.traintrack.models.Location;
 
-public class StationsFragment extends Fragment {
+public class LocationsFragment extends Fragment {
 
-	public StationsFragment() {
+	public LocationsFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_stations, container,
+		View rootView = inflater.inflate(R.layout.fragment_locations, container,
 				false);
 
-		ArrayList<Station> stations = Station.getAll(getActivity());
+		ArrayList<Location> stations = Location.getAllStations(getActivity());
 
 		ListView list = (ListView) rootView.findViewById(R.id.list);
-		final StationRowAdapter adapter = new StationRowAdapter(inflater,
+		final LocationRowAdapter adapter = new LocationRowAdapter(inflater,
 				stations);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
-				Station station = (Station) adapter.getItem(index);
+				Location location = (Location) adapter.getItem(index);
 				Intent intent = new Intent().setClass(getActivity(),
-						StationActivity.class);
-				intent.putExtra("station_id", station.getId());
+						LocationActivity.class);
+				intent.putExtra("location_id", location.getId());
 				startActivity(intent);
 				return;
 			}

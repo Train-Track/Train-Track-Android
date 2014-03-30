@@ -1,7 +1,7 @@
 package dyl.anjon.es.traintrack.utils;
 
-import dyl.anjon.es.traintrack.models.User;
 import android.util.Log;
+import dyl.anjon.es.traintrack.models.User;
 
 public class Utils {
 
@@ -51,4 +51,5 @@ public class Utils {
 	public static void log(String message) {
 		Log.i("TrainTrack", message);
 	}
+
 }

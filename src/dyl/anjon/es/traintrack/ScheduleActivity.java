@@ -14,7 +14,7 @@ import android.widget.TextView;
 import dyl.anjon.es.traintrack.adapters.ScheduleLocationRowAdapter;
 import dyl.anjon.es.traintrack.models.Schedule;
 import dyl.anjon.es.traintrack.models.ScheduleLocation;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.models.Location;
 
 public class ScheduleActivity extends Activity {
 
@@ -32,13 +32,13 @@ public class ScheduleActivity extends Activity {
 		final int scheduleId = intent.getIntExtra("schedule_id", 0);
 		Schedule schedule = Schedule.get(this, scheduleId);
 
-		final int stationId = intent.getIntExtra("station_id", 0);
-		Station station = Station.get(this, stationId);
+		final int locationId = intent.getIntExtra("location_id", 0);
+		Location location = Location.get(this, locationId);
 
 		ArrayList<ScheduleLocation> scheduleLocations = schedule
 				.getScheduleLocations(this);
 		for (int i = 0; i < scheduleLocations.size(); i++) {
-			if (scheduleLocations.get(i).getStation().equals(station)) {
+			if (scheduleLocations.get(i).getLocation().equals(location)) {
 				scheduleLocationId = scheduleLocations.get(i).getId();
 			}
 		}
@@ -53,7 +53,7 @@ public class ScheduleActivity extends Activity {
 
 		final ScheduleLocationRowAdapter adapter = new ScheduleLocationRowAdapter(
 				LayoutInflater.from(this), schedule.getScheduleLocations(this),
-				station);
+				location);
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {

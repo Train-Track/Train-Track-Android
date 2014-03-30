@@ -11,6 +11,8 @@ import dyl.anjon.es.traintrack.utils.Utils;
 
 public class Journey {
 
+	public static final String TABLE_NAME = "journeys";
+
 	private int id;
 	private int userId;
 	private ArrayList<JourneyLeg> journeyLegs;
@@ -53,12 +55,12 @@ public class Journey {
 	/**
 	 * @return the origin
 	 */
-	public Station getOrigin(Context context) {
+	public Location getOrigin(Context context) {
 		if (this.journeyLegs.isEmpty()) {
 			this.journeyLegs = this.getJourneyLegs(context);
 		}
 		if (this.journeyLegs.isEmpty()) {
-			return new Station();
+			return new Location();
 		}
 
 		return this.journeyLegs.get(0).getOrigin();
@@ -67,12 +69,12 @@ public class Journey {
 	/**
 	 * @return the destination
 	 */
-	public Station getDestination(Context context) {
+	public Location getDestination(Context context) {
 		if (this.journeyLegs.isEmpty()) {
 			this.journeyLegs = this.getJourneyLegs(context);
 		}
 		if (this.journeyLegs.isEmpty()) {
-			return new Station();
+			return new Location();
 		}
 
 		int last = this.journeyLegs.size();
@@ -90,8 +92,8 @@ public class Journey {
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("journey_legs", new String[] { "id",
-				"journey_id", "schedule_id", "origin_station_id",
-				"destination_station_id", "departure_time", "arrival_time" },
+				"journey_id", "schedule_id", "origin_id",
+				"destination_id", "departure_time", "arrival_time" },
 				"journey_id = ?", new String[] { String.valueOf(this.id) },
 				null, null, null, null);
 		if (cursor.moveToFirst()) {
@@ -100,11 +102,11 @@ public class Journey {
 				journeyLeg.setId(cursor.getInt(0));
 				journeyLeg.setJourneyId(cursor.getInt(1));
 				journeyLeg.setScheduleId(cursor.getInt(2));
-				journeyLeg.setOriginStationId(cursor.getInt(3));
-				journeyLeg.setDestinationStationId(cursor.getInt(4));
-				journeyLeg.setOrigin(Station.get(context, cursor.getInt(3)));
+				journeyLeg.setOriginId(cursor.getInt(3));
+				journeyLeg.setDestinationId(cursor.getInt(4));
+				journeyLeg.setOrigin(Location.get(context, cursor.getInt(3)));
 				journeyLeg
-						.setDestination(Station.get(context, cursor.getInt(4)));
+						.setDestination(Location.get(context, cursor.getInt(4)));
 				journeyLeg.setDepartureTime(cursor.getString(5));
 				journeyLeg.setArrivalTime(cursor.getString(6));
 				journeyLegs.add(journeyLeg);

@@ -16,7 +16,7 @@ import android.widget.Toast;
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
 import dyl.anjon.es.traintrack.models.ScheduleLocation;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.models.Location;
 
 public class JourneyLegActivity extends Activity {
 
@@ -64,10 +64,10 @@ public class JourneyLegActivity extends Activity {
 					"origin_schedule_location_id", 0);
 			final ScheduleLocation originScheduleLocation = ScheduleLocation
 					.get(this, originScheduleLocationId);
-			final Station originStation = originScheduleLocation.getStation();
+			final Location origin = originScheduleLocation.getLocation();
 
 			final TextView departureStation = (TextView) findViewById(R.id.departure_station);
-			departureStation.setText(originStation.toString());
+			departureStation.setText(origin.toString());
 
 			final TimePicker departureTime = (TimePicker) findViewById(R.id.departure_time);
 			int departureHour = Integer.valueOf(originScheduleLocation
@@ -84,11 +84,11 @@ public class JourneyLegActivity extends Activity {
 					"destination_schedule_location_id", 0);
 			final ScheduleLocation destinationScheduleLocation = ScheduleLocation
 					.get(this, destinationScheduleLocationId);
-			final Station destinationStation = destinationScheduleLocation
-					.getStation();
+			final Location destination = destinationScheduleLocation
+					.getLocation();
 
 			final TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
-			arrivalStation.setText(destinationStation.toString());
+			arrivalStation.setText(destination.toString());
 
 			final TimePicker arrivalTime = (TimePicker) findViewById(R.id.arrival_time);
 			int arrivalHour = Integer.valueOf(destinationScheduleLocation
@@ -115,16 +115,16 @@ public class JourneyLegActivity extends Activity {
 					journeyLeg.setJourneyId(journey.getId());
 					journeyLeg.setScheduleId(scheduleId);
 
-					journeyLeg.setOriginStationId(originStation.getId());
-					journeyLeg.setOrigin(originStation);
+					journeyLeg.setOriginId(origin.getId());
+					journeyLeg.setOrigin(origin);
 					journeyLeg.setDepartureTime(departureTime.getCurrentHour()
 							+ ":" + departureTime.getCurrentMinute());
 					journeyLeg.setDeparturePlatform(departurePlatform.getText()
 							.toString());
 
-					journeyLeg.setDestinationStationId(destinationStation
+					journeyLeg.setDestinationId(destination
 							.getId());
-					journeyLeg.setDestination(destinationStation);
+					journeyLeg.setDestination(destination);
 					journeyLeg.setArrivalTime(arrivalTime.getCurrentHour()
 							+ ":" + arrivalTime.getCurrentMinute());
 					journeyLeg.setArrivalPlatform(arrivalPlatform.getText()

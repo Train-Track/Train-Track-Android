@@ -14,12 +14,14 @@
     <string name="add_journey">+ Add Journey</string>
     <string name="add_journey_leg">+ Add Journey Leg</string>
     <string name="favourite">+ Favourite</string>
+    <string name="connect_facebook">Conect to Facebook</string>
     <string name="share_facebook">Share to Facebook</string>
-    <string name="connect_facebook">Coonect to Facebook</string>
+    <string name="share_facebook_summary">Automatically post a story on your newsfeed for your friends</string>
     <string name="share_public">Share with Public</string>
+    <string name="share_public_summary">Everyone can see your journeys in the app and on the website</string>
     <string name="save">Save</string>
     <string name="platform">Platform</string>
     <string name="departure">Departure</string>
     <string name="arrival">Arrival</string>
-    
+
 </resources>

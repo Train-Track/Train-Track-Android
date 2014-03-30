@@ -2,22 +2,38 @@ package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
 
+import com.google.gson.annotations.SerializedName;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
 
-public class Station {
+public class Location {
+
+	public static final String TABLE_NAME = "locations";
 
 	private int id;
+	
+	@SerializedName("crs")
 	private String crsCode;
+	
+	@SerializedName("name")
 	private String name;
-	private long latitude;
-	private long longitude;
+	
+	@SerializedName("lat")
+	private double latitude;
+	
+	@SerializedName("lng")
+	private double longitude;
+	
 	private boolean favourite;
+	
+	@SerializedName("station")
+	private boolean station;
 
-	public Station() {
+	public Location() {
 		this.setCrsCode("");
 		this.setName("Unknown");
 		this.setFavourite(false);
@@ -28,7 +44,7 @@ public class Station {
 	 * @param name
 	 * @param favourite
 	 */
-	public Station(String crsCode, String name, boolean favourite) {
+	public Location(String crsCode, String name, boolean favourite) {
 		this.setCrsCode(crsCode);
 		this.setName(name);
 		this.setFavourite(favourite);
@@ -82,7 +98,7 @@ public class Station {
 	/**
 	 * @return the latitude
 	 */
-	public long getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
@@ -90,14 +106,14 @@ public class Station {
 	 * @param latitude
 	 *            the latitude to set
 	 */
-	public void setLatitude(long latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
 	/**
 	 * @return the longitude
 	 */
-	public long getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
@@ -105,7 +121,7 @@ public class Station {
 	 * @param longitude
 	 *            the longitude to set
 	 */
-	public void setLongitude(long longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
@@ -122,6 +138,22 @@ public class Station {
 	 */
 	public void setFavourite(boolean favourite) {
 		this.favourite = favourite;
+	}
+
+
+	/**
+	 * @return true if a public UK station
+	 */
+	public boolean isStation() {
+		return station;
+	}
+
+	/**
+	 * @param station
+	 *            set to true if a public UK station
+	 */
+	public void setStation(boolean station) {
+		this.station = station;
 	}
 
 	/**
@@ -149,12 +181,12 @@ public class Station {
 	 * @param id
 	 * @return the station selected
 	 */
-	public static Station get(Context context, int id) {
+	public static Location get(Context context, int id) {
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
-		Cursor cursor = db.query("stations", new String[] { "id", "crs_code",
-				"name", "latitude", "longitude", "favourite" }, "id = ?",
+		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
+				"name", "latitude", "longitude", "favourite", "station" }, "id = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
@@ -162,46 +194,48 @@ public class Station {
 			return null;
 		}
 
-		Station station = new Station();
-		station.setId(cursor.getInt(0));
-		station.setCrsCode(cursor.getString(1));
-		station.setName(cursor.getString(2));
-		station.setLatitude(cursor.getLong(3));
-		station.setLongitude(cursor.getLong(4));
-		station.setFavourite(cursor.getInt(5) == 1);
+		Location location = new Location();
+		location.setId(cursor.getInt(0));
+		location.setCrsCode(cursor.getString(1));
+		location.setName(cursor.getString(2));
+		location.setLatitude(cursor.getLong(3));
+		location.setLongitude(cursor.getLong(4));
+		location.setFavourite(cursor.getInt(5) == 1);
+		location.setStation(cursor.getInt(6) == 1);
 		cursor.close();
 		dbh.close();
 
-		return station;
+		return location;
 	}
 
 	/**
 	 * @param context
 	 * @return all stations
 	 */
-	public static ArrayList<Station> getAll(Context context) {
-		ArrayList<Station> stations = new ArrayList<Station>();
+	public static ArrayList<Location> getAllStations(Context context) {
+		ArrayList<Location> locations = new ArrayList<Location>();
 
 		DatabaseHandler dbh = new DatabaseHandler(context);
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
-		Cursor cursor = db.rawQuery("SELECT * FROM stations ORDER BY name ASC",
+		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE station = 1 ORDER BY name ASC",
 				null);
 		if (cursor.moveToFirst()) {
 			do {
-				Station station = new Station();
-				station.setId(cursor.getInt(0));
-				station.setCrsCode(cursor.getString(1));
-				station.setName(cursor.getString(2));
-				station.setLatitude(cursor.getLong(3));
-				station.setLongitude(cursor.getLong(4));
-				station.setFavourite(cursor.getInt(5) == 1);
-				stations.add(station);
+				Location location = new Location();
+				location.setId(cursor.getInt(0));
+				location.setCrsCode(cursor.getString(1));
+				location.setName(cursor.getString(2));
+				location.setLatitude(cursor.getLong(3));
+				location.setLongitude(cursor.getLong(4));
+				location.setFavourite(cursor.getInt(5) == 1);
+				location.setStation(cursor.getInt(6) == 1);
+				locations.add(location);
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
 		dbh.close();
-		return stations;
+		return locations;
 	}
 
 	/**
@@ -215,7 +249,7 @@ public class Station {
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("schedule_locations",
-				new String[] { "schedule_id" }, "station_id = ?",
+				new String[] { "schedule_id" }, "location_id = ?",
 				new String[] { String.valueOf(this.getId()) }, null, null,
 				null, null);
 		if (cursor.moveToFirst()) {
@@ -229,7 +263,7 @@ public class Station {
 		return schedules;
 	}
 
-	public Station save(Context context) {
+	public Location save(Context context) {
 		if (this.getId() != 0) {
 			DatabaseHandler dbh = new DatabaseHandler(context);
 			SQLiteDatabase db = dbh.getWritableDatabase();
@@ -239,7 +273,8 @@ public class Station {
 			values.put("latitude", this.getLatitude());
 			values.put("longitude", this.getLongitude());
 			values.put("favourite", this.isFavourite());
-			db.update("stations", values, "id = ?",
+			values.put("station", this.isStation());
+			db.update(TABLE_NAME, values, "id = ?",
 					new String[] { String.valueOf(this.getId()) });
 		}
 		return this;

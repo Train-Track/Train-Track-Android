@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import dyl.anjon.es.traintrack.fragments.JourneysFragment;
-import dyl.anjon.es.traintrack.fragments.StationsFragment;
+import dyl.anjon.es.traintrack.fragments.LocationsFragment;
 import dyl.anjon.es.traintrack.fragments.UsersFragment;
 import dyl.anjon.es.traintrack.models.User;
 import dyl.anjon.es.traintrack.utils.Utils;
@@ -88,13 +88,13 @@ public class MainActivity extends FragmentActivity {
 		public Fragment getItem(int position) {
 			switch (position) {
 			case 0:
-				return new StationsFragment();
+				return new LocationsFragment();
 			case 1:
 				return new JourneysFragment();
 			case 2:
 				return new UsersFragment();
 			}
-			return new StationsFragment();
+			return new LocationsFragment();
 		}
 
 		@Override
