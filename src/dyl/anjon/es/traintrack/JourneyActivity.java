@@ -38,11 +38,11 @@ public class JourneyActivity extends Activity {
 		}
 
 		final TextView name = (TextView) findViewById(R.id.name);
-		name.setText(journey.getOrigin(this).toString() + " to "
-				+ journey.getDestination(this).toString());
+		name.setText(journey.getOrigin().toString() + " to "
+				+ journey.getDestination().toString());
 
 		adapter = new JourneyLegRowAdapter(LayoutInflater.from(this),
-				journey.getJourneyLegs(this));
+				journey.getJourneyLegs());
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -75,7 +75,7 @@ public class JourneyActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 			Intent intent = new Intent().setClass(getApplicationContext(),
 					LocationActivity.class);
-			intent.putExtra("location_id", journey.getDestination(this).getId());
+			intent.putExtra("location_id", journey.getDestination().getId());
 			intent.putExtra("journey_id", journeyId);
 			startActivity(intent);
 			finish();
@@ -95,7 +95,7 @@ public class JourneyActivity extends Activity {
 
 	public void onResume() {
 		super.onResume();
-		ArrayList<JourneyLeg> journeyLegs = journey.getJourneyLegs(this);
+		ArrayList<JourneyLeg> journeyLegs = journey.getJourneyLegs();
 		if (journeyLegs.size() == 0) {
 			finish();
 		}

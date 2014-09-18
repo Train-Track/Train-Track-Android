@@ -42,8 +42,8 @@ public class JourneyRowAdapter extends BaseAdapter {
 		View v = inflater.inflate(R.layout.row_journey, null);
 		Journey journey = rowList.get(position);
 		TextView name = (TextView) v.findViewById(R.id.name);
-		name.setText(journey.getOrigin(inflater.getContext()).toString() + " to "
-				+ journey.getDestination(inflater.getContext()).toString());
+		name.setText(journey.getOrigin().toString() + " to "
+				+ journey.getDestination().toString());
 		return v;
 	}
 	

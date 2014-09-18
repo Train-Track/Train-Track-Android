@@ -35,7 +35,8 @@ public class MainActivity extends FragmentActivity {
 				MODE_PRIVATE);
 		int userId = settings.getInt("user_id", 1);
 		Utils session = Utils.getSession();
-		User user = User.get(getApplicationContext(), userId);
+		session.setContext(getApplicationContext());
+		User user = User.get(userId);
 		session.setUser(user);
 		if (session.getUser() != null) {
 			Utils.log("The current logged in user is: "
@@ -48,6 +49,8 @@ public class MainActivity extends FragmentActivity {
 				getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
+		
+		//new GetServiceRequest().execute("HC65HlW6QW14R/OXoD0scg==");
 	}
 
 	@Override

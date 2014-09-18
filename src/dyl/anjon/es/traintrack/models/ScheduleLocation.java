@@ -1,6 +1,5 @@
 package dyl.anjon.es.traintrack.models;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
@@ -123,8 +122,8 @@ public class ScheduleLocation {
 	 * @param id
 	 * @return the schedule selected
 	 */
-	public static ScheduleLocation get(Context context, int id) {
-		DatabaseHandler dbh = new DatabaseHandler(context);
+	public static ScheduleLocation get(int id) {
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_NAME,
@@ -140,7 +139,7 @@ public class ScheduleLocation {
 		scheduleLocation.setId(cursor.getInt(0));
 		scheduleLocation.setScheduleId(cursor.getInt(1));
 		scheduleLocation.setLocationId(cursor.getInt(2));
-		scheduleLocation.setLocation(Location.get(context, cursor.getInt(2)));
+		scheduleLocation.setLocation(Location.get(cursor.getInt(2)));
 		scheduleLocation.setPlatform(cursor.getString(3));
 		scheduleLocation.setTime(cursor.getString(4));
 		cursor.close();

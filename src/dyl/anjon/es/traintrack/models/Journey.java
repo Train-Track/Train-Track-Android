@@ -55,9 +55,9 @@ public class Journey {
 	/**
 	 * @return the origin
 	 */
-	public Location getOrigin(Context context) {
+	public Location getOrigin() {
 		if (this.journeyLegs.isEmpty()) {
-			this.journeyLegs = this.getJourneyLegs(context);
+			this.journeyLegs = this.getJourneyLegs();
 		}
 		if (this.journeyLegs.isEmpty()) {
 			return new Location();
@@ -69,9 +69,9 @@ public class Journey {
 	/**
 	 * @return the destination
 	 */
-	public Location getDestination(Context context) {
+	public Location getDestination() {
 		if (this.journeyLegs.isEmpty()) {
-			this.journeyLegs = this.getJourneyLegs(context);
+			this.journeyLegs = this.getJourneyLegs();
 		}
 		if (this.journeyLegs.isEmpty()) {
 			return new Location();
@@ -85,10 +85,10 @@ public class Journey {
 	 * @param context
 	 * @return the journey legs for this journey
 	 */
-	public ArrayList<JourneyLeg> getJourneyLegs(Context context) {
+	public ArrayList<JourneyLeg> getJourneyLegs() {
 		ArrayList<JourneyLeg> journeyLegs = new ArrayList<JourneyLeg>();
 
-		DatabaseHandler dbh = new DatabaseHandler(context);
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("journey_legs", new String[] { "id",
@@ -104,9 +104,9 @@ public class Journey {
 				journeyLeg.setScheduleId(cursor.getInt(2));
 				journeyLeg.setOriginId(cursor.getInt(3));
 				journeyLeg.setDestinationId(cursor.getInt(4));
-				journeyLeg.setOrigin(Location.get(context, cursor.getInt(3)));
+				journeyLeg.setOrigin(Location.get(cursor.getInt(3)));
 				journeyLeg
-						.setDestination(Location.get(context, cursor.getInt(4)));
+						.setDestination(Location.get(cursor.getInt(4)));
 				journeyLeg.setDepartureTime(cursor.getString(5));
 				journeyLeg.setArrivalTime(cursor.getString(6));
 				journeyLegs.add(journeyLeg);

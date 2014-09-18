@@ -34,7 +34,7 @@ public class JourneyLegActivity extends Activity {
 		if (journeyLegId != 0) {
 
 			setContentView(R.layout.activity_journey_leg);
-			journeyLeg = JourneyLeg.get(this, journeyLegId);
+			journeyLeg = JourneyLeg.get(journeyLegId);
 
 			TextView departureStation = (TextView) findViewById(R.id.departure_station);
 			departureStation.setText(journeyLeg.getOrigin().toString());
@@ -63,7 +63,7 @@ public class JourneyLegActivity extends Activity {
 			int originScheduleLocationId = intent.getIntExtra(
 					"origin_schedule_location_id", 0);
 			final ScheduleLocation originScheduleLocation = ScheduleLocation
-					.get(this, originScheduleLocationId);
+					.get(originScheduleLocationId);
 			final Location origin = originScheduleLocation.getLocation();
 
 			final TextView departureStation = (TextView) findViewById(R.id.departure_station);
@@ -83,7 +83,7 @@ public class JourneyLegActivity extends Activity {
 			final int destinationScheduleLocationId = intent.getIntExtra(
 					"destination_schedule_location_id", 0);
 			final ScheduleLocation destinationScheduleLocation = ScheduleLocation
-					.get(this, destinationScheduleLocationId);
+					.get(destinationScheduleLocationId);
 			final Location destination = destinationScheduleLocation
 					.getLocation();
 
@@ -168,7 +168,7 @@ public class JourneyLegActivity extends Activity {
 				Toast.makeText(getApplicationContext(),
 						"Journey leg was deleted", Toast.LENGTH_SHORT).show();
 				Journey journey = Journey.get(getApplicationContext(), journeyLeg.getJourneyId());
-				if (journey.getJourneyLegs(getApplicationContext()).size() == 0) {
+				if (journey.getJourneyLegs().size() == 0) {
 					journey.delete(getApplicationContext());
 				}
 				finish();

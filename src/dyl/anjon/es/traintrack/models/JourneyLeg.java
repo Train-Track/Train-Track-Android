@@ -210,8 +210,8 @@ public class JourneyLeg {
 	 * @param id
 	 * @return the journey leg selected
 	 */
-	public static JourneyLeg get(Context context, int id) {
-		DatabaseHandler dbh = new DatabaseHandler(context);
+	public static JourneyLeg get(int id) {
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 		Cursor cursor = db.query("journey_legs", new String[] { "id",
 				"journey_id", "schedule_id", "origin_id",
@@ -229,9 +229,9 @@ public class JourneyLeg {
 		journeyLeg.setJourneyId(cursor.getInt(1));
 		journeyLeg.setScheduleId(cursor.getInt(2));
 		journeyLeg.setOriginId(cursor.getInt(3));
-		journeyLeg.setOrigin(Location.get(context, cursor.getInt(3)));
+		journeyLeg.setOrigin(Location.get(cursor.getInt(3)));
 		journeyLeg.setDestinationId(cursor.getInt(4));
-		journeyLeg.setDestination(Location.get(context, cursor.getInt(4)));
+		journeyLeg.setDestination(Location.get(cursor.getInt(4)));
 		journeyLeg.setDepartureTime(cursor.getString(5));
 		journeyLeg.setArrivalTime(cursor.getString(6));
 		journeyLeg.setDeparturePlatform(cursor.getString(7));

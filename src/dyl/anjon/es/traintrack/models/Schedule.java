@@ -55,7 +55,7 @@ public class Schedule {
 	 */
 	public ScheduleLocation getOrigin(Context context) {
 		if (this.scheduleLocations.isEmpty()) {
-			this.scheduleLocations = this.getScheduleLocations(context);
+			this.scheduleLocations = this.getScheduleLocations();
 		}
 		if (this.scheduleLocations.isEmpty()) {
 			Location location = new Location();
@@ -74,7 +74,7 @@ public class Schedule {
 	 */
 	public ScheduleLocation getDestination(Context context) {
 		if (this.scheduleLocations.isEmpty()) {
-			this.scheduleLocations = this.getScheduleLocations(context);
+			this.scheduleLocations = this.getScheduleLocations();
 		}
 		if (this.scheduleLocations.isEmpty()) {
 			Location location = new Location();
@@ -93,9 +93,9 @@ public class Schedule {
 	 * @param location
 	 * @return ScheduleLocation where the station is the station provided
 	 */
-	public ScheduleLocation at(Context context, Location location) {
+	public ScheduleLocation at(Location location) {
 		if (this.scheduleLocations.isEmpty()) {
-			this.scheduleLocations = this.getScheduleLocations(context);
+			this.scheduleLocations = this.getScheduleLocations();
 		}
 		for (int i = 0; i < this.scheduleLocations.size(); i++) {
 			if (this.scheduleLocations.get(i).getLocation()
@@ -108,10 +108,10 @@ public class Schedule {
 	/**
 	 * @return the schedule locations
 	 */
-	public ArrayList<ScheduleLocation> getScheduleLocations(Context context) {
+	public ArrayList<ScheduleLocation> getScheduleLocations() {
 		ArrayList<ScheduleLocation> scheduleLocations = new ArrayList<ScheduleLocation>();
 
-		DatabaseHandler dbh = new DatabaseHandler(context);
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("schedule_locations", new String[] { "id",
@@ -124,8 +124,7 @@ public class Schedule {
 				scheduleLocation.setId(cursor.getInt(0));
 				scheduleLocation.setScheduleId(cursor.getInt(1));
 				scheduleLocation.setLocationId(cursor.getInt(2));
-				scheduleLocation.setLocation(Location.get(context,
-						cursor.getInt(2)));
+				scheduleLocation.setLocation(Location.get(cursor.getInt(2)));
 				scheduleLocation.setTime(cursor.getString(3));
 				scheduleLocation.setPlatform(cursor.getString(4));
 				scheduleLocations.add(scheduleLocation);
@@ -142,8 +141,8 @@ public class Schedule {
 	 * @param id
 	 * @return the schedule selected
 	 */
-	public static Schedule get(Context context, int id) {
-		DatabaseHandler dbh = new DatabaseHandler(context);
+	public static Schedule get(int id) {
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query("schedules",

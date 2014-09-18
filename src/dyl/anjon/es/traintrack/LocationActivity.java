@@ -1,7 +1,10 @@
 package dyl.anjon.es.traintrack;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,13 +14,16 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import dyl.anjon.es.traintrack.adapters.ScheduleRowAdapter;
-import dyl.anjon.es.traintrack.models.Schedule;
+import dyl.anjon.es.traintrack.adapters.ServiceItemRowAdapter;
+import dyl.anjon.es.traintrack.api.ServiceItem;
+import dyl.anjon.es.traintrack.api.StationBoard;
 import dyl.anjon.es.traintrack.models.Location;
 
 public class LocationActivity extends Activity {
 
 	private Location location;
+	private ServiceItemRowAdapter adapter;
+	private ArrayList<ServiceItem> serviceItems;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +32,7 @@ public class LocationActivity extends Activity {
 
 		final Intent intent = getIntent();
 		final int locationId = intent.getIntExtra("location_id", 0);
-		location = Location.get(this, locationId);
+		location = Location.get(locationId);
 		final int journeyId = intent.getIntExtra("journey_id", 0);
 
 		final TextView name = (TextView) findViewById(R.id.name);
@@ -34,24 +40,27 @@ public class LocationActivity extends Activity {
 		final TextView crsCode = (TextView) findViewById(R.id.crs_code);
 		crsCode.setText(location.getCrsCode());
 
-		final ScheduleRowAdapter adapter = new ScheduleRowAdapter(
-				LayoutInflater.from(this), location.getSchedules(this), location);
+		serviceItems = new ArrayList<ServiceItem>();
+		adapter = new ServiceItemRowAdapter(LayoutInflater.from(this),
+				serviceItems, location);
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
-				Schedule schedule = (Schedule) adapter.getItem(index);
+				ServiceItem serviceItem = (ServiceItem) adapter.getItem(index);
 				Intent intent = new Intent().setClass(getApplicationContext(),
-						ScheduleActivity.class);
+						ServiceActivity.class);
 				intent.putExtra("journey_id", journeyId);
-				intent.putExtra("schedule_id", schedule.getId());
+				intent.putExtra("service_id", serviceItem.getServiceId());
 				intent.putExtra("location_id", location.getId());
 				startActivityForResult(intent, 1);
 				return;
 			}
 
 		});
+
+		new GetBoardRequest().execute(location.getCrsCode());
 
 	}
 
@@ -92,6 +101,22 @@ public class LocationActivity extends Activity {
 				getParent().setResult(Activity.RESULT_OK);
 			}
 			finish();
+		}
+	}
+
+	class GetBoardRequest extends AsyncTask<String, String, StationBoard> {
+
+		@Override
+		protected StationBoard doInBackground(String... crs) {
+			return StationBoard.getByCrs(crs[0]);
+		}
+
+		@Override
+		protected void onPostExecute(StationBoard board) {
+			super.onPostExecute(board);
+			serviceItems.clear();
+			serviceItems.addAll(board.getTrainServices());
+			adapter.notifyDataSetChanged();
 		}
 	}
 

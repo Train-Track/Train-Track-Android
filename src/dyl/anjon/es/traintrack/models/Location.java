@@ -181,13 +181,45 @@ public class Location {
 	 * @param id
 	 * @return the station selected
 	 */
-	public static Location get(Context context, int id) {
-		DatabaseHandler dbh = new DatabaseHandler(context);
+	public static Location get(int id) {
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
 				"name", "latitude", "longitude", "favourite", "station" }, "id = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
+		if (cursor == null) {
+			return null;
+		} else if(!cursor.moveToFirst()) {
+			return null;
+		}
+
+		Location location = new Location();
+		location.setId(cursor.getInt(0));
+		location.setCrsCode(cursor.getString(1));
+		location.setName(cursor.getString(2));
+		location.setLatitude(cursor.getLong(3));
+		location.setLongitude(cursor.getLong(4));
+		location.setFavourite(cursor.getInt(5) == 1);
+		location.setStation(cursor.getInt(6) == 1);
+		cursor.close();
+		dbh.close();
+
+		return location;
+	}
+	
+	/**
+	 * @param context
+	 * @param id
+	 * @return the station selected
+	 */
+	public static Location getByCrs(String crs) {
+		DatabaseHandler dbh = new DatabaseHandler();
+		SQLiteDatabase db = dbh.getReadableDatabase();
+
+		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
+				"name", "latitude", "longitude", "favourite", "station" }, "crs_code = ?",
+				new String[] { String.valueOf(crs) }, null, null, null, null);
 		if (cursor == null) {
 			return null;
 		} else if(!cursor.moveToFirst()) {
@@ -215,7 +247,7 @@ public class Location {
 	public static ArrayList<Location> getAllStations(Context context) {
 		ArrayList<Location> locations = new ArrayList<Location>();
 
-		DatabaseHandler dbh = new DatabaseHandler(context);
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE station = 1 ORDER BY name ASC",
@@ -254,7 +286,7 @@ public class Location {
 				null, null);
 		if (cursor.moveToFirst()) {
 			do {
-				schedules.add(Schedule.get(context, cursor.getInt(0)));
+				schedules.add(Schedule.get(cursor.getInt(0)));
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
@@ -265,7 +297,7 @@ public class Location {
 
 	public Location save(Context context) {
 		if (this.getId() != 0) {
-			DatabaseHandler dbh = new DatabaseHandler(context);
+			DatabaseHandler dbh = new DatabaseHandler();
 			SQLiteDatabase db = dbh.getWritableDatabase();
 			ContentValues values = new ContentValues();
 			values.put("crs_code", this.getCrsCode());

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class User {
 
@@ -95,8 +96,9 @@ public class User {
 	 * @param id
 	 * @return the user selected
 	 */
-	public static User get(Context context, int id) {
-		DatabaseHandler dbh = new DatabaseHandler(context);
+	public static User get(int id) {
+		Utils session = Utils.getSession();
+		DatabaseHandler dbh = new DatabaseHandler(session.getContext());
 		SQLiteDatabase db = dbh.getReadableDatabase();
 		User user = null;
 		Cursor cursor = db.query("users", new String[] { "id", "name",
