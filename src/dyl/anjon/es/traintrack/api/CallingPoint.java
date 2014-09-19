@@ -17,19 +17,19 @@ public class CallingPoint {
 
 	public CallingPoint(Element cp) {
 		if (cp.getElementsByTagName("crs").getLength() > 0) {
-			this.setLocationByCrs(cp.getElementsByTagName("crs").item(0)
+			setLocationByCrs(cp.getElementsByTagName("crs").item(0)
 					.getTextContent());
 		}
 		if (cp.getElementsByTagName("st").getLength() > 0) {
-			this.setScheduledTime(cp.getElementsByTagName("st").item(0)
+			setScheduledTime(cp.getElementsByTagName("st").item(0)
 					.getTextContent());
 		}
 		if (cp.getElementsByTagName("et").getLength() > 0) {
-			this.setEstimatedTime(cp.getElementsByTagName("et").item(0)
+			setEstimatedTime(cp.getElementsByTagName("et").item(0)
 					.getTextContent());
 		}
 		if (cp.getElementsByTagName("at").getLength() > 0) {
-			this.setActualTime(cp.getElementsByTagName("at").item(0)
+			setActualTime(cp.getElementsByTagName("at").item(0)
 					.getTextContent());
 		}
 	}
@@ -71,7 +71,16 @@ public class CallingPoint {
 	}
 
 	public void setLocationByCrs(String crs) {
-		this.location = Location.getByCrs(crs);
+		setLocation(Location.getByCrs(crs));
+	}
+	
+	public boolean hasArrived() {
+		if (getActualTime() != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 }
