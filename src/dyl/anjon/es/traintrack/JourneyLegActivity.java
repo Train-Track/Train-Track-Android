@@ -16,7 +16,6 @@ import android.widget.Toast;
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
 import dyl.anjon.es.traintrack.models.Location;
-import dyl.anjon.es.traintrack.models.ScheduleLocation;
 
 public class JourneyLegActivity extends Activity {
 
@@ -60,46 +59,40 @@ public class JourneyLegActivity extends Activity {
 			final Button saveButton = (Button) findViewById(R.id.save);
 			final int scheduleId = intent.getIntExtra("schedule_id", 0);
 
-			int originScheduleLocationId = intent.getIntExtra(
-					"origin_schedule_location_id", 0);
-			final ScheduleLocation originScheduleLocation = ScheduleLocation
-					.get(originScheduleLocationId);
-			final Location origin = originScheduleLocation.getLocation();
+			int originId = intent.getIntExtra("origin_id", 0);
+			final Location origin = Location.get(originId);
 
 			final TextView departureStation = (TextView) findViewById(R.id.departure_station);
 			departureStation.setText(origin.toString());
 
+			String originTime = intent.getStringExtra("origin_time");
 			final TimePicker departureTime = (TimePicker) findViewById(R.id.departure_time);
-			int departureHour = Integer.valueOf(originScheduleLocation
-					.getTime().split(":")[0]);
+			int departureHour = Integer.valueOf(originTime.split(":")[0]);
 			departureTime.setCurrentHour(departureHour);
-			int departureMinute = Integer.valueOf(originScheduleLocation
-					.getTime().split(":")[1]);
+			int departureMinute = Integer.valueOf(originTime.split(":")[1]);
 			departureTime.setCurrentMinute(departureMinute);
 
+			String originPlatform = intent.getStringExtra("origin_platform");
 			final EditText departurePlatform = (EditText) findViewById(R.id.departure_platform);
-			departurePlatform.setText(originScheduleLocation.getPlatform());
+			departurePlatform.setText(originPlatform);
 
-			final int destinationScheduleLocationId = intent.getIntExtra(
-					"destination_schedule_location_id", 0);
-			final ScheduleLocation destinationScheduleLocation = ScheduleLocation
-					.get(destinationScheduleLocationId);
-			final Location destination = destinationScheduleLocation
-					.getLocation();
+			int destinationId = intent.getIntExtra("destination_id", 0);
+			final Location destination = Location.get(destinationId);
 
 			final TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
 			arrivalStation.setText(destination.toString());
 
+			String destinationTime = intent.getStringExtra("destination_time");
 			final TimePicker arrivalTime = (TimePicker) findViewById(R.id.arrival_time);
-			int arrivalHour = Integer.valueOf(destinationScheduleLocation
-					.getTime().split(":")[0]);
+			int arrivalHour = Integer.valueOf(destinationTime.split(":")[0]);
 			arrivalTime.setCurrentHour(arrivalHour);
-			int arrivalMinute = Integer.valueOf(destinationScheduleLocation
-					.getTime().split(":")[1]);
+			int arrivalMinute = Integer.valueOf(destinationTime.split(":")[1]);
 			arrivalTime.setCurrentMinute(arrivalMinute);
 
+			String destinationPlatform = intent
+					.getStringExtra("destination_platform");
 			final EditText arrivalPlatform = (EditText) findViewById(R.id.arrival_platform);
-			arrivalPlatform.setText(destinationScheduleLocation.getPlatform());
+			arrivalPlatform.setText(destinationPlatform);
 
 			saveButton.setOnClickListener(new OnClickListener() {
 				@Override
@@ -122,8 +115,7 @@ public class JourneyLegActivity extends Activity {
 					journeyLeg.setDeparturePlatform(departurePlatform.getText()
 							.toString());
 
-					journeyLeg.setDestinationId(destination
-							.getId());
+					journeyLeg.setDestinationId(destination.getId());
 					journeyLeg.setDestination(destination);
 					journeyLeg.setArrivalTime(arrivalTime.getCurrentHour()
 							+ ":" + arrivalTime.getCurrentMinute());
@@ -167,7 +159,8 @@ public class JourneyLegActivity extends Activity {
 			if (success) {
 				Toast.makeText(getApplicationContext(),
 						"Journey leg was deleted", Toast.LENGTH_SHORT).show();
-				Journey journey = Journey.get(getApplicationContext(), journeyLeg.getJourneyId());
+				Journey journey = Journey.get(getApplicationContext(),
+						journeyLeg.getJourneyId());
 				if (journey.getJourneyLegs().size() == 0) {
 					journey.delete(getApplicationContext());
 				}

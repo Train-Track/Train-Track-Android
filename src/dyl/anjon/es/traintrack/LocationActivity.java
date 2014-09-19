@@ -53,7 +53,11 @@ public class LocationActivity extends Activity {
 						ServiceActivity.class);
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("service_id", serviceItem.getServiceId());
+				intent.putExtra("time", serviceItem.getScheduledTimeDeparture());
+				intent.putExtra("origin_id", serviceItem.getOrigin().getId());
 				intent.putExtra("location_id", location.getId());
+				intent.putExtra("destination_id", serviceItem.getDestination().getId());
+				intent.putExtra("operator", serviceItem.getOperator());
 				startActivityForResult(intent, 1);
 				return;
 			}

@@ -21,7 +21,6 @@ public class ServiceActivity extends Activity {
 
 	private CallingPointRowAdapter adapter;
 	private ArrayList<CallingPoint> callingPoints;
-	private Service service;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +30,16 @@ public class ServiceActivity extends Activity {
 		final Intent intent = getIntent();
 		final int journeyId = intent.getIntExtra("journey_id", 0);
 		final String serviceId = intent.getStringExtra("service_id");
-
-		// get service out of db
-		// service = Service.get(serviceId);
-		// in the mean time
 		final String time = intent.getStringExtra("time");
-		final String origin = intent.getStringExtra("origin");
-		final String destination = intent.getStringExtra("destination");
+		final int originId = intent.getIntExtra("origin_id", 0);
+		final Location origin = Location.get(originId);
+		final int locationId = intent.getIntExtra("location_id", 0);
+		final Location location = Location.get(locationId);	
+		final int destinationId = intent.getIntExtra("destination_id", 0);
+		final Location destination = Location.get(destinationId);
 		final String operator = intent.getStringExtra("operator");
-		// ////
 
 		new GetServiceRequest().execute(serviceId);
-
-		final int locationId = intent.getIntExtra("location_id", 0);
-		Location location = Location.get(locationId);
 
 		callingPoints = new ArrayList<CallingPoint>();
 
@@ -73,9 +68,13 @@ public class ServiceActivity extends Activity {
 						JourneyLegActivity.class);
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("service_id", serviceId);
-				intent.putExtra("origin_location_id", locationId);
-				intent.putExtra("destination_location_id", callingPoint
+				intent.putExtra("origin_id", locationId);
+				intent.putExtra("origin_time", "12:00");
+				intent.putExtra("origin_platform", "9");
+				intent.putExtra("destination_id", callingPoint
 						.getLocation().getId());
+				intent.putExtra("destination_time", "19:32");
+				intent.putExtra("destination_platform", "2A");
 				startActivityForResult(intent, 1);
 				return;
 			}
@@ -107,9 +106,14 @@ public class ServiceActivity extends Activity {
 		@Override
 		protected void onPostExecute(Service s) {
 			super.onPostExecute(s);
-			service = s;
 			callingPoints.clear();
 			callingPoints.addAll(s.getPreviousCallingPoints());
+			CallingPoint thisCallingPoint = new CallingPoint();
+			thisCallingPoint.setLocation(s.getLocation());
+			thisCallingPoint.setScheduledTime(s.getScheduledTimeDeparture());
+			thisCallingPoint.setEstimatedTime(s.getEstimatedTimeDeparture());
+			thisCallingPoint.setActualTime(s.getActualTimeDeparture());
+			callingPoints.add(thisCallingPoint);
 			callingPoints.addAll(s.getSubsequentCallingPoints());
 			adapter.notifyDataSetChanged();
 		}
