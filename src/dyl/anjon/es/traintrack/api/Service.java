@@ -20,6 +20,7 @@ public class Service {
 	private String platform;
 	private Location location;
 	private String crs;
+	private boolean isCancelled;
 	private String scheduledTimeArrival;
 	private String actualTimeArrival;
 	private String estimatedTimeArrival;
@@ -40,6 +41,46 @@ public class Service {
 		this.subsequentCallingPoints = new ArrayList<CallingPoint>();
 
 		Document doc = Utils.parseXml(xml);
+
+		NodeList results = doc.getElementsByTagName("GetServiceDetailsResult");
+		if (results.getLength() == 0) {
+			return;
+		}
+
+		Node result = results.item(0);
+		for (int i = 0; i < result.getChildNodes().getLength(); i++) {
+			Node node = result.getChildNodes().item(i);
+			if (node.getNodeName().equalsIgnoreCase("serviceType")) {
+				setServiceType(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("crs")) {
+				setCrs(node.getTextContent());
+				setLocation(Location.getByCrs(getCrs()));
+			} else if (node.getNodeName().equalsIgnoreCase("operator")) {
+				setOperator(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("operatorCode")) {
+				setOperatorCode(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("isCancelled")) {
+				setCancelled(Boolean.valueOf(node.getTextContent()));
+			} else if (node.getNodeName().equalsIgnoreCase("disruptionReason")) {
+				setDisruptionReason(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("overdueMessage")) {
+				setOverdueMessage(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("sta")) {
+				setScheduledTimeArrival(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("eta")) {
+				setEstimatedTimeArrival(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("ata")) {
+				setActualTimeArrival(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("std")) {
+				setScheduledTimeDeparture(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("etd")) {
+				setEstimatedTimeDeparture(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("atd")) {
+				setActualTimeDeparture(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("platform")) {
+				setPlatform(node.getTextContent());
+			}
+		}
 
 		NodeList callingPointsList = doc
 				.getElementsByTagName("callingPointList");
@@ -128,6 +169,14 @@ public class Service {
 
 	public void setCrs(String crs) {
 		this.crs = crs;
+	}
+
+	public void setCancelled(Boolean isCancelled) {
+		this.isCancelled = isCancelled;
+	}
+
+	public boolean isCancelled() {
+		return isCancelled;
 	}
 
 	public String getScheduledTimeArrival() {
@@ -238,8 +287,12 @@ public class Service {
 
 		String xml = Utils.SOAP_START + Utils.SOAP_HEADER + body
 				+ Utils.SOAP_END;
-		// String xmlResponse = Utils.httpPost(Utils.API_URL, xml);
-		String xmlResponse = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body><GetServiceDetailsResponse xmlns=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\"><GetServiceDetailsResult><generatedAt>2014-09-16T20:30:26.3255855+01:00</generatedAt><serviceType>train</serviceType><locationName>Manchester Piccadilly</locationName><crs>MAN</crs><operator>First TransPennine Express</operator><operatorCode>TP</operatorCode><disruptionReason>This train has been delayed by a train fault</disruptionReason><overdueMessage>We were expecting the monitoring point at Manchester Piccadilly to report on this train at 15:49. This report has not been received.</overdueMessage><platform>3</platform><sta>15:02</sta><ata>15:48</ata><std>15:06</std><etd>Delayed</etd><previousCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Cleethorpes</locationName><crs>CLE</crs><st>12:26</st><at>On time</at></callingPoint><callingPoint><locationName>Grimsby Town</locationName><crs>GMB</crs><st>12:34</st><at>On time</at></callingPoint><callingPoint><locationName>Barnetby</locationName><crs>BTB</crs><st>12:53</st><at>On time</at></callingPoint><callingPoint><locationName>Scunthorpe</locationName><crs>SCU</crs><st>13:08</st><at>On time</at></callingPoint><callingPoint><locationName>Doncaster</locationName><crs>DON</crs><st>13:42</st><at>14:15</at></callingPoint><callingPoint><locationName>Meadowhall</locationName><crs>MHS</crs><st>14:01</st><at>14:34</at></callingPoint><callingPoint><locationName>Sheffield</locationName><crs>SHF</crs><st>14:11</st><at>14:52</at></callingPoint><callingPoint><locationName>Stockport</locationName><crs>SPT</crs><st>14:53</st><at>15:36</at></callingPoint></callingPointList></previousCallingPoints><subsequentCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Manchester Airport</locationName><crs>MIA</crs><st>15:26</st><et>Delayed</et></callingPoint></callingPointList></subsequentCallingPoints></GetServiceDetailsResult></GetServiceDetailsResponse></soap:Body></soap:Envelope>";
+		String xmlResponse = "";
+		if (Utils.DEBUG_MODE) {
+			xmlResponse = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body><GetServiceDetailsResponse xmlns=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\"><GetServiceDetailsResult><generatedAt>2014-09-20T14:46:21.9029735+01:00</generatedAt><serviceType>train</serviceType><locationName>Cardiff Central</locationName><crs>CDF</crs><operator>Arriva Trains Wales</operator><operatorCode>AW</operatorCode><isCancelled>true</isCancelled><disruptionReason>This train has been cancelled because of an operating incident</disruptionReason><sta>15:37</sta><eta>Cancelled</eta><std>15:40</std><etd>Cancelled</etd><previousCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Manchester Piccadilly</locationName><crs>MAN</crs><st>12:30</st><at>On time</at></callingPoint><callingPoint><locationName>Stockport</locationName><crs>SPT</crs><st>12:39</st><at>On time</at></callingPoint><callingPoint><locationName>Wilmslow</locationName><crs>WML</crs><st>12:46</st><at>12:49</at></callingPoint><callingPoint><locationName>Crewe</locationName><crs>CRE</crs><st>13:08</st><at>13:10</at></callingPoint><callingPoint><locationName>Shrewsbury</locationName><crs>SHR</crs><st>13:37</st><et>13:40</et></callingPoint><callingPoint><locationName>Ludlow</locationName><crs>LUD</crs><st>14:06</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Leominster</locationName><crs>LEO</crs><st>14:16</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Hereford</locationName><crs>HFD</crs><st>14:33</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Abergavenny</locationName><crs>AGV</crs><st>14:56</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Cwmbran</locationName><crs>CWM</crs><st>15:09</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Newport (South Wales)</locationName><crs>NWP</crs><st>15:22</st><et>Cancelled</et></callingPoint></callingPointList></previousCallingPoints><subsequentCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Bridgend</locationName><crs>BGN</crs><st>15:59</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Port Talbot Parkway</locationName><crs>PTA</crs><st>16:15</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Neath</locationName><crs>NTH</crs><st>16:22</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Swansea</locationName><crs>SWA</crs><st>16:35</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Gowerton</locationName><crs>GWN</crs><st>16:51</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Llanelli</locationName><crs>LLE</crs><st>16:57</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Pembrey &amp; Burry Port</locationName><crs>PBY</crs><st>17:04</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Kidwelly</locationName><crs>KWL</crs><st>17:11</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Ferryside</locationName><crs>FYS</crs><st>17:16</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Carmarthen</locationName><crs>CMN</crs><st>17:28</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Whitland</locationName><crs>WTL</crs><st>17:45</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Clunderwen</locationName><crs>CUW</crs><st>17:52</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Clarbeston Road</locationName><crs>CLR</crs><st>18:00</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Haverfordwest</locationName><crs>HVF</crs><st>18:08</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Johnston</locationName><crs>JOH</crs><st>18:16</st><et>Cancelled</et></callingPoint><callingPoint><locationName>Milford Haven</locationName><crs>MFH</crs><st>18:31</st><et>Cancelled</et></callingPoint></callingPointList></subsequentCallingPoints></GetServiceDetailsResult></GetServiceDetailsResponse></soap:Body></soap:Envelope>";
+		} else {
+			xmlResponse = Utils.httpPost(Utils.API_URL, xml);
+		}
 
 		return new Service(serviceId, xmlResponse);
 	}
