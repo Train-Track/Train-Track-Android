@@ -15,7 +15,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import dyl.anjon.es.traintrack.api.Service;
 import dyl.anjon.es.traintrack.models.Location;
 import dyl.anjon.es.traintrack.utils.Utils;
 
@@ -28,13 +27,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.context = context;
-		Utils.log("Database is going to be used");
 	}
 	
 	public DatabaseHandler() {
 		super(Utils.getSession().getContext(), DATABASE_NAME, null, DATABASE_VERSION);
 		this.context = Utils.getSession().getContext();
-		Utils.log("Database is going to be used");
 	}
 
 	@Override
@@ -72,11 +69,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 		
 		ContentValues values;
-		
-		// create services
-		db.execSQL("CREATE TABLE " + Service.TABLE_NAME + " (id INTEGER PRIMARY KEY, service_id TEXT, service_type TEXT, operator TEXT, operator_code TEXT)");
-		// create calling_points
-		db.execSQL("CREATE TABLE calling_points (id INTEGER PRIMARY KEY, service_id INTEGER, location_id INTEGER, scheduled_time TEXT)");
 		// create journeys
 		db.execSQL("CREATE TABLE journeys (id INTEGER PRIMARY KEY, user_id INTEGER)");
 		// create journey legs table
@@ -96,6 +88,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put("friend", true);
 		db.insert("users", null, values);
 
+		// create operators
+		db.execSQL("CREATE TABLE operators (id INTEGER PRIMARY KEY, name TEXT, code TEXT, delay_repay_url TEXT)");
+		values = new ContentValues();
+		values.put("name", "East Coast");
+		values.put("code", "GR");
+		values.put("delay_repay_url", "http://www.eastcoast.co.uk/customer-service/contact-us/refund/delay-repay/");
+		db.insert("operators", null, values);
 	}
 
 	@Override
