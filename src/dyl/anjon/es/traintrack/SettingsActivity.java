@@ -64,7 +64,7 @@ public class SettingsActivity extends Activity {
 					Log.i("Facebook User", name);
 					User user = new User(name);
 					user.setFacebookId(me.getProperty("id").toString());
-					user = user.save(getApplicationContext());
+					user = user.save();
 					SharedPreferences settings = getSharedPreferences(
 							"current_user", MODE_PRIVATE);
 					SharedPreferences.Editor editor = settings.edit();
