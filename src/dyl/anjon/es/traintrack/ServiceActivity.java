@@ -21,11 +21,12 @@ public class ServiceActivity extends Activity {
 
 	private CallingPointRowAdapter adapter;
 	private ArrayList<CallingPoint> callingPoints;
+	private TextView disruptionReason;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_schedule);
+		setContentView(R.layout.activity_service);
 
 		final Intent intent = getIntent();
 		final int journeyId = intent.getIntExtra("journey_id", 0);
@@ -34,7 +35,7 @@ public class ServiceActivity extends Activity {
 		final int originId = intent.getIntExtra("origin_id", 0);
 		final Location origin = Location.get(originId);
 		final int locationId = intent.getIntExtra("location_id", 0);
-		final Location location = Location.get(locationId);	
+		final Location location = Location.get(locationId);
 		final int destinationId = intent.getIntExtra("destination_id", 0);
 		final Location destination = Location.get(destinationId);
 		final String operator = intent.getStringExtra("operator");
@@ -49,9 +50,11 @@ public class ServiceActivity extends Activity {
 		final TextView toc = (TextView) findViewById(R.id.toc);
 		toc.setText(operator);
 
+		disruptionReason = (TextView) findViewById(R.id.disruption_reason);
+
 		adapter = new CallingPointRowAdapter(LayoutInflater.from(this),
 				callingPoints, location);
-		final ListView list = (ListView) findViewById(R.id.list);
+		ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
@@ -71,8 +74,8 @@ public class ServiceActivity extends Activity {
 				intent.putExtra("origin_id", locationId);
 				intent.putExtra("origin_time", "12:00");
 				intent.putExtra("origin_platform", "9");
-				intent.putExtra("destination_id", callingPoint
-						.getLocation().getId());
+				intent.putExtra("destination_id", callingPoint.getLocation()
+						.getId());
 				intent.putExtra("destination_time", "19:32");
 				intent.putExtra("destination_platform", "2A");
 				startActivityForResult(intent, 1);
@@ -116,6 +119,12 @@ public class ServiceActivity extends Activity {
 			callingPoints.add(thisCallingPoint);
 			callingPoints.addAll(s.getSubsequentCallingPoints());
 			adapter.notifyDataSetChanged();
+			
+			if (s.getDisruptionReason() != null) {
+				disruptionReason.setText(s.getDisruptionReason());
+				disruptionReason.setVisibility(View.VISIBLE);
+			}
+
 		}
 	}
 
