@@ -3,7 +3,6 @@ package dyl.anjon.es.traintrack.models;
 import java.util.ArrayList;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
@@ -122,16 +121,14 @@ public class User {
 	 * @param context
 	 * @return all users who are friends
 	 */
-	public static ArrayList<User> getAllFriends(Context context) {
+	public static ArrayList<User> getAllFriends() {
 		ArrayList<User> users = new ArrayList<User>();
 
-		DatabaseHandler dbh = new DatabaseHandler(context);
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
-		Cursor cursor = db
-				.rawQuery(
-						"SELECT * FROM users WHERE friend != 1 ORDER BY name ASC",
-						null);
+		Cursor cursor = db.rawQuery(
+				"SELECT * FROM users WHERE friend = 1 ORDER BY name ASC", null);
 		if (cursor.moveToFirst()) {
 			do {
 				User user = new User(cursor.getString(1));
@@ -145,8 +142,8 @@ public class User {
 		return users;
 	}
 
-	public User save(Context context) {
-		DatabaseHandler dbh = new DatabaseHandler(context);
+	public User save() {
+		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("name", this.getName());
@@ -154,7 +151,7 @@ public class User {
 
 		if (this.getId() != 0) {
 			db.update("users", values, "id = ?",
-					new String[] { String.valueOf(this.getId()) });			
+					new String[] { String.valueOf(this.getId()) });
 		} else {
 			long id = db.insert("users", null, values);
 			if (id > 0) {
