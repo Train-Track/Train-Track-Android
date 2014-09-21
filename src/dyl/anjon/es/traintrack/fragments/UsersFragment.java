@@ -29,7 +29,7 @@ public class UsersFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_users, container,
 				false);
 
-		ArrayList<User> users = User.getAllFriends(getActivity());
+		ArrayList<User> users = User.getAllFriends();
 
 		ListView list = (ListView) rootView.findViewById(R.id.list);
 		final UserRowAdapter adapter = new UserRowAdapter(inflater, users);
