@@ -45,7 +45,7 @@ public class CallingPointRowAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View v = inflater.inflate(R.layout.row_schedule_location, null);
+		View v = inflater.inflate(R.layout.row_calling_point, null);
 		CallingPoint callingPoint = callingPoints.get(position);
 		final TextView time = (TextView) v.findViewById(R.id.time);
 		time.setText(callingPoint.getScheduledTime());

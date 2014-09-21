@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textIsSelectable="false"
-        android:textSize="22sp" />
+        android:textSize="20sp" />
     
     <LinearLayout
         android:layout_width="0dp"
@@ -25,7 +25,7 @@
 	        android:layout_height="wrap_content"
 	        android:paddingLeft="10sp"
 	        android:textIsSelectable="false"
-	        android:textSize="24sp"
+	        android:textSize="22sp"
 	        android:textStyle="bold" />
 	    
 	    <TextView
@@ -46,6 +46,6 @@
         android:layout_weight="1"
         android:paddingLeft="10sp"
         android:textIsSelectable="false"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
 </LinearLayout>

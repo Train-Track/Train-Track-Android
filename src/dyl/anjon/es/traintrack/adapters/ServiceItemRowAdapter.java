@@ -45,7 +45,7 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final View v = inflater.inflate(R.layout.row_schedule, null);
+		final View v = inflater.inflate(R.layout.row_service, null);
 		final ServiceItem serviceItem = serviceItems.get(position);
 
 		final TextView destination = (TextView) v

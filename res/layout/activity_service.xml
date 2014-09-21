@@ -17,15 +17,24 @@
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
             android:textSize="30sp" />
-        
+
         <TextView
             android:id="@+id/toc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:textIsSelectable="false"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/disruption_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
             android:textIsSelectable="false"
             android:textSize="16sp"
-            android:paddingTop="10sp" />
-        
+            android:textColor="#ff0000"
+            android:visibility="gone" />
     </LinearLayout>
 
     <ListView

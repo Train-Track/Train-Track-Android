@@ -45,7 +45,7 @@ public class ScheduleLocationRowAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final View v = inflater.inflate(R.layout.row_schedule_location, null);
+		final View v = inflater.inflate(R.layout.row_calling_point, null);
 		ScheduleLocation scheduleLocation = scheduleLocations.get(position);
 		final TextView time = (TextView) v.findViewById(R.id.time);
 		time.setText(scheduleLocation.getTime().toString());
