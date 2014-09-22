@@ -63,6 +63,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			values.put("id", location.getId());
 			values.put("crs_code", location.getCrsCode());
 			values.put("name", location.getName());
+			values.put("latitude", location.getLatitude());
+			values.put("longitude", location.getLongitude());
 			values.put("favourite", location.isFavourite());
 			values.put("station", location.isStation());
 			db.insert(Location.TABLE_NAME, null, values);

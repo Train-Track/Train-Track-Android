@@ -45,6 +45,10 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 		name.setText(location.getName());
 		TextView crsCode = (TextView) v.findViewById(R.id.crs_code);
 		crsCode.setText(location.getCrsCode());
+		if (location.getDistance() > 0) {
+			TextView distance = (TextView) v.findViewById(R.id.distance);
+			distance.setText(String.valueOf(location.getDistance()));
+		}
 		return v;
 	}
 
@@ -72,13 +76,14 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 					results.count = origRowList.size();
 					results.values = origRowList;
 				} else {
-					constraint = constraint.toString().toLowerCase(
-							Locale.ENGLISH).toString();
+					constraint = constraint.toString()
+							.toLowerCase(Locale.ENGLISH).toString();
 					for (int i = 0; i < origRowList.size(); i++) {
 						Location location = origRowList.get(i);
 						if ((location.getName().toLowerCase(Locale.UK)
 								.contains(constraint.toString()))
-								|| (location.getCrsCode().toLowerCase(Locale.UK)
+								|| (location.getCrsCode()
+										.toLowerCase(Locale.UK)
 										.contains(constraint))) {
 							list.add(location);
 						}
@@ -92,4 +97,10 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 		return filter;
 
 	}
+
+	public void refresh(ArrayList<Location> locations) {
+		this.rowList = locations;
+		this.notifyDataSetChanged();
+	}
+
 }

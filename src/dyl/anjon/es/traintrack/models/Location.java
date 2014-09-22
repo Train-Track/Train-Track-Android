@@ -2,12 +2,13 @@ package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
 
-import com.google.gson.annotations.SerializedName;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.google.gson.annotations.SerializedName;
+
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
 
 public class Location {
@@ -15,23 +16,25 @@ public class Location {
 	public static final String TABLE_NAME = "locations";
 
 	private int id;
-	
+
 	@SerializedName("crs")
 	private String crsCode;
-	
+
 	@SerializedName("name")
 	private String name;
-	
+
 	@SerializedName("lat")
 	private double latitude;
-	
+
 	@SerializedName("lng")
 	private double longitude;
-	
+
 	private boolean favourite;
-	
+
 	@SerializedName("station")
 	private boolean station;
+
+	private float distance;
 
 	public Location() {
 		this.setCrsCode("");
@@ -140,7 +143,6 @@ public class Location {
 		this.favourite = favourite;
 	}
 
-
 	/**
 	 * @return true if a public UK station
 	 */
@@ -154,6 +156,14 @@ public class Location {
 	 */
 	public void setStation(boolean station) {
 		this.station = station;
+	}
+
+	public float getDistance() {
+		return distance;
+	}
+
+	public void setDistance(float distance) {
+		this.distance = distance;
 	}
 
 	/**
@@ -186,11 +196,12 @@ public class Location {
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
-				"name", "latitude", "longitude", "favourite", "station" }, "id = ?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
+				"name", "latitude", "longitude", "favourite", "station" },
+				"id = ?", new String[] { String.valueOf(id) }, null, null,
+				null, null);
 		if (cursor == null) {
 			return null;
-		} else if(!cursor.moveToFirst()) {
+		} else if (!cursor.moveToFirst()) {
 			return null;
 		}
 
@@ -207,7 +218,7 @@ public class Location {
 
 		return location;
 	}
-	
+
 	/**
 	 * @param context
 	 * @param id
@@ -218,11 +229,12 @@ public class Location {
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
-				"name", "latitude", "longitude", "favourite", "station" }, "crs_code = ?",
-				new String[] { String.valueOf(crs) }, null, null, null, null);
+				"name", "latitude", "longitude", "favourite", "station" },
+				"crs_code = ?", new String[] { String.valueOf(crs) }, null,
+				null, null, null);
 		if (cursor == null) {
 			return null;
-		} else if(!cursor.moveToFirst()) {
+		} else if (!cursor.moveToFirst()) {
 			return null;
 		}
 
@@ -250,8 +262,8 @@ public class Location {
 		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
-		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE station = 1 ORDER BY name ASC",
-				null);
+		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME
+				+ " WHERE station = 1 ORDER BY name ASC", null);
 		if (cursor.moveToFirst()) {
 			do {
 				Location location = new Location();
