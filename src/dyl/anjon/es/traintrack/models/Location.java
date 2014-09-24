@@ -242,8 +242,8 @@ public class Location {
 		location.setId(cursor.getInt(0));
 		location.setCrsCode(cursor.getString(1));
 		location.setName(cursor.getString(2));
-		location.setLatitude(cursor.getLong(3));
-		location.setLongitude(cursor.getLong(4));
+		location.setLatitude(cursor.getDouble(3));
+		location.setLongitude(cursor.getDouble(4));
 		location.setFavourite(cursor.getInt(5) == 1);
 		location.setStation(cursor.getInt(6) == 1);
 		cursor.close();
@@ -270,8 +270,8 @@ public class Location {
 				location.setId(cursor.getInt(0));
 				location.setCrsCode(cursor.getString(1));
 				location.setName(cursor.getString(2));
-				location.setLatitude(cursor.getLong(3));
-				location.setLongitude(cursor.getLong(4));
+				location.setLatitude(cursor.getDouble(3));
+				location.setLongitude(cursor.getDouble(4));
 				location.setFavourite(cursor.getInt(5) == 1);
 				location.setStation(cursor.getInt(6) == 1);
 				locations.add(location);

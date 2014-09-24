@@ -47,7 +47,9 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 		crsCode.setText(location.getCrsCode());
 		if (location.getDistance() > 0) {
 			TextView distance = (TextView) v.findViewById(R.id.distance);
-			distance.setText(String.valueOf(location.getDistance()));
+			String km = String.format(Locale.getDefault(), "%.2g%n",
+					location.getDistance() / 1000);
+			distance.setText(km + "km");
 		}
 		return v;
 	}

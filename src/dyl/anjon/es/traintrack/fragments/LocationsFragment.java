@@ -86,8 +86,6 @@ public class LocationsFragment extends Fragment {
 					android.location.Location.distanceBetween(
 							station.getLatitude(), station.getLongitude(),
 							gps.getLatitude(), gps.getLongitude(), results);
-					Utils.log("Station is: " + station.getLatitude() + ","
-							+ station.getLongitude());
 					station.setDistance(results[0]);
 				}
 				Collections.sort(stations, new DistanceComparator());
@@ -135,7 +133,7 @@ public class LocationsFragment extends Fragment {
 	public class DistanceComparator implements Comparator<Location> {
 		@Override
 		public int compare(Location o1, Location o2) {
-			return Float.compare(o2.getDistance(), o1.getDistance());
+			return Float.compare(o1.getDistance(), o2.getDistance());
 		}
 	}
 

@@ -42,8 +42,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				" (id INTEGER PRIMARY KEY," +
 				" crs_code TEXT," +
 				" name TEXT," +
-				" latitude NUMERIC," +
-				" longitude NUMERIC," +
+				" latitude DOUBLE," +
+				" longitude DOUBLE," +
 				" favourite BOOLEAN," +
 				" station BOOLEAN)");
 		
