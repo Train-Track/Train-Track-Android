@@ -25,7 +25,6 @@ import dyl.anjon.es.traintrack.LocationActivity;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.adapters.LocationRowAdapter;
 import dyl.anjon.es.traintrack.models.Location;
-import dyl.anjon.es.traintrack.utils.Utils;
 
 public class LocationsFragment extends Fragment {
 
@@ -80,6 +79,9 @@ public class LocationsFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
+				if (gps == null) {
+					return;
+				}
 				for (int i = 0; i < stations.size(); i++) {
 					Location station = stations.get(i);
 					float results[] = { 0, 0, 0 };
@@ -123,9 +125,6 @@ public class LocationsFragment extends Fragment {
 
 	private void updateLocation(android.location.Location gps) {
 		if (gps != null) {
-			Utils.log("Location accuracy: " + gps.getAccuracy());
-			Utils.log("Location lat: " + gps.getLatitude());
-			Utils.log("Location lng: " + gps.getLongitude());
 			this.gps = gps;
 		}
 	}
