@@ -24,6 +24,7 @@ public class LocationActivity extends Activity {
 	private Location location;
 	private ServiceItemRowAdapter adapter;
 	private ArrayList<ServiceItem> serviceItems;
+	private TextView nrccMessage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class LocationActivity extends Activity {
 		final TextView crsCode = (TextView) findViewById(R.id.crs_code);
 		crsCode.setText(location.getCrsCode());
 
+		nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
 		serviceItems = new ArrayList<ServiceItem>();
 		adapter = new ServiceItemRowAdapter(LayoutInflater.from(this),
 				serviceItems, location);
@@ -56,7 +58,8 @@ public class LocationActivity extends Activity {
 				intent.putExtra("time", serviceItem.getScheduledTimeDeparture());
 				intent.putExtra("origin_id", serviceItem.getOrigin().getId());
 				intent.putExtra("location_id", location.getId());
-				intent.putExtra("destination_id", serviceItem.getDestination().getId());
+				intent.putExtra("destination_id", serviceItem.getDestination()
+						.getId());
 				intent.putExtra("operator", serviceItem.getOperator());
 				startActivityForResult(intent, 1);
 				return;
@@ -121,6 +124,13 @@ public class LocationActivity extends Activity {
 			serviceItems.clear();
 			serviceItems.addAll(board.getTrainServices());
 			adapter.notifyDataSetChanged();
+
+			ArrayList<String> nrccMessages = board.getNrccMessages();
+			if (nrccMessages.size() > 0) {
+				nrccMessage.setVisibility(View.VISIBLE);
+				nrccMessage.setText(nrccMessages.get(0).toString());
+			}
+
 		}
 	}
 
