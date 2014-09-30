@@ -307,7 +307,7 @@ public class Location {
 		return schedules;
 	}
 
-	public Location save(Context context) {
+	public Location save() {
 		if (this.getId() != 0) {
 			DatabaseHandler dbh = new DatabaseHandler();
 			SQLiteDatabase db = dbh.getWritableDatabase();

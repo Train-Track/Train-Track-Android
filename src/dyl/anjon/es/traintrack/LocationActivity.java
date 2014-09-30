@@ -88,7 +88,7 @@ public class LocationActivity extends Activity {
 				item.setIcon(android.R.drawable.btn_star_big_off);
 				location.setFavourite(false);
 			}
-			location.save(getApplicationContext());
+			location.save();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
