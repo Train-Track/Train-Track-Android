@@ -172,12 +172,15 @@ public class Location {
 	 */
 	public String getDistanceText() {
 		if (getDistance() > 0) {
-			String km = String.format(Locale.getDefault(), "%.2g%n",
-					getDistance() / 1000);
-			return km + " km";
-		} else {
-			return "";
+			double distance = getDistance() / 1000;
+			if (distance > 100) {
+				return String.format(Locale.getDefault(), "%.0fkm", distance);
+			} else if (distance > 0) {
+				return String.format(Locale.getDefault(), "%.2fkm", distance);
+			}
 		}
+		return "";
+
 	}
 
 	/**
