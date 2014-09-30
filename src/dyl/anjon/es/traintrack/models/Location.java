@@ -1,6 +1,7 @@
 package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -164,6 +165,19 @@ public class Location {
 
 	public void setDistance(float distance) {
 		this.distance = distance;
+	}
+
+	/**
+	 * @return the distance in a nice format
+	 */
+	public String getDistanceText() {
+		if (getDistance() > 0) {
+			String km = String.format(Locale.getDefault(), "%.2g%n",
+					getDistance() / 1000);
+			return km + " km";
+		} else {
+			return "";
+		}
 	}
 
 	/**
