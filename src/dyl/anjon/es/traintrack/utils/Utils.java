@@ -32,7 +32,7 @@ public class Utils {
 	private Context context;
 
 	public static boolean DEBUG_MODE = true;
-	public static String API_URL = "http://lite.realtime.nationalrail.co.uk/LDBWS/ldb5.asmx";
+	public static String API_URL = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb5.asmx";
 	public static String ACCESS_TOKEN = "";
 	public static String SOAP_START = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:com=\"http://thalesgroup.com/RTTI/2010-11-01/ldb/commontypes\" xmlns:typ=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\">";
 	public static String SOAP_HEADER = "<soapenv:Header><com:AccessToken><com:TokenValue>"
