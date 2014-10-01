@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
@@ -28,24 +29,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.context = context;
 	}
-	
+
 	public DatabaseHandler() {
-		super(Utils.getSession().getContext(), DATABASE_NAME, null, DATABASE_VERSION);
+		super(Utils.getSession().getContext(), DATABASE_NAME, null,
+				DATABASE_VERSION);
 		this.context = Utils.getSession().getContext();
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
-		//Locations
-		db.execSQL("CREATE TABLE " + Location.TABLE_NAME + 
-				" (id INTEGER PRIMARY KEY," +
-				" crs_code TEXT," +
-				" name TEXT," +
-				" latitude DOUBLE," +
-				" longitude DOUBLE," +
-				" favourite BOOLEAN)");
-		
+		// Locations
+		db.execSQL("CREATE TABLE " + Location.TABLE_NAME
+				+ " (id INTEGER PRIMARY KEY," + " crs_code TEXT,"
+				+ " name TEXT," + " latitude DOUBLE," + " longitude DOUBLE,"
+				+ " favourite BOOLEAN)");
+
 		Gson gson = new Gson();
 		InputStream is = null;
 		try {
@@ -54,9 +53,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			Utils.log(e.getMessage());
 		}
 		Reader reader = new InputStreamReader(is);
-		List<Location> locations = gson.fromJson(reader, new TypeToken<List<Location>>() {}.getType());
+		List<Location> locations = gson.fromJson(reader,
+				new TypeToken<List<Location>>() {
+				}.getType());
 		ListIterator<Location> it = locations.listIterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			Location location = it.next();
 			ContentValues values = new ContentValues();
 			values.put("id", location.getId());
@@ -67,15 +68,40 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			values.put("favourite", location.isFavourite());
 			db.insert(Location.TABLE_NAME, null, values);
 		}
-		
+
+		// Operators
+		db.execSQL("CREATE TABLE "
+				+ Operator.TABLE_NAME
+				+ " (id INTEGER PRIMARY KEY, code TEXT, name TEXT, delay_repay_url TEXT)");
+		gson = new Gson();
+		is = null;
+		try {
+			is = this.context.getAssets().open("operators.json");
+		} catch (IOException e) {
+			Utils.log(e.getMessage());
+		}
+		reader = new InputStreamReader(is);
+		List<Operator> opertors = gson.fromJson(reader,
+				new TypeToken<List<Operator>>() {
+				}.getType());
+		ListIterator<Operator> itop = opertors.listIterator();
+		while (itop.hasNext()) {
+			Operator operator = itop.next();
+			ContentValues values = new ContentValues();
+			values.put("id", operator.getId());
+			values.put("code", operator.getCode());
+			values.put("name", operator.getName());
+			values.put("delay_repay_url", operator.getDelayRepayUrl());
+			db.insert(Operator.TABLE_NAME, null, values);
+		}
+
 		ContentValues values;
-		// create journeys
+		// Journeys
 		db.execSQL("CREATE TABLE journeys (id INTEGER PRIMARY KEY, user_id INTEGER)");
-		// create journey legs table
+		// Journey Legs
 		db.execSQL("CREATE TABLE journey_legs (id INTEGER PRIMARY KEY, journey_id INTEGER, schedule_id INTEGER, origin_id INTEGER, destination_id INTEGER, departure_time TEXT, arrival_time TEXT, departure_platform TEXT, arrival_platform TEXT)");
 
-
-		// create friends
+		// Friends
 		db.execSQL("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, facebook_id TEXT, friend BOOLEAN)");
 		values = new ContentValues();
 		values.put("name", "Dylan Jones");
@@ -88,13 +114,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put("friend", true);
 		db.insert("users", null, values);
 
-		// create operators
-		db.execSQL("CREATE TABLE operators (id INTEGER PRIMARY KEY, name TEXT, code TEXT, delay_repay_url TEXT)");
-		values = new ContentValues();
-		values.put("name", "East Coast");
-		values.put("code", "GR");
-		values.put("delay_repay_url", "http://www.eastcoast.co.uk/customer-service/contact-us/refund/delay-repay/");
-		db.insert("operators", null, values);
 	}
 
 	@Override
@@ -102,6 +121,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS schedules");
 		db.execSQL("DROP TABLE IF EXISTS schedule_locations");
 		db.execSQL("DROP TABLE IF EXISTS locations");
+		db.execSQL("DROP TABLE IF EXISTS operators");
 		db.execSQL("DROP TABLE IF EXISTS users");
 		db.execSQL("DROP TABLE IF EXISTS journeys");
 		db.execSQL("DROP TABLE IF EXISTS journey_legs");
