@@ -323,6 +323,7 @@ public class Location {
 			values.put("favourite", this.isFavourite());
 			db.update(TABLE_NAME, values, "id = ?",
 					new String[] { String.valueOf(this.getId()) });
+			dbh.close();
 		}
 		return this;
 	}
