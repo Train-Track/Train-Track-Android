@@ -46,6 +46,7 @@
         android:layout_weight="1"
         android:paddingLeft="10sp"
         android:textIsSelectable="false"
+        android:gravity="center"
         android:textSize="20sp" />
 
 </LinearLayout>
