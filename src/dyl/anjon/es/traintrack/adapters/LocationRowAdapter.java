@@ -76,15 +76,11 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 					results.count = origRowList.size();
 					results.values = origRowList;
 				} else {
-					constraint = constraint.toString()
+					String string = constraint.toString()
 							.toLowerCase(Locale.ENGLISH).toString();
 					for (int i = 0; i < origRowList.size(); i++) {
 						Location location = origRowList.get(i);
-						if ((location.getName().toLowerCase(Locale.UK)
-								.contains(constraint.toString()))
-								|| (location.getCrsCode()
-										.toLowerCase(Locale.UK)
-										.contains(constraint))) {
+						if (location.isNameSimilarTo(string)) {
 							list.add(location);
 						}
 					}
