@@ -32,9 +32,6 @@ public class Location {
 
 	private boolean favourite;
 
-	@SerializedName("station")
-	private boolean station;
-
 	private float distance;
 
 	public Location() {
@@ -144,21 +141,6 @@ public class Location {
 		this.favourite = favourite;
 	}
 
-	/**
-	 * @return true if a public UK station
-	 */
-	public boolean isStation() {
-		return station;
-	}
-
-	/**
-	 * @param station
-	 *            set to true if a public UK station
-	 */
-	public void setStation(boolean station) {
-		this.station = station;
-	}
-
 	public float getDistance() {
 		return distance;
 	}
@@ -181,6 +163,16 @@ public class Location {
 		}
 		return "";
 
+	}
+
+	/**
+	 * @param string
+	 *            to check against
+	 * @return true or false
+	 */
+	public boolean isNameSimilarTo(String string) {
+		return (getName().toLowerCase(Locale.UK).contains(string))
+				|| (getCrsCode().toLowerCase(Locale.UK).contains(string));
 	}
 
 	/**
@@ -213,9 +205,8 @@ public class Location {
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
-				"name", "latitude", "longitude", "favourite", "station" },
-				"id = ?", new String[] { String.valueOf(id) }, null, null,
-				null, null);
+				"name", "latitude", "longitude", "favourite" }, "id = ?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor == null) {
 			return null;
 		} else if (!cursor.moveToFirst()) {
@@ -229,7 +220,6 @@ public class Location {
 		location.setLatitude(cursor.getLong(3));
 		location.setLongitude(cursor.getLong(4));
 		location.setFavourite(cursor.getInt(5) == 1);
-		location.setStation(cursor.getInt(6) == 1);
 		cursor.close();
 		dbh.close();
 
@@ -246,9 +236,8 @@ public class Location {
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
-				"name", "latitude", "longitude", "favourite", "station" },
-				"crs_code = ?", new String[] { String.valueOf(crs) }, null,
-				null, null, null);
+				"name", "latitude", "longitude", "favourite" }, "crs_code = ?",
+				new String[] { String.valueOf(crs) }, null, null, null, null);
 		if (cursor == null) {
 			return null;
 		} else if (!cursor.moveToFirst()) {
@@ -262,7 +251,6 @@ public class Location {
 		location.setLatitude(cursor.getDouble(3));
 		location.setLongitude(cursor.getDouble(4));
 		location.setFavourite(cursor.getInt(5) == 1);
-		location.setStation(cursor.getInt(6) == 1);
 		cursor.close();
 		dbh.close();
 
@@ -273,14 +261,14 @@ public class Location {
 	 * @param context
 	 * @return all stations
 	 */
-	public static ArrayList<Location> getAllStations(Context context) {
+	public static ArrayList<Location> getAll() {
 		ArrayList<Location> locations = new ArrayList<Location>();
 
 		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
 		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME
-				+ " WHERE station = 1 ORDER BY name ASC", null);
+				+ " ORDER BY name ASC", null);
 		if (cursor.moveToFirst()) {
 			do {
 				Location location = new Location();
@@ -290,7 +278,6 @@ public class Location {
 				location.setLatitude(cursor.getDouble(3));
 				location.setLongitude(cursor.getDouble(4));
 				location.setFavourite(cursor.getInt(5) == 1);
-				location.setStation(cursor.getInt(6) == 1);
 				locations.add(location);
 			} while (cursor.moveToNext());
 		}
@@ -334,7 +321,6 @@ public class Location {
 			values.put("latitude", this.getLatitude());
 			values.put("longitude", this.getLongitude());
 			values.put("favourite", this.isFavourite());
-			values.put("station", this.isStation());
 			db.update(TABLE_NAME, values, "id = ?",
 					new String[] { String.valueOf(this.getId()) });
 		}

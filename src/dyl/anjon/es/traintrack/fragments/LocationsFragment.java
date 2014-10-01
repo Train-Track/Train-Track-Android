@@ -39,8 +39,7 @@ public class LocationsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_locations,
 				container, false);
 
-		final ArrayList<Location> stations = Location
-				.getAllStations(getActivity());
+		final ArrayList<Location> stations = Location.getAll();
 
 		ListView list = (ListView) rootView.findViewById(R.id.list);
 		final LocationRowAdapter adapter = new LocationRowAdapter(inflater,
