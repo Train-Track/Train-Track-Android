@@ -8,6 +8,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class Service {
@@ -15,7 +16,7 @@ public class Service {
 	public static final String TABLE_NAME = "services";
 	private String serviceId;
 	private String serviceType;
-	private String operator;
+	private Operator operator;
 	private String operatorCode;
 	private String platform;
 	private Location location;
@@ -55,10 +56,15 @@ public class Service {
 			} else if (node.getNodeName().equalsIgnoreCase("crs")) {
 				setCrs(node.getTextContent());
 				setLocation(Location.getByCrs(getCrs()));
-			} else if (node.getNodeName().equalsIgnoreCase("operator")) {
-				setOperator(node.getTextContent());
 			} else if (node.getNodeName().equalsIgnoreCase("operatorCode")) {
 				setOperatorCode(node.getTextContent());
+				Operator operator = Operator.getByCode(getOperatorCode());
+				if (operator != null) {
+					setOperator(operator);
+				} else {
+					Utils.log("NO OPERATOR FOUND IN DB!");
+				}
+				setOperator(Operator.getByCode(getOperatorCode()));
 			} else if (node.getNodeName().equalsIgnoreCase("isCancelled")) {
 				setCancelled(Boolean.valueOf(node.getTextContent()));
 			} else if (node.getNodeName().equalsIgnoreCase("disruptionReason")) {
@@ -131,11 +137,11 @@ public class Service {
 		this.serviceType = serviceType;
 	}
 
-	public String getOperator() {
+	public Operator getOperator() {
 		return operator;
 	}
 
-	public void setOperator(String operator) {
+	public void setOperator(Operator operator) {
 		this.operator = operator;
 	}
 

@@ -60,7 +60,7 @@ public class LocationActivity extends Activity {
 				intent.putExtra("location_id", location.getId());
 				intent.putExtra("destination_id", serviceItem.getDestination()
 						.getId());
-				intent.putExtra("operator", serviceItem.getOperator());
+				intent.putExtra("operator", serviceItem.getOperator().toString());
 				startActivityForResult(intent, 1);
 				return;
 			}

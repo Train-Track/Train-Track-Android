@@ -3,6 +3,7 @@ package dyl.anjon.es.traintrack.api;
 import org.w3c.dom.Element;
 
 import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class ServiceItem {
@@ -14,7 +15,7 @@ public class ServiceItem {
 	private String scheduledTimeDeparture;
 	private String estimatedTimeDeparture;
 	private String platform;
-	private String operator;
+	private Operator operator;
 	private String operatorCode;
 	private boolean isCircularRoute;
 	private String serviceId;
@@ -66,13 +67,15 @@ public class ServiceItem {
 			this.platform = ts.getElementsByTagName("platform").item(0)
 					.getTextContent();
 		}
-		if (ts.getElementsByTagName("operator").getLength() > 0) {
-			this.operator = ts.getElementsByTagName("operator").item(0)
-					.getTextContent();
-		}
 		if (ts.getElementsByTagName("operatorCode").getLength() > 0) {
 			this.operatorCode = ts.getElementsByTagName("operatorCode").item(0)
 					.getTextContent();
+			Operator operator = Operator.getByCode(this.operatorCode);
+			if (operator != null) {
+				this.operator = operator;
+			} else {
+				Utils.log("NO OPERATOR FOUND IN DB!");
+			}
 		}
 		if (ts.getElementsByTagName("isCircularRoute").getLength() > 0) {
 			this.isCircularRoute = Boolean.valueOf(ts.getElementsByTagName("isCircularRoute").item(0)
@@ -140,11 +143,11 @@ public class ServiceItem {
 		this.platform = platform;
 	}
 
-	public String getOperator() {
+	public Operator getOperator() {
 		return operator;
 	}
 
-	public void setOperator(String operator) {
+	public void setOperator(Operator operator) {
 		this.operator = operator;
 	}
 

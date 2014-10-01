@@ -62,6 +62,7 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 		} else {
 			origin.setText("From " + serviceItem.getOrigin().toString());
 		}
+		origin.setText(origin.getText() + " - " + serviceItem.getOperator());
 
 		final TextView time = (TextView) v.findViewById(R.id.time);
 		if (serviceItem.getScheduledTimeDeparture() != null) {
