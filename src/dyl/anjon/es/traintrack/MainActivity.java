@@ -49,8 +49,7 @@ public class MainActivity extends FragmentActivity {
 				getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-		
-		//new GetServiceRequest().execute("HC65HlW6QW14R/OXoD0scg==");
+
 	}
 
 	@Override
