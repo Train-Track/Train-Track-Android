@@ -64,7 +64,6 @@ public class Service {
 				} else {
 					Utils.log("NO OPERATOR FOUND IN DB!");
 				}
-				setOperator(Operator.getByCode(getOperatorCode()));
 			} else if (node.getNodeName().equalsIgnoreCase("isCancelled")) {
 				setCancelled(Boolean.valueOf(node.getTextContent()));
 			} else if (node.getNodeName().equalsIgnoreCase("disruptionReason")) {
