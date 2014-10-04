@@ -3,6 +3,7 @@
 
     <string name="app_name">Train Track</string>
     <string name="app_id">272514462916508</string>
+    <string name="maps_api_key">AIzaSyC9LZFbAznxN0LxPLeX3D5d-84h3PHbdiQ</string>
     <string name="delete_journey">Delete Journey</string>
     <string name="delete_journey_leg">Delete Journey Leg</string>
     <string name="settings">Settings</string>
