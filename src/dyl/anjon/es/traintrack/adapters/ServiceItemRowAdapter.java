@@ -2,6 +2,7 @@ package dyl.anjon.es.traintrack.adapters;
 
 import java.util.ArrayList;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,14 +51,14 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 
 		final TextView destination = (TextView) v
 				.findViewById(R.id.destination);
-		if (serviceItem.getDestination().equals(station)) {
+		if (serviceItem.terminatesHere()) {
 			destination.setText("Terminates Here");
 		} else {
 			destination.setText(serviceItem.getDestination().toString());
 		}
 
 		final TextView origin = (TextView) v.findViewById(R.id.origin);
-		if (serviceItem.getOrigin().equals(station)) {
+		if (serviceItem.startsHere()) {
 			origin.setText("Starts Here");
 		} else {
 			origin.setText("From " + serviceItem.getOrigin().toString());
@@ -65,11 +66,18 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 		origin.setText(origin.getText() + " - " + serviceItem.getOperator());
 
 		final TextView time = (TextView) v.findViewById(R.id.time);
-		if (serviceItem.getScheduledTimeDeparture() != null) {
-			time.setText(serviceItem.getScheduledTimeDeparture());
-		} else {
+		if ((serviceItem.terminatesHere()) && (serviceItem.isDelayedArriving())) {
+			time.setText(serviceItem.getEstimatedTimeArrival());
+			time.setTextColor(Color.RED);
+		} else if (serviceItem.terminatesHere()) {
 			time.setText(serviceItem.getScheduledTimeArrival());
+		} else if (serviceItem.isDelayedDeparting()) {
+			time.setText(serviceItem.getEstimatedTimeDeparture());
+			time.setTextColor(Color.RED);
+		} else {
+			time.setText(serviceItem.getScheduledTimeDeparture());
 		}
+		
 
 		final TextView platform = (TextView) v.findViewById(R.id.platform);
 		platform.setText(serviceItem.getPlatform());
