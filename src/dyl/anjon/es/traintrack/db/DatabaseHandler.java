@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
@@ -39,8 +39,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
-		// Locations
-		db.execSQL("CREATE TABLE " + Location.TABLE_NAME
+		// Stations
+		db.execSQL("CREATE TABLE " + Station.TABLE_NAME
 				+ " (id INTEGER PRIMARY KEY," + " crs_code TEXT,"
 				+ " name TEXT," + " latitude DOUBLE," + " longitude DOUBLE,"
 				+ " favourite BOOLEAN)");
@@ -53,20 +53,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			Utils.log(e.getMessage());
 		}
 		Reader reader = new InputStreamReader(is);
-		List<Location> locations = gson.fromJson(reader,
-				new TypeToken<List<Location>>() {
+		List<Station> locations = gson.fromJson(reader,
+				new TypeToken<List<Station>>() {
 				}.getType());
-		ListIterator<Location> it = locations.listIterator();
+		ListIterator<Station> it = locations.listIterator();
 		while (it.hasNext()) {
-			Location location = it.next();
+			Station station = it.next();
 			ContentValues values = new ContentValues();
-			values.put("id", location.getId());
-			values.put("crs_code", location.getCrsCode());
-			values.put("name", location.getName());
-			values.put("latitude", location.getLatitude());
-			values.put("longitude", location.getLongitude());
-			values.put("favourite", location.isFavourite());
-			db.insert(Location.TABLE_NAME, null, values);
+			values.put("id", station.getId());
+			values.put("crs_code", station.getCrsCode());
+			values.put("name", station.getName());
+			values.put("latitude", station.getLatitude());
+			values.put("longitude", station.getLongitude());
+			values.put("favourite", station.isFavourite());
+			db.insert(Station.TABLE_NAME, null, values);
 		}
 
 		// Operators
@@ -120,7 +120,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS schedules");
 		db.execSQL("DROP TABLE IF EXISTS schedule_locations");
-		db.execSQL("DROP TABLE IF EXISTS locations");
+		db.execSQL("DROP TABLE IF EXISTS stations");
 		db.execSQL("DROP TABLE IF EXISTS operators");
 		db.execSQL("DROP TABLE IF EXISTS users");
 		db.execSQL("DROP TABLE IF EXISTS journeys");

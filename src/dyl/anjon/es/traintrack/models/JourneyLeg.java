@@ -15,8 +15,8 @@ public class JourneyLeg {
 	private int scheduleId;
 	private int originId;
 	private int destinationId;
-	private Location origin;
-	private Location destination;
+	private Station origin;
+	private Station destination;
 	private String departureTime;
 	private String arrivalTime;
 	private String departurePlatform;
@@ -26,7 +26,7 @@ public class JourneyLeg {
 		this.setId(0);
 	}
 
-	public JourneyLeg(Location origin, Location destination) {
+	public JourneyLeg(Station origin, Station destination) {
 		this.setOrigin(origin);
 		this.setDestination(destination);
 	}
@@ -109,7 +109,7 @@ public class JourneyLeg {
 	/**
 	 * @return the origin
 	 */
-	public Location getOrigin() {
+	public Station getOrigin() {
 		return origin;
 	}
 
@@ -117,14 +117,14 @@ public class JourneyLeg {
 	 * @param origin
 	 *            the origin to set
 	 */
-	public void setOrigin(Location origin) {
+	public void setOrigin(Station origin) {
 		this.origin = origin;
 	}
 
 	/**
 	 * @return the destination
 	 */
-	public Location getDestination() {
+	public Station getDestination() {
 		return destination;
 	}
 
@@ -132,7 +132,7 @@ public class JourneyLeg {
 	 * @param destinaion
 	 *            the destination to set
 	 */
-	public void setDestination(Location destination) {
+	public void setDestination(Station destination) {
 		this.destination = destination;
 	}
 
@@ -229,9 +229,9 @@ public class JourneyLeg {
 		journeyLeg.setJourneyId(cursor.getInt(1));
 		journeyLeg.setScheduleId(cursor.getInt(2));
 		journeyLeg.setOriginId(cursor.getInt(3));
-		journeyLeg.setOrigin(Location.get(cursor.getInt(3)));
+		journeyLeg.setOrigin(Station.get(cursor.getInt(3)));
 		journeyLeg.setDestinationId(cursor.getInt(4));
-		journeyLeg.setDestination(Location.get(cursor.getInt(4)));
+		journeyLeg.setDestination(Station.get(cursor.getInt(4)));
 		journeyLeg.setDepartureTime(cursor.getString(5));
 		journeyLeg.setArrivalTime(cursor.getString(6));
 		journeyLeg.setDeparturePlatform(cursor.getString(7));

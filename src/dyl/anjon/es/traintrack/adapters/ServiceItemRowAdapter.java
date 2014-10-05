@@ -9,14 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.api.ServiceItem;
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 
 //TO replace scheduleRowAdapter
 public class ServiceItemRowAdapter extends BaseAdapter {
 
 	private ArrayList<ServiceItem> serviceItems;
 	private LayoutInflater inflater = null;
-	private Location location;
+	private Station station;
 
 	/**
 	 * @param inflater
@@ -26,10 +26,10 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 	 *            the schedule is being seen from
 	 */
 	public ServiceItemRowAdapter(LayoutInflater inflater,
-			ArrayList<ServiceItem> serviceItems, Location location) {
+			ArrayList<ServiceItem> serviceItems, Station station) {
 		this.serviceItems = serviceItems;
 		this.inflater = inflater;
-		this.location = location;
+		this.station = station;
 	}
 
 	public int getCount() {
@@ -50,14 +50,14 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 
 		final TextView destination = (TextView) v
 				.findViewById(R.id.destination);
-		if (serviceItem.getDestination().equals(location)) {
+		if (serviceItem.getDestination().equals(station)) {
 			destination.setText("Terminates Here");
 		} else {
 			destination.setText(serviceItem.getDestination().toString());
 		}
 
 		final TextView origin = (TextView) v.findViewById(R.id.origin);
-		if (serviceItem.getOrigin().equals(location)) {
+		if (serviceItem.getOrigin().equals(station)) {
 			origin.setText("Starts Here");
 		} else {
 			origin.setText("From " + serviceItem.getOrigin().toString());

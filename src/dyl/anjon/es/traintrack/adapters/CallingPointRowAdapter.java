@@ -10,13 +10,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.api.CallingPoint;
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 
 public class CallingPointRowAdapter extends BaseAdapter {
 
 	private ArrayList<CallingPoint> callingPoints;
 	private LayoutInflater inflater = null;
-	private Location location = null;
+	private Station station = null;
 
 	/**
 	 * @param inflater
@@ -26,10 +26,10 @@ public class CallingPointRowAdapter extends BaseAdapter {
 	 *            the schedule is being seen from
 	 */
 	public CallingPointRowAdapter(LayoutInflater inflater,
-			ArrayList<CallingPoint> callingPoints, Location location) {
+			ArrayList<CallingPoint> callingPoints, Station station) {
 		this.callingPoints = callingPoints;
 		this.inflater = inflater;
-		this.location = location;
+		this.station = station;
 	}
 
 	public int getCount() {
@@ -50,9 +50,9 @@ public class CallingPointRowAdapter extends BaseAdapter {
 		final TextView time = (TextView) v.findViewById(R.id.time);
 		time.setText(callingPoint.getScheduledTime());
 		final TextView station = (TextView) v.findViewById(R.id.station);
-		if (callingPoint.getLocation() != null) {
-			station.setText(callingPoint.getLocation().toString());
-			if (callingPoint.getLocation().equals(this.location)) {
+		if (callingPoint.getStation() != null) {
+			station.setText(callingPoint.getStation().toString());
+			if (callingPoint.getStation().equals(this.station)) {
 				station.setTextColor(Color.RED);
 				v.setEnabled(false);
 			}

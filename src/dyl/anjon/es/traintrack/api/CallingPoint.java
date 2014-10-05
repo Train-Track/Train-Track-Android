@@ -2,11 +2,11 @@ package dyl.anjon.es.traintrack.api;
 
 import org.w3c.dom.Element;
 
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 
 public class CallingPoint {
 
-	private Location location;
+	private Station station;
 	private String scheduledTime;
 	private String estimatedTime;
 	private String actualTime;
@@ -17,7 +17,7 @@ public class CallingPoint {
 
 	public CallingPoint(Element cp) {
 		if (cp.getElementsByTagName("crs").getLength() > 0) {
-			setLocationByCrs(cp.getElementsByTagName("crs").item(0)
+			setStationByCrs(cp.getElementsByTagName("crs").item(0)
 					.getTextContent());
 		}
 		if (cp.getElementsByTagName("st").getLength() > 0) {
@@ -34,12 +34,12 @@ public class CallingPoint {
 		}
 	}
 
-	public Location getLocation() {
-		return location;
+	public Station getStation() {
+		return station;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setStation(Station station) {
+		this.station = station;
 	}
 
 	public String getScheduledTime() {
@@ -67,11 +67,11 @@ public class CallingPoint {
 	}
 
 	public String toString() {
-		return "Name: " + getLocation() + "\n";
+		return "Name: " + getStation() + "\n";
 	}
 
-	public void setLocationByCrs(String crs) {
-		setLocation(Location.getByCrs(crs));
+	public void setStationByCrs(String crs) {
+		setStation(Station.getByCrs(crs));
 	}
 	
 	public boolean hasArrived() {

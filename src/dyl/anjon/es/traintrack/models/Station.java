@@ -12,9 +12,9 @@ import com.google.gson.annotations.SerializedName;
 
 import dyl.anjon.es.traintrack.db.DatabaseHandler;
 
-public class Location {
+public class Station {
 
-	public static final String TABLE_NAME = "locations";
+	public static final String TABLE_NAME = "stations";
 
 	private int id;
 
@@ -34,7 +34,7 @@ public class Location {
 
 	private float distance;
 
-	public Location() {
+	public Station() {
 		this.setCrsCode("");
 		this.setName("Unknown");
 		this.setFavourite(false);
@@ -45,7 +45,7 @@ public class Location {
 	 * @param name
 	 * @param favourite
 	 */
-	public Location(String crsCode, String name, boolean favourite) {
+	public Station(String crsCode, String name, boolean favourite) {
 		this.setCrsCode(crsCode);
 		this.setName(name);
 		this.setFavourite(favourite);
@@ -200,7 +200,7 @@ public class Location {
 	 * @param id
 	 * @return the station selected
 	 */
-	public static Location get(int id) {
+	public static Station get(int id) {
 		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
@@ -213,7 +213,7 @@ public class Location {
 			return null;
 		}
 
-		Location location = new Location();
+		Station location = new Station();
 		location.setId(cursor.getInt(0));
 		location.setCrsCode(cursor.getString(1));
 		location.setName(cursor.getString(2));
@@ -231,7 +231,7 @@ public class Location {
 	 * @param id
 	 * @return the station selected
 	 */
-	public static Location getByCrs(String crs) {
+	public static Station getByCrs(String crs) {
 		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
 
@@ -244,7 +244,7 @@ public class Location {
 			return null;
 		}
 
-		Location location = new Location();
+		Station location = new Station();
 		location.setId(cursor.getInt(0));
 		location.setCrsCode(cursor.getString(1));
 		location.setName(cursor.getString(2));
@@ -261,8 +261,8 @@ public class Location {
 	 * @param context
 	 * @return all stations
 	 */
-	public static ArrayList<Location> getAll() {
-		ArrayList<Location> locations = new ArrayList<Location>();
+	public static ArrayList<Station> getAll() {
+		ArrayList<Station> locations = new ArrayList<Station>();
 
 		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
@@ -271,7 +271,7 @@ public class Location {
 				+ " ORDER BY name ASC", null);
 		if (cursor.moveToFirst()) {
 			do {
-				Location location = new Location();
+				Station location = new Station();
 				location.setId(cursor.getInt(0));
 				location.setCrsCode(cursor.getString(1));
 				location.setName(cursor.getString(2));
@@ -311,7 +311,7 @@ public class Location {
 		return schedules;
 	}
 
-	public Location save() {
+	public Station save() {
 		if (this.getId() != 0) {
 			DatabaseHandler dbh = new DatabaseHandler();
 			SQLiteDatabase db = dbh.getWritableDatabase();

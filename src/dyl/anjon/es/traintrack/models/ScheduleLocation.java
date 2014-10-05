@@ -12,7 +12,7 @@ public class ScheduleLocation {
 	private int id;
 	private int scheduleId;
 	private int locationId;
-	private Location location;
+	private Station location;
 	private String time;
 	private String platform;
 
@@ -67,7 +67,7 @@ public class ScheduleLocation {
 	/**
 	 * @return the location
 	 */
-	public Location getLocation() {
+	public Station getLocation() {
 		return location;
 	}
 
@@ -75,7 +75,7 @@ public class ScheduleLocation {
 	 * @param location
 	 *            the location to set
 	 */
-	public void setLocation(Location location) {
+	public void setLocation(Station location) {
 		this.location = location;
 	}
 
@@ -139,7 +139,7 @@ public class ScheduleLocation {
 		scheduleLocation.setId(cursor.getInt(0));
 		scheduleLocation.setScheduleId(cursor.getInt(1));
 		scheduleLocation.setLocationId(cursor.getInt(2));
-		scheduleLocation.setLocation(Location.get(cursor.getInt(2)));
+		scheduleLocation.setLocation(Station.get(cursor.getInt(2)));
 		scheduleLocation.setPlatform(cursor.getString(3));
 		scheduleLocation.setTime(cursor.getString(4));
 		cursor.close();

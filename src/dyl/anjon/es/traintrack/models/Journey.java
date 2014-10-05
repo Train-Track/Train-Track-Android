@@ -55,12 +55,12 @@ public class Journey {
 	/**
 	 * @return the origin
 	 */
-	public Location getOrigin() {
+	public Station getOrigin() {
 		if (this.journeyLegs.isEmpty()) {
 			this.journeyLegs = this.getJourneyLegs();
 		}
 		if (this.journeyLegs.isEmpty()) {
-			return new Location();
+			return new Station();
 		}
 
 		return this.journeyLegs.get(0).getOrigin();
@@ -69,12 +69,12 @@ public class Journey {
 	/**
 	 * @return the destination
 	 */
-	public Location getDestination() {
+	public Station getDestination() {
 		if (this.journeyLegs.isEmpty()) {
 			this.journeyLegs = this.getJourneyLegs();
 		}
 		if (this.journeyLegs.isEmpty()) {
-			return new Location();
+			return new Station();
 		}
 
 		int last = this.journeyLegs.size();
@@ -104,9 +104,9 @@ public class Journey {
 				journeyLeg.setScheduleId(cursor.getInt(2));
 				journeyLeg.setOriginId(cursor.getInt(3));
 				journeyLeg.setDestinationId(cursor.getInt(4));
-				journeyLeg.setOrigin(Location.get(cursor.getInt(3)));
+				journeyLeg.setOrigin(Station.get(cursor.getInt(3)));
 				journeyLeg
-						.setDestination(Location.get(cursor.getInt(4)));
+						.setDestination(Station.get(cursor.getInt(4)));
 				journeyLeg.setDepartureTime(cursor.getString(5));
 				journeyLeg.setArrivalTime(cursor.getString(6));
 				journeyLegs.add(journeyLeg);

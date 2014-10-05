@@ -15,7 +15,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 
 public class JourneyLegActivity extends Activity {
 
@@ -60,7 +60,7 @@ public class JourneyLegActivity extends Activity {
 			final int scheduleId = intent.getIntExtra("schedule_id", 0);
 
 			int originId = intent.getIntExtra("origin_id", 0);
-			final Location origin = Location.get(originId);
+			final Station origin = Station.get(originId);
 
 			final TextView departureStation = (TextView) findViewById(R.id.departure_station);
 			departureStation.setText(origin.toString());
@@ -77,7 +77,7 @@ public class JourneyLegActivity extends Activity {
 			departurePlatform.setText(originPlatform);
 
 			int destinationId = intent.getIntExtra("destination_id", 0);
-			final Location destination = Location.get(destinationId);
+			final Station destination = Station.get(destinationId);
 
 			final TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
 			arrivalStation.setText(destination.toString());

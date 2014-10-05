@@ -17,7 +17,7 @@ import android.widget.TextView;
 import dyl.anjon.es.traintrack.adapters.CallingPointRowAdapter;
 import dyl.anjon.es.traintrack.api.CallingPoint;
 import dyl.anjon.es.traintrack.api.Service;
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 
 public class ServiceActivity extends Activity {
 
@@ -37,11 +37,11 @@ public class ServiceActivity extends Activity {
 		serviceId = intent.getStringExtra("service_id");
 		final String time = intent.getStringExtra("time");
 		final int originId = intent.getIntExtra("origin_id", 0);
-		final Location origin = Location.get(originId);
-		final int locationId = intent.getIntExtra("location_id", 0);
-		final Location location = Location.get(locationId);
+		final Station origin = Station.get(originId);
+		final int stationId = intent.getIntExtra("station_id", 0);
+		final Station station = Station.get(stationId);
 		final int destinationId = intent.getIntExtra("destination_id", 0);
-		final Location destination = Location.get(destinationId);
+		final Station destination = Station.get(destinationId);
 		final String operator = intent.getStringExtra("operator");
 
 		new GetServiceRequest().execute(serviceId);
@@ -58,7 +58,7 @@ public class ServiceActivity extends Activity {
 		generatedAt = (TextView) findViewById(R.id.generated_at);
 
 		adapter = new CallingPointRowAdapter(LayoutInflater.from(this),
-				callingPoints, location);
+				callingPoints, station);
 		ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -76,10 +76,10 @@ public class ServiceActivity extends Activity {
 						JourneyLegActivity.class);
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("service_id", serviceId);
-				intent.putExtra("origin_id", locationId);
+				intent.putExtra("origin_id", stationId);
 				intent.putExtra("origin_time", "12:00");
 				intent.putExtra("origin_platform", "9");
-				intent.putExtra("destination_id", callingPoint.getLocation()
+				intent.putExtra("destination_id", callingPoint.getStation()
 						.getId());
 				intent.putExtra("destination_time", "19:32");
 				intent.putExtra("destination_platform", "2A");
@@ -133,7 +133,7 @@ public class ServiceActivity extends Activity {
 			callingPoints.clear();
 			callingPoints.addAll(s.getPreviousCallingPoints());
 			CallingPoint thisCallingPoint = new CallingPoint();
-			thisCallingPoint.setLocation(s.getLocation());
+			thisCallingPoint.setStation(s.getStation());
 			thisCallingPoint.setScheduledTime(s.getScheduledTimeDeparture());
 			thisCallingPoint.setEstimatedTime(s.getEstimatedTimeDeparture());
 			thisCallingPoint.setActualTime(s.getActualTimeDeparture());

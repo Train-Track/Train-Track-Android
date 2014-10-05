@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -23,35 +24,35 @@ import android.widget.EditText;
 import android.widget.ListView;
 import dyl.anjon.es.traintrack.StationActivity;
 import dyl.anjon.es.traintrack.R;
-import dyl.anjon.es.traintrack.adapters.LocationRowAdapter;
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.adapters.StationRowAdapter;
+import dyl.anjon.es.traintrack.models.Station;
 
-public class LocationsFragment extends Fragment {
+public class StationsFragment extends Fragment {
 
 	private android.location.Location gps;
 
-	public LocationsFragment() {
+	public StationsFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_locations,
+		View rootView = inflater.inflate(R.layout.fragment_stations,
 				container, false);
 
-		final ArrayList<Location> stations = Location.getAll();
+		final ArrayList<Station> stations = Station.getAll();
 
 		ListView list = (ListView) rootView.findViewById(R.id.list);
-		final LocationRowAdapter adapter = new LocationRowAdapter(inflater,
+		final StationRowAdapter adapter = new StationRowAdapter(inflater,
 				stations);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
 					long x) {
-				Location location = (Location) adapter.getItem(index);
+				Station station = (Station) adapter.getItem(index);
 				Intent intent = new Intent().setClass(getActivity(),
 						StationActivity.class);
-				intent.putExtra("location_id", location.getId());
+				intent.putExtra("station_id", station.getId());
 				startActivity(intent);
 				return;
 			}
@@ -82,9 +83,9 @@ public class LocationsFragment extends Fragment {
 					return;
 				}
 				for (int i = 0; i < stations.size(); i++) {
-					Location station = stations.get(i);
+					Station station = stations.get(i);
 					float results[] = { 0, 0, 0 };
-					android.location.Location.distanceBetween(
+					Location.distanceBetween(
 							station.getLatitude(), station.getLongitude(),
 							gps.getLatitude(), gps.getLongitude(), results);
 					station.setDistance(results[0]);
@@ -128,9 +129,9 @@ public class LocationsFragment extends Fragment {
 		}
 	}
 
-	public class DistanceComparator implements Comparator<Location> {
+	public class DistanceComparator implements Comparator<Station> {
 		@Override
-		public int compare(Location o1, Location o2) {
+		public int compare(Station o1, Station o2) {
 			return Float.compare(o1.getDistance(), o2.getDistance());
 		}
 	}

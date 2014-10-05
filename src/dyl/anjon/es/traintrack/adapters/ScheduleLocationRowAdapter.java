@@ -10,13 +10,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.models.ScheduleLocation;
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 
 public class ScheduleLocationRowAdapter extends BaseAdapter {
 
 	private ArrayList<ScheduleLocation> scheduleLocations;
 	private LayoutInflater inflater = null;
-	private Location location = null;
+	private Station station = null;
 
 	/**
 	 * @param inflater
@@ -26,10 +26,10 @@ public class ScheduleLocationRowAdapter extends BaseAdapter {
 	 *            the schedule is being seen from
 	 */
 	public ScheduleLocationRowAdapter(LayoutInflater inflater,
-			ArrayList<ScheduleLocation> scheduleLocations, Location location) {
+			ArrayList<ScheduleLocation> scheduleLocations, Station station) {
 		this.scheduleLocations = scheduleLocations;
 		this.inflater = inflater;
-		this.location = location;
+		this.station = station;
 	}
 
 	public int getCount() {
@@ -51,7 +51,7 @@ public class ScheduleLocationRowAdapter extends BaseAdapter {
 		time.setText(scheduleLocation.getTime().toString());
 		final TextView station = (TextView) v.findViewById(R.id.station);
 		station.setText(scheduleLocation.getLocation().toString());
-		if (scheduleLocation.getLocation().equals(this.location)) {
+		if (scheduleLocation.getLocation().equals(this.station)) {
 			station.setTextColor(Color.RED);
 			v.setEnabled(false);
 		}

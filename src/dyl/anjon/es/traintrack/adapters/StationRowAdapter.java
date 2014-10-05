@@ -12,17 +12,17 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 
-public class LocationRowAdapter extends BaseAdapter implements Filterable {
+public class StationRowAdapter extends BaseAdapter implements Filterable {
 
-	private List<Location> rowList;
-	private List<Location> origRowList;
+	private List<Station> rowList;
+	private List<Station> origRowList;
 	private LayoutInflater inflater = null;
 
-	public LocationRowAdapter(LayoutInflater inflater,
-			ArrayList<Location> locations) {
-		this.rowList = locations;
+	public StationRowAdapter(LayoutInflater inflater,
+			ArrayList<Station> stations) {
+		this.rowList = stations;
 		this.inflater = inflater;
 	}
 
@@ -30,7 +30,7 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 		return rowList.size();
 	}
 
-	public Location getItem(int position) {
+	public Station getItem(int position) {
 		return rowList.get(position);
 	}
 
@@ -40,7 +40,7 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_station, null);
-		Location location = rowList.get(position);
+		Station location = rowList.get(position);
 		TextView name = (TextView) v.findViewById(R.id.name);
 		name.setText(location.getName());
 		TextView crsCode = (TextView) v.findViewById(R.id.crs_code);
@@ -59,17 +59,17 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 			@Override
 			protected void publishResults(CharSequence constraint,
 					FilterResults results) {
-				rowList = (List<Location>) results.values;
+				rowList = (List<Station>) results.values;
 				notifyDataSetChanged();
 			}
 
 			@Override
 			protected FilterResults performFiltering(CharSequence constraint) {
 				FilterResults results = new FilterResults();
-				List<Location> list = new ArrayList<Location>();
+				List<Station> list = new ArrayList<Station>();
 
 				if (origRowList == null) {
-					origRowList = new ArrayList<Location>(rowList);
+					origRowList = new ArrayList<Station>(rowList);
 				}
 
 				if (constraint == null || constraint.length() == 0) {
@@ -79,9 +79,9 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 					String string = constraint.toString()
 							.toLowerCase(Locale.ENGLISH).toString();
 					for (int i = 0; i < origRowList.size(); i++) {
-						Location location = origRowList.get(i);
-						if (location.isNameSimilarTo(string)) {
-							list.add(location);
+						Station station = origRowList.get(i);
+						if (station.isNameSimilarTo(string)) {
+							list.add(station);
 						}
 					}
 					results.count = list.size();
@@ -94,8 +94,8 @@ public class LocationRowAdapter extends BaseAdapter implements Filterable {
 
 	}
 
-	public void refresh(ArrayList<Location> locations) {
-		this.rowList = locations;
+	public void refresh(ArrayList<Station> stations) {
+		this.rowList = stations;
 		this.notifyDataSetChanged();
 	}
 

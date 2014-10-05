@@ -2,14 +2,14 @@ package dyl.anjon.es.traintrack.api;
 
 import org.w3c.dom.Element;
 
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class ServiceItem {
 
-	private Location origin;
-	private Location destination;
+	private Station origin;
+	private Station destination;
 	private String scheduledTimeArrival;
 	private String estimatedTimeArrival;
 	private String scheduledTimeDeparture;
@@ -26,7 +26,7 @@ public class ServiceItem {
 			if (orig.getElementsByTagName("crs").getLength() > 0) {
 				String crs = orig.getElementsByTagName("crs").item(0)
 						.getTextContent();
-				Location origin = Location.getByCrs(crs);
+				Station origin = Station.getByCrs(crs);
 				if (origin != null) {
 					this.origin = origin;
 				} else {
@@ -39,7 +39,7 @@ public class ServiceItem {
 			if (dest.getElementsByTagName("crs").getLength() > 0) {
 				String crs = dest.getElementsByTagName("crs").item(0)
 						.getTextContent();
-				Location destination = Location.getByCrs(crs);
+				Station destination = Station.getByCrs(crs);
 				if (destination != null) {
 					this.destination = destination;
 				} else {
@@ -87,19 +87,19 @@ public class ServiceItem {
 		}
 	}
 
-	public Location getOrigin() {
+	public Station getOrigin() {
 		return origin;
 	}
 
-	public void setOrigin(Location origin) {
+	public void setOrigin(Station origin) {
 		this.origin = origin;
 	}
 
-	public Location getDestination() {
+	public Station getDestination() {
 		return destination;
 	}
 
-	public void setDestination(Location destination) {
+	public void setDestination(Station destination) {
 		this.destination = destination;
 	}
 

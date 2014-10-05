@@ -58,7 +58,7 @@ public class Schedule {
 			this.scheduleLocations = this.getScheduleLocations();
 		}
 		if (this.scheduleLocations.isEmpty()) {
-			Location location = new Location();
+			Station location = new Station();
 			ScheduleLocation scheduleLocation = new ScheduleLocation();
 			scheduleLocation.setLocation(location);
 			scheduleLocation.setTime("?");
@@ -77,7 +77,7 @@ public class Schedule {
 			this.scheduleLocations = this.getScheduleLocations();
 		}
 		if (this.scheduleLocations.isEmpty()) {
-			Location location = new Location();
+			Station location = new Station();
 			ScheduleLocation scheduleLocation = new ScheduleLocation();
 			scheduleLocation.setLocation(location);
 			scheduleLocation.setTime("?");
@@ -93,7 +93,7 @@ public class Schedule {
 	 * @param location
 	 * @return ScheduleLocation where the station is the station provided
 	 */
-	public ScheduleLocation at(Location location) {
+	public ScheduleLocation at(Station location) {
 		if (this.scheduleLocations.isEmpty()) {
 			this.scheduleLocations = this.getScheduleLocations();
 		}
@@ -124,7 +124,7 @@ public class Schedule {
 				scheduleLocation.setId(cursor.getInt(0));
 				scheduleLocation.setScheduleId(cursor.getInt(1));
 				scheduleLocation.setLocationId(cursor.getInt(2));
-				scheduleLocation.setLocation(Location.get(cursor.getInt(2)));
+				scheduleLocation.setLocation(Station.get(cursor.getInt(2)));
 				scheduleLocation.setTime(cursor.getString(3));
 				scheduleLocation.setPlatform(cursor.getString(4));
 				scheduleLocations.add(scheduleLocation);

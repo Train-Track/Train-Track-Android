@@ -9,7 +9,7 @@ import org.w3c.dom.NodeList;
 
 import android.text.format.Time;
 
-import dyl.anjon.es.traintrack.models.Location;
+import dyl.anjon.es.traintrack.models.Station;
 import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
@@ -22,7 +22,7 @@ public class Service {
 	private Operator operator;
 	private String operatorCode;
 	private String platform;
-	private Location location;
+	private Station station;
 	private String crs;
 	private boolean isCancelled;
 	private String scheduledTimeArrival;
@@ -60,10 +60,10 @@ public class Service {
 				Time t = new Time();
 				t.parse3339(node.getTextContent());
 				setGeneratedAt(t);
-				setLocation(Location.getByCrs(getCrs()));
+				setStation(Station.getByCrs(getCrs()));
 			} else if (node.getNodeName().equalsIgnoreCase("crs")) {
 				setCrs(node.getTextContent());
-				setLocation(Location.getByCrs(getCrs()));
+				setStation(Station.getByCrs(getCrs()));
 			} else if (node.getNodeName().equalsIgnoreCase("operatorCode")) {
 				setOperatorCode(node.getTextContent());
 				Operator operator = Operator.getByCode(getOperatorCode());
@@ -180,12 +180,12 @@ public class Service {
 		this.platform = platform;
 	}
 
-	public Location getLocation() {
-		return location;
+	public Station getStation() {
+		return station;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setStation(Station station) {
+		this.station = station;
 	}
 
 	public String getCrs() {
