@@ -19,7 +19,7 @@ import dyl.anjon.es.traintrack.api.ServiceItem;
 import dyl.anjon.es.traintrack.api.StationBoard;
 import dyl.anjon.es.traintrack.models.Location;
 
-public class LocationActivity extends Activity {
+public class StationActivity extends Activity {
 
 	private Location location;
 	private ServiceItemRowAdapter adapter;

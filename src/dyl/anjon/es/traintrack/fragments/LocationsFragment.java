@@ -21,7 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import dyl.anjon.es.traintrack.LocationActivity;
+import dyl.anjon.es.traintrack.StationActivity;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.adapters.LocationRowAdapter;
 import dyl.anjon.es.traintrack.models.Location;
@@ -50,7 +50,7 @@ public class LocationsFragment extends Fragment {
 					long x) {
 				Location location = (Location) adapter.getItem(index);
 				Intent intent = new Intent().setClass(getActivity(),
-						LocationActivity.class);
+						StationActivity.class);
 				intent.putExtra("location_id", location.getId());
 				startActivity(intent);
 				return;
