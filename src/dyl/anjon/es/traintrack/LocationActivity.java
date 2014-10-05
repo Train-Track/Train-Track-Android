@@ -96,6 +96,8 @@ public class LocationActivity extends Activity {
 			}
 			location.save();
 			return true;
+		case R.id.refresh:
+			new GetBoardRequest().execute(location.getCrsCode());
 		default:
 			return super.onOptionsItemSelected(item);
 		}
