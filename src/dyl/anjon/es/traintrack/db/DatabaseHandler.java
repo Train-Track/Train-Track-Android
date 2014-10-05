@@ -48,15 +48,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		Gson gson = new Gson();
 		InputStream is = null;
 		try {
-			is = this.context.getAssets().open("locations.json");
+			is = this.context.getAssets().open("stations.json");
 		} catch (IOException e) {
 			Utils.log(e.getMessage());
 		}
 		Reader reader = new InputStreamReader(is);
-		List<Station> locations = gson.fromJson(reader,
+		List<Station> stations = gson.fromJson(reader,
 				new TypeToken<List<Station>>() {
 				}.getType());
-		ListIterator<Station> it = locations.listIterator();
+		ListIterator<Station> it = stations.listIterator();
 		while (it.hasNext()) {
 			Station station = it.next();
 			ContentValues values = new ContentValues();
@@ -101,7 +101,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Journey Legs
 		db.execSQL("CREATE TABLE journey_legs (id INTEGER PRIMARY KEY, journey_id INTEGER, schedule_id INTEGER, origin_id INTEGER, destination_id INTEGER, departure_time TEXT, arrival_time TEXT, departure_platform TEXT, arrival_platform TEXT)");
 
-		// Friends
+		// Users
 		db.execSQL("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, facebook_id TEXT, friend BOOLEAN)");
 		values = new ContentValues();
 		values.put("name", "Dylan Jones");
@@ -118,8 +118,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS schedules");
-		db.execSQL("DROP TABLE IF EXISTS schedule_locations");
 		db.execSQL("DROP TABLE IF EXISTS stations");
 		db.execSQL("DROP TABLE IF EXISTS operators");
 		db.execSQL("DROP TABLE IF EXISTS users");

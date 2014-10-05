@@ -75,7 +75,7 @@ public class JourneyActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 			Intent intent = new Intent().setClass(getApplicationContext(),
 					StationActivity.class);
-			intent.putExtra("location_id", journey.getDestination().getId());
+			intent.putExtra("station_id", journey.getDestination().getId());
 			intent.putExtra("journey_id", journeyId);
 			startActivity(intent);
 			finish();

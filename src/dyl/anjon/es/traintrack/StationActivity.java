@@ -30,7 +30,7 @@ public class StationActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_location);
+		setContentView(R.layout.activity_station);
 
 		final Intent intent = getIntent();
 		final int stationId = intent.getIntExtra("station_id", 0);

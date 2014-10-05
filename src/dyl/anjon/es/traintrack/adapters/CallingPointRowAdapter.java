@@ -22,7 +22,7 @@ public class CallingPointRowAdapter extends BaseAdapter {
 	 * @param inflater
 	 * @param schedules
 	 *            to be displayed
-	 * @param location
+	 * @param station
 	 *            the schedule is being seen from
 	 */
 	public CallingPointRowAdapter(LayoutInflater inflater,

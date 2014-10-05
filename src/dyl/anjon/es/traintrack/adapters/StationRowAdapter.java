@@ -40,14 +40,14 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_station, null);
-		Station location = rowList.get(position);
+		Station station = rowList.get(position);
 		TextView name = (TextView) v.findViewById(R.id.name);
-		name.setText(location.getName());
+		name.setText(station.getName());
 		TextView crsCode = (TextView) v.findViewById(R.id.crs_code);
-		crsCode.setText(location.getCrsCode());
-		if (location.getDistance() > 0) {
+		crsCode.setText(station.getCrsCode());
+		if (station.getDistance() > 0) {
 			TextView distance = (TextView) v.findViewById(R.id.distance);
-			distance.setText(location.getDistanceText());
+			distance.setText(station.getDistanceText());
 		}
 		return v;
 	}

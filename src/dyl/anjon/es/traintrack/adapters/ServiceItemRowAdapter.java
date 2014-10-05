@@ -22,8 +22,8 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 	 * @param inflater
 	 * @param schedules
 	 *            to be displayed
-	 * @param location
-	 *            the schedule is being seen from
+	 * @param station
+	 *            the service is being seen from
 	 */
 	public ServiceItemRowAdapter(LayoutInflater inflater,
 			ArrayList<ServiceItem> serviceItems, Station station) {

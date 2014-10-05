@@ -22,14 +22,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import dyl.anjon.es.traintrack.StationActivity;
 import dyl.anjon.es.traintrack.R;
+import dyl.anjon.es.traintrack.StationActivity;
 import dyl.anjon.es.traintrack.adapters.StationRowAdapter;
 import dyl.anjon.es.traintrack.models.Station;
 
 public class StationsFragment extends Fragment {
 
-	private android.location.Location gps;
+	private Location gps;
 
 	public StationsFragment() {
 	}
@@ -37,8 +37,8 @@ public class StationsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_stations,
-				container, false);
+		View rootView = inflater.inflate(R.layout.fragment_stations, container,
+				false);
 
 		final ArrayList<Station> stations = Station.getAll();
 
@@ -85,9 +85,9 @@ public class StationsFragment extends Fragment {
 				for (int i = 0; i < stations.size(); i++) {
 					Station station = stations.get(i);
 					float results[] = { 0, 0, 0 };
-					Location.distanceBetween(
-							station.getLatitude(), station.getLongitude(),
-							gps.getLatitude(), gps.getLongitude(), results);
+					Location.distanceBetween(station.getLatitude(),
+							station.getLongitude(), gps.getLatitude(),
+							gps.getLongitude(), results);
 					station.setDistance(results[0]);
 				}
 				Collections.sort(stations, new DistanceComparator());
@@ -113,7 +113,7 @@ public class StationsFragment extends Fragment {
 			}
 
 			@Override
-			public void onLocationChanged(android.location.Location location) {
+			public void onLocationChanged(Location location) {
 				updateLocation(location);
 			}
 		};
@@ -123,7 +123,7 @@ public class StationsFragment extends Fragment {
 		return rootView;
 	}
 
-	private void updateLocation(android.location.Location gps) {
+	private void updateLocation(Location gps) {
 		if (gps != null) {
 			this.gps = gps;
 		}

@@ -213,17 +213,17 @@ public class Station {
 			return null;
 		}
 
-		Station location = new Station();
-		location.setId(cursor.getInt(0));
-		location.setCrsCode(cursor.getString(1));
-		location.setName(cursor.getString(2));
-		location.setLatitude(cursor.getLong(3));
-		location.setLongitude(cursor.getLong(4));
-		location.setFavourite(cursor.getInt(5) == 1);
+		Station station = new Station();
+		station.setId(cursor.getInt(0));
+		station.setCrsCode(cursor.getString(1));
+		station.setName(cursor.getString(2));
+		station.setLatitude(cursor.getLong(3));
+		station.setLongitude(cursor.getLong(4));
+		station.setFavourite(cursor.getInt(5) == 1);
 		cursor.close();
 		dbh.close();
 
-		return location;
+		return station;
 	}
 
 	/**
@@ -244,17 +244,17 @@ public class Station {
 			return null;
 		}
 
-		Station location = new Station();
-		location.setId(cursor.getInt(0));
-		location.setCrsCode(cursor.getString(1));
-		location.setName(cursor.getString(2));
-		location.setLatitude(cursor.getDouble(3));
-		location.setLongitude(cursor.getDouble(4));
-		location.setFavourite(cursor.getInt(5) == 1);
+		Station station = new Station();
+		station.setId(cursor.getInt(0));
+		station.setCrsCode(cursor.getString(1));
+		station.setName(cursor.getString(2));
+		station.setLatitude(cursor.getDouble(3));
+		station.setLongitude(cursor.getDouble(4));
+		station.setFavourite(cursor.getInt(5) == 1);
 		cursor.close();
 		dbh.close();
 
-		return location;
+		return station;
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class Station {
 	 * @return all stations
 	 */
 	public static ArrayList<Station> getAll() {
-		ArrayList<Station> locations = new ArrayList<Station>();
+		ArrayList<Station> stations = new ArrayList<Station>();
 
 		DatabaseHandler dbh = new DatabaseHandler();
 		SQLiteDatabase db = dbh.getReadableDatabase();
@@ -271,44 +271,19 @@ public class Station {
 				+ " ORDER BY name ASC", null);
 		if (cursor.moveToFirst()) {
 			do {
-				Station location = new Station();
-				location.setId(cursor.getInt(0));
-				location.setCrsCode(cursor.getString(1));
-				location.setName(cursor.getString(2));
-				location.setLatitude(cursor.getDouble(3));
-				location.setLongitude(cursor.getDouble(4));
-				location.setFavourite(cursor.getInt(5) == 1);
-				locations.add(location);
+				Station station = new Station();
+				station.setId(cursor.getInt(0));
+				station.setCrsCode(cursor.getString(1));
+				station.setName(cursor.getString(2));
+				station.setLatitude(cursor.getDouble(3));
+				station.setLongitude(cursor.getDouble(4));
+				station.setFavourite(cursor.getInt(5) == 1);
+				stations.add(station);
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
 		dbh.close();
-		return locations;
-	}
-
-	/**
-	 * @param context
-	 * @return all schedules
-	 */
-	public ArrayList<Schedule> getSchedules(Context context) {
-		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
-
-		DatabaseHandler dbh = new DatabaseHandler(context);
-		SQLiteDatabase db = dbh.getReadableDatabase();
-
-		Cursor cursor = db.query("schedule_locations",
-				new String[] { "schedule_id" }, "location_id = ?",
-				new String[] { String.valueOf(this.getId()) }, null, null,
-				null, null);
-		if (cursor.moveToFirst()) {
-			do {
-				schedules.add(Schedule.get(cursor.getInt(0)));
-			} while (cursor.moveToNext());
-		}
-		cursor.close();
-		dbh.close();
-
-		return schedules;
+		return stations;
 	}
 
 	public Station save() {
