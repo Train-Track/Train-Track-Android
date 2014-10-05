@@ -8,6 +8,7 @@ import dyl.anjon.es.traintrack.utils.Utils;
 
 public class ServiceItem {
 
+	private static final String ON_TIME = "On Time";
 	private Station origin;
 	private Station destination;
 	private String scheduledTimeArrival;
@@ -35,7 +36,8 @@ public class ServiceItem {
 			}
 		}
 		if (ts.getElementsByTagName("destination").getLength() > 0) {
-			Element dest = (Element) ts.getElementsByTagName("destination").item(0);
+			Element dest = (Element) ts.getElementsByTagName("destination")
+					.item(0);
 			if (dest.getElementsByTagName("crs").getLength() > 0) {
 				String crs = dest.getElementsByTagName("crs").item(0)
 						.getTextContent();
@@ -78,7 +80,8 @@ public class ServiceItem {
 			}
 		}
 		if (ts.getElementsByTagName("isCircularRoute").getLength() > 0) {
-			this.isCircularRoute = Boolean.valueOf(ts.getElementsByTagName("isCircularRoute").item(0)
+			this.isCircularRoute = Boolean.valueOf(ts
+					.getElementsByTagName("isCircularRoute").item(0)
 					.getTextContent());
 		}
 		if (ts.getElementsByTagName("serviceID").getLength() > 0) {
@@ -173,6 +176,38 @@ public class ServiceItem {
 
 	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
+	}
+
+	public boolean isDelayedDeparting() {
+		if (getEstimatedTimeDeparture().equalsIgnoreCase(ON_TIME)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public boolean isDelayedArriving() {
+		if (getEstimatedTimeArrival().equalsIgnoreCase(ON_TIME)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public boolean terminatesHere() {
+		if (getScheduledTimeDeparture() == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean startsHere() {
+		if (getScheduledTimeArrival() == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public String toString() {
