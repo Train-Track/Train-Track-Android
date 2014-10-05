@@ -27,5 +27,7 @@
     <string name="departure">Departure</string>
     <string name="arrival">Arrival</string>
     <string name="nearby">Find nearby stations</string>
+    <string name="street_view">Street View</string>
+    <string name="map">Map</string>
     
 </resources>
