@@ -7,12 +7,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.text.format.Time;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class StationBoard {
 
 	private Boolean platformAvailable;
 	private Boolean areServicesAvailable;
+	private Time generatedAt;
 	private ArrayList<String> nrccMessages;
 	private ArrayList<ServiceItem> trainServices;
 
@@ -28,13 +30,22 @@ public class StationBoard {
 
 		if (doc != null) {
 
+			Node generatedAt = doc.getElementsByTagName("generatedAt").item(0);
+			if (generatedAt != null) {
+				Time t = new Time();
+				t.parse3339(generatedAt.getTextContent());
+				this.generatedAt = new Time(t);
+			}
+
 			Node nrccMessages = doc.getElementsByTagName("nrccMessages")
 					.item(0);
 			if (nrccMessages != null) {
 				NodeList nrccMessageList = nrccMessages.getChildNodes();
 				for (int i = 0; i < nrccMessageList.getLength(); i++) {
 					String message = nrccMessageList.item(i).getTextContent();
-					message = android.text.Html.fromHtml(message.replace("<P>&nbsp;</P>", "")).toString().trim();
+					message = android.text.Html
+							.fromHtml(message.replace("<P>&nbsp;</P>", ""))
+							.toString().trim();
 					this.nrccMessages.add(message);
 				}
 			}
@@ -73,6 +84,18 @@ public class StationBoard {
 
 	public ArrayList<String> getNrccMessages() {
 		return nrccMessages;
+	}
+
+	public Time getGeneratedAt() {
+		return generatedAt;
+	}
+
+	public String getGeneratedAtString() {
+		return "Last updated at " + generatedAt.format("%H:%m");
+	}
+
+	public void setGeneratedAt(Time generatedAt) {
+		this.generatedAt = generatedAt;
 	}
 
 	public static StationBoard getByCrs(String crs) {
