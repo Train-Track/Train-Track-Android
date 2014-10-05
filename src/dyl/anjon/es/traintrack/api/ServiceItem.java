@@ -2,8 +2,8 @@ package dyl.anjon.es.traintrack.api;
 
 import org.w3c.dom.Element;
 
-import dyl.anjon.es.traintrack.models.Station;
 import dyl.anjon.es.traintrack.models.Operator;
+import dyl.anjon.es.traintrack.models.Station;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class ServiceItem {
@@ -207,6 +207,18 @@ public class ServiceItem {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public String getTime() {
+		if ((terminatesHere()) && (isDelayedArriving())) {
+			return getEstimatedTimeArrival();
+		} else if (terminatesHere()) {
+			return getScheduledTimeArrival();
+		} else if (isDelayedDeparting()) {
+			return getEstimatedTimeDeparture();
+		} else {
+			return getScheduledTimeDeparture();
 		}
 	}
 
