@@ -13,14 +13,14 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textIsSelectable="false"
             android:textSize="30sp" />
 
         <TextView
             android:id="@+id/toc"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10sp"
             android:textIsSelectable="false"
@@ -28,13 +28,21 @@
 
         <TextView
             android:id="@+id/disruption_reason"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:textColor="#ff0000"
+            android:textIsSelectable="false"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/generated_at"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10sp"
             android:textIsSelectable="false"
-            android:textSize="16sp"
-            android:textColor="#ff0000"
-            android:visibility="gone" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <ListView

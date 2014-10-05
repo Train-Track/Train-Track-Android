@@ -7,6 +7,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.text.format.Time;
+
 import dyl.anjon.es.traintrack.models.Location;
 import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
@@ -16,6 +18,7 @@ public class Service {
 	public static final String TABLE_NAME = "services";
 	private String serviceId;
 	private String serviceType;
+	private Time generatedAt;
 	private Operator operator;
 	private String operatorCode;
 	private String platform;
@@ -53,6 +56,11 @@ public class Service {
 			Node node = result.getChildNodes().item(i);
 			if (node.getNodeName().equalsIgnoreCase("serviceType")) {
 				setServiceType(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("generatedAt")) {
+				Time t = new Time();
+				t.parse3339(node.getTextContent());
+				setGeneratedAt(t);
+				setLocation(Location.getByCrs(getCrs()));
 			} else if (node.getNodeName().equalsIgnoreCase("crs")) {
 				setCrs(node.getTextContent());
 				setLocation(Location.getByCrs(getCrs()));
@@ -134,6 +142,18 @@ public class Service {
 
 	public void setServiceType(String serviceType) {
 		this.serviceType = serviceType;
+	}
+
+	public Time getGeneratedAt() {
+		return generatedAt;
+	}
+
+	public String getGeneratedAtString() {
+		return "Last updated at " + generatedAt.format("%H:%m");
+	}
+
+	public void setGeneratedAt(Time generatedAt) {
+		this.generatedAt = generatedAt;
 	}
 
 	public Operator getOperator() {

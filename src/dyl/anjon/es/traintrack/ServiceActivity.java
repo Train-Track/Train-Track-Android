@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -22,6 +24,8 @@ public class ServiceActivity extends Activity {
 	private CallingPointRowAdapter adapter;
 	private ArrayList<CallingPoint> callingPoints;
 	private TextView disruptionReason;
+	private TextView generatedAt;
+	private String serviceId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class ServiceActivity extends Activity {
 
 		final Intent intent = getIntent();
 		final int journeyId = intent.getIntExtra("journey_id", 0);
-		final String serviceId = intent.getStringExtra("service_id");
+		serviceId = intent.getStringExtra("service_id");
 		final String time = intent.getStringExtra("time");
 		final int originId = intent.getIntExtra("origin_id", 0);
 		final Location origin = Location.get(originId);
@@ -51,6 +55,7 @@ public class ServiceActivity extends Activity {
 		toc.setText(operator);
 
 		disruptionReason = (TextView) findViewById(R.id.disruption_reason);
+		generatedAt = (TextView) findViewById(R.id.generated_at);
 
 		adapter = new CallingPointRowAdapter(LayoutInflater.from(this),
 				callingPoints, location);
@@ -87,6 +92,22 @@ public class ServiceActivity extends Activity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.service, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.refresh:
+			new GetServiceRequest().execute(serviceId);
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
@@ -119,11 +140,13 @@ public class ServiceActivity extends Activity {
 			callingPoints.add(thisCallingPoint);
 			callingPoints.addAll(s.getSubsequentCallingPoints());
 			adapter.notifyDataSetChanged();
-			
+
 			if (s.getDisruptionReason() != null) {
 				disruptionReason.setText(s.getDisruptionReason());
 				disruptionReason.setVisibility(View.VISIBLE);
 			}
+
+			generatedAt.setText(s.getGeneratedAtString());
 
 		}
 	}

@@ -129,13 +129,14 @@ public class LocationActivity extends Activity {
 			serviceItems.clear();
 			serviceItems.addAll(board.getTrainServices());
 			adapter.notifyDataSetChanged();
-			generatedAt.setText(board.getGeneratedAtString());
 
 			ArrayList<String> nrccMessages = board.getNrccMessages();
 			if (nrccMessages.size() > 0) {
 				nrccMessage.setVisibility(View.VISIBLE);
 				nrccMessage.setText(nrccMessages.get(0).toString());
 			}
+
+			generatedAt.setText(board.getGeneratedAtString());
 
 		}
 	}
