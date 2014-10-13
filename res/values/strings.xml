@@ -26,8 +26,10 @@
     <string name="platform">Platform</string>
     <string name="departure">Departure</string>
     <string name="arrival">Arrival</string>
-    <string name="nearby">Find nearby stations</string>
+    <string name="nearby">Nearby</string>
     <string name="refresh">Refresh</string>
     <string name="map">Map</string>
+    <string name="favourites">Favourites</string>
+    <string name="a_z">A-Z</string>
     
 </resources>

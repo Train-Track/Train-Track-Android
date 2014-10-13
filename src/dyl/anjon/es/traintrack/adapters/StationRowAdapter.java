@@ -94,6 +94,41 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
 
 	}
 
+	public Filter getFavouriteFilter() {
+		Filter filter = new Filter() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void publishResults(CharSequence constraint,
+					FilterResults results) {
+				rowList = (List<Station>) results.values;
+				notifyDataSetChanged();
+			}
+
+			@Override
+			protected FilterResults performFiltering(CharSequence constraint) {
+				FilterResults results = new FilterResults();
+				List<Station> list = new ArrayList<Station>();
+
+				if (origRowList == null) {
+					origRowList = new ArrayList<Station>(rowList);
+				}
+
+				for (int i = 0; i < origRowList.size(); i++) {
+					Station station = origRowList.get(i);
+					if (station.isFavourite()) {
+						list.add(station);
+					}
+				}
+				results.count = list.size();
+				results.values = list;
+				return results;
+			}
+		};
+		return filter;
+
+	}
+
 	public void refresh(ArrayList<Station> stations) {
 		this.rowList = stations;
 		this.notifyDataSetChanged();

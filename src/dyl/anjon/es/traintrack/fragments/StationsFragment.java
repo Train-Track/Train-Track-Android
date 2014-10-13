@@ -96,6 +96,22 @@ public class StationsFragment extends Fragment {
 
 		});
 
+		Button favourites = (Button) rootView.findViewById(R.id.favourites);
+		favourites.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				adapter.getFavouriteFilter().filter(null);
+			}
+		});
+
+		Button aZ = (Button) rootView.findViewById(R.id.a_z);
+		aZ.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				adapter.refresh(Station.getAll());
+			}
+		});
+
 		LocationManager locationManager = (LocationManager) getActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
 		updateLocation(locationManager

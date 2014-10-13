@@ -24,11 +24,31 @@
         android:textSize="20sp" >
     </EditText>
 
-    <Button
-        android:id="@+id/nearby"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/nearby" />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/a_z"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/a_z" />
+        <Button
+            android:id="@+id/nearby"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/nearby" />
+        
+        <Button
+            android:id="@+id/favourites"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/favourites" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/list"
