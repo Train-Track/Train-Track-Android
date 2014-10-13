@@ -57,7 +57,7 @@ public class StationActivity extends Activity {
 						ServiceActivity.class);
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("service_id", serviceItem.getServiceId());
-				intent.putExtra("time", serviceItem.getScheduledTimeDeparture());
+				intent.putExtra("time", serviceItem.getTime());
 				intent.putExtra("origin_id", serviceItem.getOrigin().getId());
 				intent.putExtra("station_id", station.getId());
 				intent.putExtra("destination_id", serviceItem.getDestination()

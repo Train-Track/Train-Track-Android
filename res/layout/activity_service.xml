@@ -49,7 +49,9 @@
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:listSelector="#ff5533"
+        android:divider="#ff0000"
+        android:dividerHeight="4px"
+        android:listSelector="#ff0000"
         android:overScrollMode="never"
         android:scrollingCache="true" />
 

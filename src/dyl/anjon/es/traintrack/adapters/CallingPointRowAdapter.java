@@ -20,10 +20,10 @@ public class CallingPointRowAdapter extends BaseAdapter {
 
 	/**
 	 * @param inflater
-	 * @param schedules
+	 * @param callingPoints
 	 *            to be displayed
 	 * @param station
-	 *            the schedule is being seen from
+	 *            the station it is being seen from
 	 */
 	public CallingPointRowAdapter(LayoutInflater inflater,
 			ArrayList<CallingPoint> callingPoints, Station station) {
@@ -47,6 +47,8 @@ public class CallingPointRowAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_calling_point, null);
 		CallingPoint callingPoint = callingPoints.get(position);
+		final TextView icon = (TextView) v.findViewById(R.id.icon);
+		icon.setText(callingPoint.getIcon());
 		final TextView time = (TextView) v.findViewById(R.id.time);
 		time.setText(callingPoint.getScheduledTime());
 		final TextView station = (TextView) v.findViewById(R.id.station);
@@ -61,5 +63,4 @@ public class CallingPointRowAdapter extends BaseAdapter {
 		platform.setText(callingPoint.getEstimatedTime());
 		return v;
 	}
-
 }

@@ -11,7 +11,6 @@ import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.api.ServiceItem;
 import dyl.anjon.es.traintrack.models.Station;
 
-//TO replace scheduleRowAdapter
 public class ServiceItemRowAdapter extends BaseAdapter {
 
 	private ArrayList<ServiceItem> serviceItems;
@@ -42,6 +41,14 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 
 	public long getItemId(int position) {
 		return position;
+	}
+
+	public Station getStation() {
+		return station;
+	}
+
+	public void setStation(Station station) {
+		this.station = station;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {

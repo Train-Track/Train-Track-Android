@@ -109,6 +109,9 @@ public class Service {
 			for (int i = 0; i < callingPoints.getLength(); i++) {
 				Element cp = (Element) callingPoints.item(i);
 				CallingPoint callingPoint = new CallingPoint(cp);
+				if (i == 0) {
+					callingPoint.setIcon(CallingPoint.START);
+				}
 				this.previousCallingPoints.add(callingPoint);
 			}
 		}
@@ -123,6 +126,9 @@ public class Service {
 			for (int i = 0; i < callingPoints.getLength(); i++) {
 				Element cp = (Element) callingPoints.item(i);
 				CallingPoint callingPoint = new CallingPoint(cp);
+				if (i == callingPoints.getLength() - 1) {
+					callingPoint.setIcon(CallingPoint.END);
+				}
 				this.subsequentCallingPoints.add(callingPoint);
 			}
 		}

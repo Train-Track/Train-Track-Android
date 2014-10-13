@@ -5,11 +5,15 @@ import org.w3c.dom.Element;
 import dyl.anjon.es.traintrack.models.Station;
 
 public class CallingPoint {
+	
+	public static String START = "START";
+	public static String END = "END";
 
 	private Station station;
 	private String scheduledTime;
 	private String estimatedTime;
 	private String actualTime;
+	private String icon;
 
 	public CallingPoint() {
 
@@ -66,6 +70,14 @@ public class CallingPoint {
 		this.actualTime = actualTime;
 	}
 
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
 	public String toString() {
 		return "Name: " + getStation() + "\n";
 	}
@@ -73,12 +85,11 @@ public class CallingPoint {
 	public void setStationByCrs(String crs) {
 		setStation(Station.getByCrs(crs));
 	}
-	
+
 	public boolean hasArrived() {
 		if (getActualTime() != null) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
