@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -217,8 +216,8 @@ public class Station {
 		station.setId(cursor.getInt(0));
 		station.setCrsCode(cursor.getString(1));
 		station.setName(cursor.getString(2));
-		station.setLatitude(cursor.getLong(3));
-		station.setLongitude(cursor.getLong(4));
+		station.setLatitude(cursor.getDouble(3));
+		station.setLongitude(cursor.getDouble(4));
 		station.setFavourite(cursor.getInt(5) == 1);
 		cursor.close();
 		dbh.close();
