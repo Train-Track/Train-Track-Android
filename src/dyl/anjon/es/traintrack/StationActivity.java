@@ -98,6 +98,11 @@ public class StationActivity extends Activity {
 			return true;
 		case R.id.refresh:
 			new GetBoardRequest().execute(station.getCrsCode());
+		case R.id.map:
+			Intent intent = new Intent().setClass(this,
+					MapActivity.class);
+			intent.putExtra("station_id", station.getId());
+			startActivity(intent);
 		default:
 			return super.onOptionsItemSelected(item);
 		}
