@@ -7,6 +7,8 @@ import dyl.anjon.es.traintrack.models.Station;
 public class CallingPoint {
 	
 	public static String START = "START";
+	public static String THIS = "THIS";
+	public static String STOP = "STOP";
 	public static String END = "END";
 
 	private Station station;

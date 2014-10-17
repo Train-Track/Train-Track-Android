@@ -37,6 +37,7 @@ public class Service {
 	private String previousCallingPointsServiceType;
 	private ArrayList<CallingPoint> subsequentCallingPoints;
 	private String subsequentCallingPointsServiceType;
+	private ArrayList<CallingPoint> callingPoints;
 
 	private Service(String serviceId, String xml) {
 
@@ -111,6 +112,8 @@ public class Service {
 				CallingPoint callingPoint = new CallingPoint(cp);
 				if (i == 0) {
 					callingPoint.setIcon(CallingPoint.START);
+				} else {
+					callingPoint.setIcon(CallingPoint.STOP);
 				}
 				this.previousCallingPoints.add(callingPoint);
 			}
@@ -128,10 +131,22 @@ public class Service {
 				CallingPoint callingPoint = new CallingPoint(cp);
 				if (i == callingPoints.getLength() - 1) {
 					callingPoint.setIcon(CallingPoint.END);
+				} else {
+					callingPoint.setIcon(CallingPoint.STOP);
 				}
 				this.subsequentCallingPoints.add(callingPoint);
 			}
 		}
+		callingPoints = new ArrayList<CallingPoint>();
+		callingPoints.addAll(getPreviousCallingPoints());
+		CallingPoint thisCallingPoint = new CallingPoint();
+		thisCallingPoint.setStation(getStation());
+		thisCallingPoint.setScheduledTime(getScheduledTimeDeparture());
+		thisCallingPoint.setEstimatedTime(getEstimatedTimeDeparture());
+		thisCallingPoint.setActualTime(getActualTimeDeparture());
+		thisCallingPoint.setIcon(CallingPoint.THIS);
+		callingPoints.add(thisCallingPoint);
+		callingPoints.addAll(getSubsequentCallingPoints());
 	}
 
 	public String getServiceId() {
@@ -303,6 +318,10 @@ public class Service {
 
 	public String getSubsequentCallingPointsServiceType() {
 		return subsequentCallingPointsServiceType;
+	}
+
+	public ArrayList<CallingPoint> getCallingPoints() {
+		return callingPoints;
 	}
 
 	public void setSubsequentCallingPointsServiceType(

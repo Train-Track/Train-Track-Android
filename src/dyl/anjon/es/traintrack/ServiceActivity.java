@@ -102,6 +102,11 @@ public class ServiceActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.refresh:
 			new GetServiceRequest().execute(serviceId);
+		case R.id.map:
+			Intent intent = new Intent().setClass(this,
+					MapActivity.class);
+			intent.putExtra("service_id", serviceId);
+			startActivity(intent);
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -131,14 +136,7 @@ public class ServiceActivity extends Activity {
 		protected void onPostExecute(Service s) {
 			super.onPostExecute(s);
 			callingPoints.clear();
-			callingPoints.addAll(s.getPreviousCallingPoints());
-			CallingPoint thisCallingPoint = new CallingPoint();
-			thisCallingPoint.setStation(s.getStation());
-			thisCallingPoint.setScheduledTime(s.getScheduledTimeDeparture());
-			thisCallingPoint.setEstimatedTime(s.getEstimatedTimeDeparture());
-			thisCallingPoint.setActualTime(s.getActualTimeDeparture());
-			callingPoints.add(thisCallingPoint);
-			callingPoints.addAll(s.getSubsequentCallingPoints());
+			callingPoints.addAll(s.getCallingPoints());
 			adapter.notifyDataSetChanged();
 
 			if (s.getDisruptionReason() != null) {
