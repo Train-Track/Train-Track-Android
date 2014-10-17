@@ -102,11 +102,12 @@ public class ServiceActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.refresh:
 			new GetServiceRequest().execute(serviceId);
+			return true;
 		case R.id.map:
-			Intent intent = new Intent().setClass(this,
-					MapActivity.class);
+			Intent intent = new Intent().setClass(this, MapActivity.class);
 			intent.putExtra("service_id", serviceId);
 			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

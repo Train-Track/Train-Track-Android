@@ -78,7 +78,8 @@ public class StationActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.station, menu);
 		if (station.isFavourite()) {
-			menu.findItem(R.id.favourite).setIcon(android.R.drawable.btn_star_big_on);
+			menu.findItem(R.id.favourite).setIcon(
+					android.R.drawable.btn_star_big_on);
 		}
 		return true;
 	}
@@ -98,11 +99,12 @@ public class StationActivity extends Activity {
 			return true;
 		case R.id.refresh:
 			new GetBoardRequest().execute(station.getCrsCode());
+			return true;
 		case R.id.map:
-			Intent intent = new Intent().setClass(this,
-					MapActivity.class);
+			Intent intent = new Intent().setClass(this, MapActivity.class);
 			intent.putExtra("station_id", station.getId());
 			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
