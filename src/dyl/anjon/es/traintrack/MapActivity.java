@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import dyl.anjon.es.traintrack.api.CallingPoint;
 import dyl.anjon.es.traintrack.api.Service;
 import dyl.anjon.es.traintrack.models.Station;
-import dyl.anjon.es.traintrack.utils.Utils;
 
 public class MapActivity extends Activity {
 
@@ -37,7 +36,6 @@ public class MapActivity extends Activity {
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
 		if (map == null) {
-			Utils.log("Where is the map?");
 			finish();
 		}
 
@@ -49,14 +47,12 @@ public class MapActivity extends Activity {
 			map.addMarker(new MarkerOptions()
 					.position(pos)
 					.title(station.getName())
-					.snippet("Hellllo!!")
 					.icon(BitmapDescriptorFactory
 							.fromResource(R.drawable.ic_launcher)));
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
 		}
 
 		String serviceId = intent.getStringExtra("service_id");
-		Utils.log("SHOW THE CALLING POINTS OF: " + serviceId);
 		if (serviceId != null) {
 			new GetServiceRequest().execute(serviceId);
 		}
@@ -78,7 +74,8 @@ public class MapActivity extends Activity {
 			LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
 			for (int i = 0; i < callingPoints.size(); i++) {
-				Station station = callingPoints.get(i).getStation();
+				CallingPoint callingPoint = callingPoints.get(i);
+				Station station = callingPoint.getStation();
 				LatLng pos = new LatLng(station.getLatitude(),
 						station.getLongitude());
 				points[i] = pos;
@@ -86,14 +83,15 @@ public class MapActivity extends Activity {
 				map.addMarker(new MarkerOptions()
 						.position(pos)
 						.title(station.getName())
-						.snippet(station.getLatitude() +"," + station.getLongitude())
+						.snippet(callingPoint.getScheduledTime())
 						.icon(BitmapDescriptorFactory
-								.fromResource(R.drawable.ic_launcher)));
+								.fromResource(R.drawable.ic_launcher)).visible(true));
 			}
 
-			map.addPolyline(new PolylineOptions().add(points).width(15)
+			map.addPolyline(new PolylineOptions().add(points).width(12)
 					.color(Color.RED));
-			map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+			map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
+					100));
 		}
 	}
 

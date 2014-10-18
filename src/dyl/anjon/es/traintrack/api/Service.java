@@ -96,11 +96,13 @@ public class Service {
 			}
 		}
 
-		NodeList callingPointsList = doc
-				.getElementsByTagName("callingPointList");
-		if (callingPointsList.getLength() > 0) {
-			Node previousCallingPointsListNode = callingPointsList.item(0);
+		Node previousCallingPoints = doc.getElementsByTagName(
+				"previousCallingPoints").item(0);
+		if ((previousCallingPoints != null)
+				&& (previousCallingPoints.hasChildNodes())) {
 
+			Node previousCallingPointsListNode = previousCallingPoints
+					.getFirstChild();
 			Element previousCallingPointsListElement = (Element) previousCallingPointsListNode;
 			this.previousCallingPointsServiceType = previousCallingPointsListElement
 					.getAttribute("serviceType");
@@ -118,8 +120,14 @@ public class Service {
 				this.previousCallingPoints.add(callingPoint);
 			}
 		}
-		if (callingPointsList.getLength() > 1) {
-			Node subsequentCallingPointsListNode = callingPointsList.item(1);
+
+		Node subsequentCallingPoints = doc.getElementsByTagName(
+				"subsequentCallingPoints").item(0);
+		if ((subsequentCallingPoints != null)
+				&& (subsequentCallingPoints.hasChildNodes())) {
+
+			Node subsequentCallingPointsListNode = subsequentCallingPoints
+					.getFirstChild();
 			Element subsequentCallingPointsListElement = (Element) subsequentCallingPointsListNode;
 			this.subsequentCallingPointsServiceType = subsequentCallingPointsListElement
 					.getAttribute("serviceType");
@@ -137,16 +145,17 @@ public class Service {
 				this.subsequentCallingPoints.add(callingPoint);
 			}
 		}
-		callingPoints = new ArrayList<CallingPoint>();
-		callingPoints.addAll(getPreviousCallingPoints());
+		this.callingPoints = new ArrayList<CallingPoint>();
+		this.callingPoints.addAll(getPreviousCallingPoints());
 		CallingPoint thisCallingPoint = new CallingPoint();
 		thisCallingPoint.setStation(getStation());
 		thisCallingPoint.setScheduledTime(getScheduledTimeDeparture());
 		thisCallingPoint.setEstimatedTime(getEstimatedTimeDeparture());
 		thisCallingPoint.setActualTime(getActualTimeDeparture());
 		thisCallingPoint.setIcon(CallingPoint.THIS);
-		callingPoints.add(thisCallingPoint);
-		callingPoints.addAll(getSubsequentCallingPoints());
+		this.callingPoints.add(thisCallingPoint);
+		this.callingPoints.addAll(getSubsequentCallingPoints());
+		Utils.log(this.toString());
 	}
 
 	public String getServiceId() {
@@ -339,7 +348,7 @@ public class Service {
 				+ Utils.SOAP_END;
 		String xmlResponse = "";
 		if (Utils.DEBUG_MODE) {
-			xmlResponse = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body><GetServiceDetailsResponse xmlns=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\"><GetServiceDetailsResult><generatedAt>2014-10-05T22:37:25.2473081+01:00</generatedAt><serviceType>train</serviceType><locationName>Leeds</locationName><crs>LDS</crs><operator>First TransPennine Express</operator><operatorCode>TP</operatorCode><disruptionReason>This train has been delayed by a problem at a level crossing</disruptionReason><sta>22:08</sta><ata>On time</ata><std>22:14</std><etd>22:39</etd><previousCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Liverpool Lime Street</locationName><crs>LIV</crs><st>20:22</st><at>On time</at></callingPoint><callingPoint><locationName>Liverpool South Parkway</locationName><crs>LPY</crs><st>20:32</st><at>20:34</at></callingPoint><callingPoint><locationName>Warrington Central</locationName><crs>WAC</crs><st>20:45</st><at>20:47</at></callingPoint><callingPoint><locationName>Birchwood</locationName><crs>BWD</crs><st>20:50</st><at>No report</at></callingPoint><callingPoint><locationName>Manchester Oxford Road</locationName><crs>MCO</crs><st>21:07</st><at>On time</at></callingPoint><callingPoint><locationName>Manchester Piccadilly</locationName><crs>MAN</crs><st>21:11</st><at>On time</at></callingPoint><callingPoint><locationName>Stalybridge</locationName><crs>SYB</crs><st>21:25</st><at>On time</at></callingPoint><callingPoint><locationName>Huddersfield</locationName><crs>HUD</crs><st>21:46</st><at>On time</at></callingPoint><callingPoint><locationName>Dewsbury</locationName><crs>DEW</crs><st>21:55</st><at>On time</at></callingPoint></callingPointList></previousCallingPoints><subsequentCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Selby</locationName><crs>SBY</crs><st>22:44</st><et>23:08</et></callingPoint><callingPoint><locationName>Brough</locationName><crs>BUH</crs><st>23:03</st><et>23:26</et></callingPoint><callingPoint><locationName>Hull</locationName><crs>HUL</crs><st>23:20</st><et>23:39</et></callingPoint></callingPointList></subsequentCallingPoints></GetServiceDetailsResult></GetServiceDetailsResponse></soap:Body></soap:Envelope>";
+			xmlResponse = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body><GetServiceDetailsResponse xmlns=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\"><GetServiceDetailsResult><generatedAt>2014-10-18T00:50:05.7673566+01:00</generatedAt><serviceType>train</serviceType><locationName>London Paddington</locationName><crs>PAD</crs><operator>First Great Western</operator><operatorCode>GW</operatorCode><platform>9</platform><std>01:44</std><etd>On time</etd><previousCallingPoints /><subsequentCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Ealing Broadway</locationName><crs>EAL</crs><st>01:52</st><et>On time</et></callingPoint><callingPoint><locationName>Southall</locationName><crs>STL</crs><st>01:57</st><et>On time</et></callingPoint><callingPoint><locationName>Hayes &amp; Harlington</locationName><crs>HAY</crs><st>02:01</st><et>On time</et></callingPoint><callingPoint><locationName>West Drayton</locationName><crs>WDT</crs><st>02:05</st><et>On time</et></callingPoint><callingPoint><locationName>Slough</locationName><crs>SLO</crs><st>02:13</st><et>On time</et></callingPoint><callingPoint><locationName>Maidenhead</locationName><crs>MAI</crs><st>02:20</st><et>On time</et></callingPoint><callingPoint><locationName>Twyford</locationName><crs>TWY</crs><st>02:29</st><et>On time</et></callingPoint><callingPoint><locationName>Reading</locationName><crs>RDG</crs><st>02:38</st><et>On time</et></callingPoint></callingPointList></subsequentCallingPoints></GetServiceDetailsResult></GetServiceDetailsResponse></soap:Body></soap:Envelope>";
 		} else {
 			xmlResponse = Utils.httpPost(Utils.API_URL, xml);
 		}
@@ -348,7 +357,7 @@ public class Service {
 	}
 
 	public String toString() {
-		return this.previousCallingPoints.toString();
+		return this.callingPoints.toString();
 	}
 
 }
