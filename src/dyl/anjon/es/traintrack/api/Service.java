@@ -152,7 +152,13 @@ public class Service {
 		thisCallingPoint.setScheduledTime(getScheduledTimeDeparture());
 		thisCallingPoint.setEstimatedTime(getEstimatedTimeDeparture());
 		thisCallingPoint.setActualTime(getActualTimeDeparture());
-		thisCallingPoint.setIcon(CallingPoint.THIS);
+		if (getSubsequentCallingPoints().size() == 0) {
+			thisCallingPoint.setIcon(CallingPoint.END);
+		} else if (getPreviousCallingPoints().size() == 0) {
+			thisCallingPoint.setIcon(CallingPoint.START);
+		} else {
+			thisCallingPoint.setIcon(CallingPoint.STOP);
+		}
 		this.callingPoints.add(thisCallingPoint);
 		this.callingPoints.addAll(getSubsequentCallingPoints());
 		Utils.log(this.toString());

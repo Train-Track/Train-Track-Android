@@ -8,7 +8,6 @@ import dyl.anjon.es.traintrack.models.Station;
 public class CallingPoint {
 	
 	public static int START = R.drawable.start;
-	public static int THIS = R.drawable.stop;
 	public static int STOP = R.drawable.stop;
 	public static int END = R.drawable.end;
 
