@@ -2,20 +2,21 @@ package dyl.anjon.es.traintrack.api;
 
 import org.w3c.dom.Element;
 
+import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.models.Station;
 
 public class CallingPoint {
 	
-	public static String START = "START";
-	public static String THIS = "THIS";
-	public static String STOP = "STOP";
-	public static String END = "END";
+	public static int START = R.drawable.start;
+	public static int THIS = R.drawable.stop;
+	public static int STOP = R.drawable.stop;
+	public static int END = R.drawable.end;
 
 	private Station station;
 	private String scheduledTime;
 	private String estimatedTime;
 	private String actualTime;
-	private String icon;
+	private int icon;
 
 	public CallingPoint() {
 
@@ -72,11 +73,11 @@ public class CallingPoint {
 		this.actualTime = actualTime;
 	}
 
-	public String getIcon() {
+	public int getIcon() {
 		return icon;
 	}
 
-	public void setIcon(String icon) {
+	public void setIcon(int icon) {
 		this.icon = icon;
 	}
 

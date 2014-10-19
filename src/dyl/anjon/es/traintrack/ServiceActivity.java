@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,8 +56,7 @@ public class ServiceActivity extends Activity {
 		disruptionReason = (TextView) findViewById(R.id.disruption_reason);
 		generatedAt = (TextView) findViewById(R.id.generated_at);
 
-		adapter = new CallingPointRowAdapter(LayoutInflater.from(this),
-				callingPoints, station);
+		adapter = new CallingPointRowAdapter(callingPoints, station, this);
 		ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {

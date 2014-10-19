@@ -7,33 +7,30 @@
     <TextView
         android:id="@+id/icon"
         android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/start_calling_point"
-        android:layout_gravity="center" />
+        android:layout_height="fill_parent" />
 
     <TextView
-        android:id="@+id/time"
-        android:layout_width="0dp"
+        android:id="@+id/scheduled_time"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:padding="10sp"
         android:textIsSelectable="false"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/station"
         style="@style/Row"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
+        android:layout_weight="1"
         android:padding="10sp"
         android:textIsSelectable="false"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/platform"
-        android:layout_width="0dp"
+        android:id="@+id/time"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
         android:gravity="center"
         android:paddingLeft="10sp"
         android:textIsSelectable="false"
