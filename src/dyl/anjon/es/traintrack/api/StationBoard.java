@@ -91,7 +91,11 @@ public class StationBoard {
 	}
 
 	public String getGeneratedAtString() {
-		return "Last updated at " + generatedAt.format("%H:%m");
+		if (getGeneratedAt() != null) {
+			return "Last updated at " + generatedAt.format("%H:%m");
+		} else {
+			return "Uh oh!";
+		}
 	}
 
 	public void setGeneratedAt(Time generatedAt) {
