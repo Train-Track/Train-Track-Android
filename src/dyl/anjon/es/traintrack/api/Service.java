@@ -149,9 +149,15 @@ public class Service {
 		this.callingPoints.addAll(getPreviousCallingPoints());
 		CallingPoint thisCallingPoint = new CallingPoint();
 		thisCallingPoint.setStation(getStation());
-		thisCallingPoint.setScheduledTime(getScheduledTimeDeparture());
-		thisCallingPoint.setEstimatedTime(getEstimatedTimeDeparture());
-		thisCallingPoint.setActualTime(getActualTimeDeparture());
+		if (terminatesHere()) {
+			thisCallingPoint.setScheduledTime(getScheduledTimeArrival());
+			thisCallingPoint.setEstimatedTime(getEstimatedTimeArrival());
+			thisCallingPoint.setActualTime(getActualTimeArrival());
+		} else {
+			thisCallingPoint.setScheduledTime(getScheduledTimeDeparture());
+			thisCallingPoint.setEstimatedTime(getEstimatedTimeDeparture());
+			thisCallingPoint.setActualTime(getActualTimeDeparture());
+		}
 		if (getSubsequentCallingPoints().size() == 0) {
 			thisCallingPoint.setIcon(CallingPoint.END);
 		} else if (getPreviousCallingPoints().size() == 0) {
@@ -161,7 +167,15 @@ public class Service {
 		}
 		this.callingPoints.add(thisCallingPoint);
 		this.callingPoints.addAll(getSubsequentCallingPoints());
-		Utils.log(this.toString());
+		Utils.log(serviceId);
+	}
+
+	private boolean terminatesHere() {
+		if (getScheduledTimeDeparture() == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public String getServiceId() {
