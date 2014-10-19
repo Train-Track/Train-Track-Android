@@ -34,7 +34,6 @@ public class ServiceActivity extends Activity {
 		final Intent intent = getIntent();
 		final int journeyId = intent.getIntExtra("journey_id", 0);
 		serviceId = intent.getStringExtra("service_id");
-		final String time = intent.getStringExtra("time");
 		final int originId = intent.getIntExtra("origin_id", 0);
 		final Station origin = Station.get(originId);
 		final int stationId = intent.getIntExtra("station_id", 0);
@@ -48,7 +47,7 @@ public class ServiceActivity extends Activity {
 		callingPoints = new ArrayList<CallingPoint>();
 
 		final TextView name = (TextView) findViewById(R.id.name);
-		name.setText(time + " " + origin + " to " + destination);
+		name.setText(origin + " to " + destination);
 
 		final TextView toc = (TextView) findViewById(R.id.toc);
 		toc.setText(operator);
