@@ -85,7 +85,8 @@ public class MapActivity extends Activity {
 						.title(station.getName())
 						.snippet(callingPoint.getScheduledTime())
 						.icon(BitmapDescriptorFactory
-								.fromResource(R.drawable.ic_launcher)).visible(true));
+								.fromResource(R.drawable.ic_launcher))
+						.visible(true));
 			}
 
 			map.addPolyline(new PolylineOptions().add(points).width(12)
