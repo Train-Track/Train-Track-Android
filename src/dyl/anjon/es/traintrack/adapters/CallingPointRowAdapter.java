@@ -71,13 +71,17 @@ public class CallingPointRowAdapter extends BaseAdapter {
 			if (callingPoint.getStation().equals(this.station)) {
 				holder.station.setTextColor(Color.RED);
 				convertView.setEnabled(false);
+			} else {
+				holder.station.setTextColor(Color.BLACK);
+				convertView.setEnabled(true);
 			}
 		}
 		holder.time.setText(callingPoint.getEstimatedTime());
+
 		return convertView;
 	}
 
-	class ViewHolder {
+	static class ViewHolder {
 		TextView icon;
 		TextView scheduledTime;
 		TextView station;

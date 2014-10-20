@@ -45,8 +45,7 @@ public class StationActivity extends Activity {
 		generatedAt = (TextView) findViewById(R.id.generated_at);
 		nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
 		serviceItems = new ArrayList<ServiceItem>();
-		adapter = new ServiceItemRowAdapter(LayoutInflater.from(this),
-				serviceItems, station);
+		adapter = new ServiceItemRowAdapter(serviceItems, station, this);
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {

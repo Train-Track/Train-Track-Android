@@ -2,6 +2,7 @@ package dyl.anjon.es.traintrack.adapters;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,8 @@ import dyl.anjon.es.traintrack.models.Station;
 public class ServiceItemRowAdapter extends BaseAdapter {
 
 	private ArrayList<ServiceItem> serviceItems;
-	private LayoutInflater inflater = null;
 	private Station station;
+	private Context context;
 
 	/**
 	 * @param inflater
@@ -24,11 +25,11 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 	 * @param station
 	 *            the service is being seen from
 	 */
-	public ServiceItemRowAdapter(LayoutInflater inflater,
-			ArrayList<ServiceItem> serviceItems, Station station) {
+	public ServiceItemRowAdapter(ArrayList<ServiceItem> serviceItems,
+			Station station, Context context) {
 		this.serviceItems = serviceItems;
-		this.inflater = inflater;
 		this.station = station;
+		this.context = context;
 	}
 
 	public int getCount() {
@@ -52,31 +53,44 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final View v = inflater.inflate(R.layout.row_service, null);
-		final ServiceItem serviceItem = serviceItems.get(position);
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = LayoutInflater.from(context).inflate(
+					R.layout.row_service, null);
+			holder = new ViewHolder();
+			holder.destination = (TextView) convertView
+					.findViewById(R.id.destination);
+			holder.origin = (TextView) convertView.findViewById(R.id.origin);
+			holder.time = (TextView) convertView.findViewById(R.id.time);
+			holder.platform = (TextView) convertView
+					.findViewById(R.id.platform);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
 
-		final TextView destination = (TextView) v
-				.findViewById(R.id.destination);
+		ServiceItem serviceItem = serviceItems.get(position);
 		if (serviceItem.terminatesHere()) {
-			destination.setText("Terminates Here");
+			holder.destination.setText("Terminates Here");
 		} else {
-			destination.setText(serviceItem.getDestination().toString());
+			holder.destination.setText(serviceItem.getDestination().toString());
 		}
-
-		final TextView origin = (TextView) v.findViewById(R.id.origin);
 		if (serviceItem.startsHere()) {
-			origin.setText("Starts Here");
+			holder.origin.setText("Starts Here");
 		} else {
-			origin.setText("From " + serviceItem.getOrigin().toString());
+			holder.origin.setText("From " + serviceItem.getOrigin().toString());
 		}
-		origin.setText(origin.getText() + " - " + serviceItem.getOperator());
+		// origin.setText(origin.getText() + " - " + serviceItem.getOperator());
+		holder.time.setText(serviceItem.getTime());
+		holder.platform.setText(serviceItem.getPlatform());
 
-		final TextView time = (TextView) v.findViewById(R.id.time);
-		time.setText(serviceItem.getTime());
+		return convertView;
+	}
 
-		final TextView platform = (TextView) v.findViewById(R.id.platform);
-		platform.setText(serviceItem.getPlatform());
-
-		return v;
+	static class ViewHolder {
+		TextView destination;
+		TextView origin;
+		TextView time;
+		TextView platform;
 	}
 }
