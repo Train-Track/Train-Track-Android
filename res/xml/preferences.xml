@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">    
     <PreferenceCategory 
-        android:title="Schedules"
-        android:key="pref_schedules">
+        android:title="Buses"
+        android:key="pref_buses">
         <CheckBoxPreference
-            android:key="pref_view_detailed_schedule"
-            android:title="@string/view_detailed_schedule"
-            android:summary="@string/view_detailed_schedule_summary"
+            android:key="pref_view_bus_services"
+            android:title="@string/view_bus_services"
+            android:summary="@string/view_bus_services_summary"
             android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory 

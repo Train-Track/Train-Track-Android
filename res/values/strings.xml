@@ -20,8 +20,8 @@
     <string name="share_facebook_summary">Automatically post a story on your newsfeed for your friends</string>
     <string name="share_public">Share with Public</string>
     <string name="share_public_summary">Everyone can see your journeys in the app and on the website</string>
-    <string name="view_detailed_schedule">View Detailed Schedules</string>
-    <string name="view_detailed_schedule_summary">See detailed schedule information</string>
+    <string name="view_bus_services">View Bus Services</string>
+    <string name="view_bus_services_summary">See bus services where available</string>
     <string name="save">Save</string>
     <string name="platform">Platform</string>
     <string name="departure">Departure</string>
