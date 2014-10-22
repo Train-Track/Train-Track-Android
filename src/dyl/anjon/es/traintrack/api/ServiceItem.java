@@ -177,7 +177,7 @@ public class ServiceItem {
 	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
 	}
-
+	
 	public boolean isDelayedDeparting() {
 		if (getEstimatedTimeDeparture().equalsIgnoreCase(ON_TIME)) {
 			return false;
@@ -210,15 +210,19 @@ public class ServiceItem {
 		}
 	}
 
-	public String getTime() {
-		if ((terminatesHere()) && (isDelayedArriving())) {
-			return getEstimatedTimeArrival();
-		} else if (terminatesHere()) {
+	public String getScheduledTime() {
+		if (terminatesHere()) {
 			return getScheduledTimeArrival();
-		} else if (isDelayedDeparting()) {
-			return getEstimatedTimeDeparture();
 		} else {
 			return getScheduledTimeDeparture();
+		}
+	}
+
+	public String getEstimatedTime() {
+		if (terminatesHere()) {
+			return getEstimatedTimeArrival();
+		} else {
+			return getEstimatedTimeDeparture();
 		}
 	}
 

@@ -3,6 +3,8 @@ package dyl.anjon.es.traintrack.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,10 +60,13 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.row_service, null);
 			holder = new ViewHolder();
+			holder.scheduledTime = (TextView) convertView
+					.findViewById(R.id.scheduled_time);
+			holder.estimatedTime = (TextView) convertView
+					.findViewById(R.id.estimated_time);
 			holder.destination = (TextView) convertView
 					.findViewById(R.id.destination);
 			holder.origin = (TextView) convertView.findViewById(R.id.origin);
-			holder.time = (TextView) convertView.findViewById(R.id.time);
 			holder.platform = (TextView) convertView
 					.findViewById(R.id.platform);
 			convertView.setTag(holder);
@@ -70,27 +75,44 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 		}
 
 		ServiceItem serviceItem = serviceItems.get(position);
+		holder.scheduledTime.setText(serviceItem.getScheduledTime());
+		holder.estimatedTime.setText(serviceItem.getEstimatedTime());
 		if (serviceItem.terminatesHere()) {
 			holder.destination.setText("Terminates Here");
+			if (serviceItem.isDelayedArriving()) {
+				holder.estimatedTime.setTextColor(Color.RED);
+				holder.scheduledTime.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+			} else {
+				holder.estimatedTime.setTextColor(Color.BLACK);
+				holder.scheduledTime.setPaintFlags(0);
+			}
 		} else {
 			holder.destination.setText(serviceItem.getDestination().toString());
+			if (serviceItem.isDelayedDeparting()) {
+				holder.estimatedTime.setTextColor(Color.RED);
+				holder.scheduledTime.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+			} else {
+				holder.estimatedTime.setTextColor(Color.BLACK);
+				holder.scheduledTime.setPaintFlags(0);
+			}
 		}
 		if (serviceItem.startsHere()) {
 			holder.origin.setText("Starts Here");
 		} else {
 			holder.origin.setText("From " + serviceItem.getOrigin().toString());
 		}
-		// origin.setText(origin.getText() + " - " + serviceItem.getOperator());
-		holder.time.setText(serviceItem.getTime());
+		holder.origin.setText(holder.origin.getText() + " - "
+				+ serviceItem.getOperator());
 		holder.platform.setText(serviceItem.getPlatform());
 
 		return convertView;
 	}
 
 	static class ViewHolder {
+		TextView scheduledTime;
+		TextView estimatedTime;
 		TextView destination;
 		TextView origin;
-		TextView time;
 		TextView platform;
 	}
 }
