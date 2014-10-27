@@ -1,7 +1,5 @@
 package dyl.anjon.es.traintrack;
 
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,8 +21,8 @@ import dyl.anjon.es.traintrack.utils.Utils;
 
 public class MainActivity extends FragmentActivity {
 
-	SectionsPagerAdapter mSectionsPagerAdapter;
-	ViewPager mViewPager;
+	private SectionsPagerAdapter mSectionsPagerAdapter;
+	private ViewPager mViewPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +58,7 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.add_journey:
 			mViewPager.setCurrentItem(0);
@@ -67,8 +66,13 @@ public class MainActivity extends FragmentActivity {
 					"Choose departing station...", Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.settings:
-			Intent intent = new Intent().setClass(getApplicationContext(),
+			intent = new Intent().setClass(getApplicationContext(),
 					SettingsActivity.class);
+			startActivity(intent);
+			return true;
+		case R.id.google:
+			intent = new Intent().setClass(getApplicationContext(),
+					GoogleLoginActivity.class);
 			startActivity(intent);
 			return true;
 		default:
@@ -106,14 +110,13 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			Locale l = Locale.getDefault();
 			switch (position) {
 			case 0:
-				return getString(R.string.title_section1).toUpperCase(l);
+				return getString(R.string.title_section1);
 			case 1:
-				return getString(R.string.title_section2).toUpperCase(l);
+				return getString(R.string.title_section2);
 			case 2:
-				return getString(R.string.title_section3).toUpperCase(l);
+				return getString(R.string.title_section3);
 			}
 			return null;
 		}

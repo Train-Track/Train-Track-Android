@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">Train Track</string>
-    <string name="app_id">272514462916508</string>
+    <string name="facebook_app_id">272514462916508</string>
+    <string name="games_app_id">912421679009</string>
     <string name="maps_api_key">AIzaSyC9LZFbAznxN0LxPLeX3D5d-84h3PHbdiQ</string>
     <string name="delete_journey">Delete Journey</string>
     <string name="delete_journey_leg">Delete Journey Leg</string>
@@ -31,5 +32,12 @@
     <string name="map">Map</string>
     <string name="favourites">Favourites</string>
     <string name="a_z">A-Z</string>
+    <string name="gamehelper_sign_in_failed">Failed to sign in. Please check your network connection and try again.</string>
+    <string name="gamehelper_app_misconfigured">The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.</string>
+    <string name="gamehelper_license_failed">License check failed.</string>
+    <string name="gamehelper_unknown_error">Unknown error.</string>
+    <string name="signin_other_error">Other Error.</string>
+    <string name="signin_failure">Failed.</string>
+    <string name="google">Sign in to Google</string>
     
 </resources>
