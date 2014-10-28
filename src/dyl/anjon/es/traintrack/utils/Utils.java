@@ -67,7 +67,7 @@ public class Utils {
 	}
 
 	/**
-	 * @return the user
+	 * @return the context
 	 */
 	public Context getContext() {
 		return this.context;
