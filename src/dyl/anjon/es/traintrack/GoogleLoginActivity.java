@@ -6,12 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.Player;
 import com.google.android.gms.plus.Plus;
 
 import dyl.anjon.es.traintrack.utils.BaseGameUtils;
@@ -40,7 +42,6 @@ public class GoogleLoginActivity extends Activity implements
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-		Utils.log("CONNECTION FAILED: " + result.toString());
 		if (!BaseGameUtils.resolveConnectionFailure(this, mGoogleApiClient,
 				result, RC_SIGN_IN, getString(R.string.signin_other_error))) {
 		}
@@ -53,11 +54,15 @@ public class GoogleLoginActivity extends Activity implements
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
+		Utils.log("onConnected called");
 		findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-		findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.google_logged_in).setVisibility(View.VISIBLE);
 		SharedPreferences prefs = getSharedPreferences("current_user",
 				MODE_PRIVATE);
 		prefs.edit().putBoolean("linked_google_account", true).apply();
+		Player p = Games.Players.getCurrentPlayer(mGoogleApiClient);
+		TextView playerName = (TextView) findViewById(R.id.player_name);
+		playerName.setText(p.getDisplayName());
 	}
 
 	@Override
@@ -74,7 +79,6 @@ public class GoogleLoginActivity extends Activity implements
 
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
-		Utils.log("onActivityResult called!");
 		if (requestCode == RC_SIGN_IN) {
 			if (resultCode == RESULT_OK) {
 				mGoogleApiClient.connect();
@@ -89,14 +93,14 @@ public class GoogleLoginActivity extends Activity implements
 	@Override
 	public void onClick(View view) {
 		if (view.getId() == R.id.sign_in_button) {
-			mGoogleApiClient.connect();
+			mGoogleApiClient.reconnect();
 		} else if (view.getId() == R.id.sign_out_button) {
 			Games.signOut(mGoogleApiClient);
 			SharedPreferences prefs = getSharedPreferences("current_user",
 					MODE_PRIVATE);
 			prefs.edit().putBoolean("linked_google_account", false).apply();
 			findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-			findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+			findViewById(R.id.google_logged_in).setVisibility(View.GONE);
 		}
 
 	}
