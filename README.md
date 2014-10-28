@@ -1,4 +1,4 @@
-TrainTrack
+Train Track
 ==========
 
-Android app for https://dyl.anjon.es/trains
+Android app for https://android-train-track.appspot.com/
