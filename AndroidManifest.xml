@@ -67,7 +67,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="dyl.anjon.es.traintrack.GoogleLoginActivity"
+            android:name="dyl.anjon.es.traintrack.AccountManagerActivity"
             android:label="@string/app_name" >
         </activity>
 

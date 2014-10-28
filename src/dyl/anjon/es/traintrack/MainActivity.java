@@ -70,9 +70,9 @@ public class MainActivity extends FragmentActivity {
 					SettingsActivity.class);
 			startActivity(intent);
 			return true;
-		case R.id.google:
+		case R.id.linked_accounts:
 			intent = new Intent().setClass(getApplicationContext(),
-					GoogleLoginActivity.class);
+					AccountManagerActivity.class);
 			startActivity(intent);
 			return true;
 		default:

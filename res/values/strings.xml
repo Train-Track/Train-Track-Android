@@ -38,6 +38,8 @@
     <string name="gamehelper_unknown_error">Unknown error.</string>
     <string name="signin_other_error">Other Error.</string>
     <string name="signin_failure">Failed.</string>
-    <string name="google">Sign in to Google</string>
+    <string name="linked_accounts">Linked Accounts</string>
+    <string name="disconnect_google">Disconnect Google Account</string>
+    <string name="disconnect_fb">Disconnect Facebook Account</string>
     
 </resources>
