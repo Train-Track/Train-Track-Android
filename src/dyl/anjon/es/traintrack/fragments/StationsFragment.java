@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import dyl.anjon.es.traintrack.MapActivity;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.StationActivity;
 import dyl.anjon.es.traintrack.adapters.StationRowAdapter;
@@ -109,6 +110,17 @@ public class StationsFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				adapter.refresh(Station.getAll());
+			}
+		});
+
+		Button map = (Button) rootView.findViewById(R.id.map);
+		map.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent().setClass(getActivity(),
+						MapActivity.class);
+				intent.putExtra("all_stations", true);
+				startActivity(intent);
 			}
 		});
 
