@@ -1,4 +1,4 @@
 Train Track
 ==========
 
-Android app for https://traintrack.parseapp.com/
+Android app for http://www.traintrackapp.com
