@@ -43,7 +43,7 @@ public class StationsFragment extends Fragment {
 
 		final ArrayList<Station> stations = Station.getAll();
 
-		ListView list = (ListView) rootView.findViewById(R.id.list);
+		final ListView list = (ListView) rootView.findViewById(R.id.list);
 		final StationRowAdapter adapter = new StationRowAdapter(inflater,
 				stations);
 		list.setAdapter(adapter);
@@ -72,12 +72,21 @@ public class StationsFragment extends Fragment {
 			public void onTextChanged(CharSequence search, int arg1, int arg2,
 					int arg3) {
 				adapter.getFilter().filter(search);
+				list.smoothScrollToPosition(0);
+			}
+		});
+
+		Button aZ = (Button) rootView.findViewById(R.id.a_z);
+		aZ.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				adapter.refresh(Station.getAll());
+				list.smoothScrollToPosition(0);
 			}
 		});
 
 		Button nearby = (Button) rootView.findViewById(R.id.nearby);
 		nearby.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				if (gps == null) {
@@ -93,8 +102,8 @@ public class StationsFragment extends Fragment {
 				}
 				Collections.sort(stations, new DistanceComparator());
 				adapter.refresh(stations);
+				list.smoothScrollToPosition(0);
 			}
-
 		});
 
 		Button favourites = (Button) rootView.findViewById(R.id.favourites);
@@ -102,14 +111,7 @@ public class StationsFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				adapter.getFavouriteFilter().filter(null);
-			}
-		});
-
-		Button aZ = (Button) rootView.findViewById(R.id.a_z);
-		aZ.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				adapter.refresh(Station.getAll());
+				list.smoothScrollToPosition(0);
 			}
 		});
 
