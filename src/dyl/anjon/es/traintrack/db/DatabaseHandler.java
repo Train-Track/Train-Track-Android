@@ -1,20 +1,9 @@
 package dyl.anjon.es.traintrack.db;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
-import java.util.ListIterator;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
@@ -36,32 +25,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-
-		// Operators
-		db.execSQL("CREATE TABLE "
-				+ Operator.TABLE_NAME
-				+ " (id INTEGER PRIMARY KEY, code TEXT, name TEXT, delay_repay_url TEXT)");
-		Gson gson = new Gson();
-		InputStream is = null;
-		try {
-			is = this.context.getAssets().open("operators.json");
-		} catch (IOException e) {
-			Utils.log(e.getMessage());
-		}
-		InputStreamReader reader = new InputStreamReader(is);
-		List<Operator> opertors = gson.fromJson(reader,
-				new TypeToken<List<Operator>>() {
-				}.getType());
-		ListIterator<Operator> itop = opertors.listIterator();
-		while (itop.hasNext()) {
-			Operator operator = itop.next();
-			ContentValues values = new ContentValues();
-			values.put("id", operator.getId());
-			values.put("code", operator.getCode());
-			values.put("name", operator.getName());
-			values.put("delay_repay_url", operator.getDelayRepayUrl());
-			db.insert(Operator.TABLE_NAME, null, values);
-		}
 
 		ContentValues values;
 		// Journeys
