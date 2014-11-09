@@ -3,7 +3,6 @@ package dyl.anjon.es.traintrack;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,10 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.parse.ParseUser;
+
 import dyl.anjon.es.traintrack.fragments.JourneysFragment;
 import dyl.anjon.es.traintrack.fragments.StationsFragment;
 import dyl.anjon.es.traintrack.fragments.UsersFragment;
-import dyl.anjon.es.traintrack.models.User;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class MainActivity extends FragmentActivity {
@@ -29,24 +30,19 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		SharedPreferences settings = getSharedPreferences("current_user",
-				MODE_PRIVATE);
-		int userId = settings.getInt("user_id", 1);
 		Utils session = Utils.getSession();
 		session.setContext(getApplicationContext());
-		User user = User.get(userId);
-		session.setUser(user);
-		if (session.getUser() != null) {
-			Utils.log("The current logged in user is: "
-					+ session.getUser().getName());
-		} else {
-			Utils.log("No one is logged in!");
-		}
 
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
+		
+		ParseUser user = ParseUser.getCurrentUser();
+		Utils.log("User is: " + user.toString());
+		user.setUsername("dylan8902");
+		user.setPassword("bob");
+		user.saveInBackground();
 
 	}
 

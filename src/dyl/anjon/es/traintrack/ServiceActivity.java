@@ -77,7 +77,7 @@ public class ServiceActivity extends Activity {
 				intent.putExtra("origin_time", "12:00");
 				intent.putExtra("origin_platform", "9");
 				intent.putExtra("destination_id", callingPoint.getStation()
-						.getId());
+						.getObjectId());
 				intent.putExtra("destination_time", "19:32");
 				intent.putExtra("destination_platform", "2A");
 				startActivityForResult(intent, 1);

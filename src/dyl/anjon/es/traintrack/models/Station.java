@@ -1,305 +1,97 @@
 package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
-import com.google.gson.annotations.SerializedName;
+import dyl.anjon.es.traintrack.utils.Utils;
 
-import dyl.anjon.es.traintrack.db.DatabaseHandler;
-
-public class Station {
-
-	public static final String TABLE_NAME = "stations";
-
-	private int id;
-
-	@SerializedName("crs")
-	private String crsCode;
-
-	@SerializedName("name")
-	private String name;
-
-	@SerializedName("lat")
-	private double latitude;
-
-	@SerializedName("lng")
-	private double longitude;
-
-	private boolean favourite;
-
-	private float distance;
+@ParseClassName("Station")
+public class Station extends ParseObject {
 
 	public Station() {
-		this.setCrsCode("");
-		this.setName("Unknown");
-		this.setFavourite(false);
 	}
 
-	/**
-	 * @param crsCode
-	 * @param name
-	 * @param favourite
-	 */
-	public Station(String crsCode, String name, boolean favourite) {
-		this.setCrsCode(crsCode);
-		this.setName(name);
-		this.setFavourite(favourite);
-	}
-
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	/**
+	/*
 	 * @return the crsCode
 	 */
 	public String getCrsCode() {
-		return crsCode;
-	}
-
-	/**
-	 * @param crsCode
-	 *            the crsCode to set
-	 */
-	public void setCrsCode(String crsCode) {
-		this.crsCode = crsCode;
+		return getString("crs");
 	}
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return getString("name");
 	}
 
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the latitude
-	 */
 	public double getLatitude() {
-		return latitude;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	/**
-	 * @param latitude
-	 *            the latitude to set
-	 */
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	/**
-	 * @return the longitude
-	 */
 	public double getLongitude() {
-		return longitude;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	/**
-	 * @param longitude
-	 *            the longitude to set
-	 */
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	/**
-	 * @return the favourite
-	 */
-	public boolean isFavourite() {
-		return favourite;
-	}
-
-	/**
-	 * @param favourite
-	 *            the favourite to set
-	 */
-	public void setFavourite(boolean favourite) {
-		this.favourite = favourite;
-	}
-
-	public float getDistance() {
-		return distance;
-	}
-
-	public void setDistance(float distance) {
-		this.distance = distance;
-	}
-
-	/**
-	 * @return the distance in a nice format
-	 */
-	public String getDistanceText() {
-		if (getDistance() > 0) {
-			double distance = getDistance() / 1000;
-			if (distance > 100) {
-				return String.format(Locale.getDefault(), "%.0fkm", distance);
-			} else if (distance > 0) {
-				return String.format(Locale.getDefault(), "%.2fkm", distance);
-			}
-		}
-		return "";
-
-	}
-
-	/**
-	 * @param string
-	 *            to check against
-	 * @return true or false
-	 */
-	public boolean isNameSimilarTo(String string) {
-		return (getName().toLowerCase(Locale.UK).contains(string))
-				|| (getCrsCode().toLowerCase(Locale.UK).contains(string));
-	}
-
-	/**
-	 * @return the name
-	 */
-	@Override
-	public String toString() {
-		return this.getName();
-	}
-
-	/**
-	 * @return true or false
-	 */
-	@Override
-	public boolean equals(Object station) {
-		if (this.toString().equals(station.toString())) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @param context
-	 * @param id
-	 * @return the station selected
-	 */
-	public static Station get(int id) {
-		DatabaseHandler dbh = new DatabaseHandler();
-		SQLiteDatabase db = dbh.getReadableDatabase();
-
-		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
-				"name", "latitude", "longitude", "favourite" }, "id = ?",
-				new String[] { String.valueOf(id) }, null, null, null, null);
-		if (cursor == null) {
-			return null;
-		} else if (!cursor.moveToFirst()) {
-			return null;
-		}
-
-		Station station = new Station();
-		station.setId(cursor.getInt(0));
-		station.setCrsCode(cursor.getString(1));
-		station.setName(cursor.getString(2));
-		station.setLatitude(cursor.getDouble(3));
-		station.setLongitude(cursor.getDouble(4));
-		station.setFavourite(cursor.getInt(5) == 1);
-		cursor.close();
-		dbh.close();
-
-		return station;
-	}
-
-	/**
-	 * @param context
-	 * @param id
-	 * @return the station selected
-	 */
-	public static Station getByCrs(String crs) {
-		DatabaseHandler dbh = new DatabaseHandler();
-		SQLiteDatabase db = dbh.getReadableDatabase();
-
-		Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "crs_code",
-				"name", "latitude", "longitude", "favourite" }, "crs_code = ?",
-				new String[] { String.valueOf(crs) }, null, null, null, null);
-		if (cursor == null) {
-			return null;
-		} else if (!cursor.moveToFirst()) {
-			return null;
-		}
-
-		Station station = new Station();
-		station.setId(cursor.getInt(0));
-		station.setCrsCode(cursor.getString(1));
-		station.setName(cursor.getString(2));
-		station.setLatitude(cursor.getDouble(3));
-		station.setLongitude(cursor.getDouble(4));
-		station.setFavourite(cursor.getInt(5) == 1);
-		cursor.close();
-		dbh.close();
-
-		return station;
-	}
-
-	/**
-	 * @param context
-	 * @return all stations
-	 */
 	public static ArrayList<Station> getAll() {
-		ArrayList<Station> stations = new ArrayList<Station>();
-
-		DatabaseHandler dbh = new DatabaseHandler();
-		SQLiteDatabase db = dbh.getReadableDatabase();
-
-		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME
-				+ " ORDER BY name ASC", null);
-		if (cursor.moveToFirst()) {
-			do {
-				Station station = new Station();
-				station.setId(cursor.getInt(0));
-				station.setCrsCode(cursor.getString(1));
-				station.setName(cursor.getString(2));
-				station.setLatitude(cursor.getDouble(3));
-				station.setLongitude(cursor.getDouble(4));
-				station.setFavourite(cursor.getInt(5) == 1);
-				stations.add(station);
-			} while (cursor.moveToNext());
-		}
-		cursor.close();
-		dbh.close();
-		return stations;
+		// TODO Auto-generated method stub
+		return new ArrayList<Station>();
 	}
 
-	public Station save() {
-		if (this.getId() != 0) {
-			DatabaseHandler dbh = new DatabaseHandler();
-			SQLiteDatabase db = dbh.getWritableDatabase();
-			ContentValues values = new ContentValues();
-			values.put("crs_code", this.getCrsCode());
-			values.put("name", this.getName());
-			values.put("latitude", this.getLatitude());
-			values.put("longitude", this.getLongitude());
-			values.put("favourite", this.isFavourite());
-			db.update(TABLE_NAME, values, "id = ?",
-					new String[] { String.valueOf(this.getId()) });
-			dbh.close();
+	public static Station get(int stationId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isFavourite() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setFavourite(boolean b) {
+		// TODO Auto-generated method stub
+	}
+
+	public int getDistance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public CharSequence getDistanceText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isNameSimilarTo(String string) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setDistance(float f) {
+		// TODO Auto-generated method stub
+	}
+
+	public static Station getByCrs(String crs) {
+		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
+		query.fromLocalDatastore();
+		query.whereEqualTo("crs", crs);
+		Station station = null;
+		try {
+			station = query.getFirst();
+		} catch (ParseException e) {
+			Utils.log(e.getMessage());
 		}
-		return this;
+		return station;
+	}
+
+	public String toString() {
+		return getName();
 	}
 
 }

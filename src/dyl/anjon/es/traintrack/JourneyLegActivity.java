@@ -62,7 +62,7 @@ public class JourneyLegActivity extends Activity {
 
 			/* Departure from origin */
 			int originId = intent.getIntExtra("origin_id", 0);
-			final Station origin = Station.get(originId);
+			final Station origin = null;
 			final TextView departureStation = (TextView) findViewById(R.id.departure_station);
 			departureStation.setText(origin.toString());
 			String originTime = intent.getStringExtra("origin_time");
@@ -92,7 +92,7 @@ public class JourneyLegActivity extends Activity {
 
 			/* Arrival into destination */
 			int destinationId = intent.getIntExtra("destination_id", 0);
-			final Station destination = Station.get(destinationId);
+			final Station destination = null;
 			final TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
 			arrivalStation.setText(destination.toString());
 			String destinationTime = intent.getStringExtra("destination_time");
@@ -133,12 +133,10 @@ public class JourneyLegActivity extends Activity {
 
 					journeyLeg.setJourneyId(journey.getId());
 
-					journeyLeg.setOriginId(origin.getId());
 					journeyLeg.setOrigin(origin);
 					journeyLeg.setDeparturePlatform(departurePlatform.getText()
 							.toString());
 
-					journeyLeg.setDestinationId(destination.getId());
 					journeyLeg.setDestination(destination);
 					journeyLeg.setArrivalPlatform(arrivalPlatform.getText()
 							.toString());

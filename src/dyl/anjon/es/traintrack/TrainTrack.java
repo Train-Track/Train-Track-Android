@@ -1,17 +1,23 @@
 package dyl.anjon.es.traintrack;
 
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParsePush;
-import com.parse.SaveCallback;
-
 import android.app.Application;
 import android.util.Log;
+
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParsePush;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import dyl.anjon.es.traintrack.models.Station;
 
 public class TrainTrack extends Application {
 
 	public void onCreate() {
 		super.onCreate();
+		ParseObject.registerSubclass(Station.class);
+		Parse.enableLocalDatastore(this);
 		Parse.initialize(this, "rvI3JMtQbb3saBrKk5blfeTGdc1uCVs3ueVqwGq2",
 				"3uYi6iO1mE1KMfVm6mqXjHq43Ov9iPmi1u9Htk4q");
 		ParsePush.subscribeInBackground("broadcast", new SaveCallback() {
@@ -25,6 +31,7 @@ public class TrainTrack extends Application {
 				}
 			}
 		});
+		ParseUser.enableAutomaticUser();
 	}
 
 }

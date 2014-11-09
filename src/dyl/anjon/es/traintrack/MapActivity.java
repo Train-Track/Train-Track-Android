@@ -61,7 +61,7 @@ public class MapActivity extends Activity {
 			public void onInfoWindowClick(Marker marker) {
 				Intent intent = new Intent().setClass(getApplicationContext(),
 						StationActivity.class);
-				intent.putExtra("station_id", hashmap.get(marker).getId());
+				intent.putExtra("station_id", hashmap.get(marker).getObjectId());
 				startActivity(intent);
 			}
 		});
