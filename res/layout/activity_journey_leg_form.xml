@@ -23,10 +23,12 @@
             android:textIsSelectable="false"
             android:textSize="30sp" />
 
-        <TimePicker
+        <TextView
             android:id="@+id/departure_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            android:textSize="30sp" />
 
         <EditText
             android:id="@+id/departure_platform"
@@ -49,10 +51,12 @@
             android:textIsSelectable="false"
             android:textSize="30sp" />
 
-        <TimePicker
+        <TextView
             android:id="@+id/arrival_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            android:textSize="30sp" />
 
         <EditText
             android:id="@+id/arrival_platform"

@@ -41,6 +41,9 @@ public class MapActivity extends Activity {
 
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
+		map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(54.47942,
+				-4.232974)));
+		map.animateCamera(CameraUpdateFactory.zoomTo(5));
 		map.setMyLocationEnabled(true);
 		map.setOnMapLoadedCallback(new OnMapLoadedCallback() {
 			@Override
@@ -85,15 +88,15 @@ public class MapActivity extends Activity {
 						station.getLongitude());
 				points[i] = pos;
 				builder.include(pos);
-				map.addMarker(new MarkerOptions()
+				Marker m = map.addMarker(new MarkerOptions()
 						.position(pos)
 						.title(station.getName())
 						.snippet(callingPoint.getScheduledTime())
 						.icon(BitmapDescriptorFactory
 								.fromResource(R.drawable.ic_launcher))
 						.visible(true));
+				hashmap.put(m, station);
 			}
-
 			map.addPolyline(new PolylineOptions().add(points).width(12)
 					.color(Color.RED));
 			map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
@@ -130,8 +133,8 @@ public class MapActivity extends Activity {
 						.title(s.getName())
 						.snippet("View Arrival/Departure Board").icon(icon));
 				hashmap.put(m, s);
-				Utils.log("Ending the loop");
 			}
+			Utils.log("Ending the loop");
 		}
 	}
 

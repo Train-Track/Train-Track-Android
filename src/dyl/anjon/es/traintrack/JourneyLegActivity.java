@@ -1,6 +1,7 @@
 package dyl.anjon.es.traintrack;
 
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
 import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class JourneyLegActivity extends Activity {
 
@@ -56,44 +58,69 @@ public class JourneyLegActivity extends Activity {
 		} else {
 
 			setContentView(R.layout.activity_journey_leg_form);
-			final Button saveButton = (Button) findViewById(R.id.save);
-			final int scheduleId = intent.getIntExtra("schedule_id", 0);
+			journeyLeg = new JourneyLeg();
 
+			/* Departure from origin */
 			int originId = intent.getIntExtra("origin_id", 0);
 			final Station origin = Station.get(originId);
-
 			final TextView departureStation = (TextView) findViewById(R.id.departure_station);
 			departureStation.setText(origin.toString());
-
 			String originTime = intent.getStringExtra("origin_time");
-			final TimePicker departureTime = (TimePicker) findViewById(R.id.departure_time);
+			Utils.log("Origin time: " + originTime);
+			final TextView departureTime = (TextView) findViewById(R.id.departure_time);
+			departureTime.setText(originTime);
 			int departureHour = Integer.valueOf(originTime.split(":")[0]);
-			departureTime.setCurrentHour(departureHour);
 			int departureMinute = Integer.valueOf(originTime.split(":")[1]);
-			departureTime.setCurrentMinute(departureMinute);
-
+			final TimePickerDialog departureTimePicker = new TimePickerDialog(this,
+					new TimePickerDialog.OnTimeSetListener() {
+						@Override
+						public void onTimeSet(TimePicker view, int hourOfDay,
+								int minute) {
+							journeyLeg.setDepartureTime(hourOfDay + ":"
+									+ minute);
+						}
+					}, departureHour, departureMinute, true);
+			departureTime.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					departureTimePicker.show();
+				}
+			});
 			String originPlatform = intent.getStringExtra("origin_platform");
 			final EditText departurePlatform = (EditText) findViewById(R.id.departure_platform);
 			departurePlatform.setText(originPlatform);
 
+			/* Arrival into destination */
 			int destinationId = intent.getIntExtra("destination_id", 0);
 			final Station destination = Station.get(destinationId);
-
 			final TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
 			arrivalStation.setText(destination.toString());
-
 			String destinationTime = intent.getStringExtra("destination_time");
-			final TimePicker arrivalTime = (TimePicker) findViewById(R.id.arrival_time);
+			Utils.log("Destination time: " + destinationTime);
+			final TextView arrivalTime = (TextView) findViewById(R.id.departure_time);
+			arrivalTime.setText(destinationTime);
 			int arrivalHour = Integer.valueOf(destinationTime.split(":")[0]);
-			arrivalTime.setCurrentHour(arrivalHour);
 			int arrivalMinute = Integer.valueOf(destinationTime.split(":")[1]);
-			arrivalTime.setCurrentMinute(arrivalMinute);
-
+			final TimePickerDialog arrivalTimePicker = new TimePickerDialog(this,
+					new TimePickerDialog.OnTimeSetListener() {
+						@Override
+						public void onTimeSet(TimePicker view, int hourOfDay,
+								int minute) {
+							journeyLeg.setArrivalTime(hourOfDay + ":" + minute);
+						}
+					}, arrivalHour, arrivalMinute, true);
+			arrivalTime.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					arrivalTimePicker.show();
+				}
+			});
 			String destinationPlatform = intent
 					.getStringExtra("destination_platform");
 			final EditText arrivalPlatform = (EditText) findViewById(R.id.arrival_platform);
 			arrivalPlatform.setText(destinationPlatform);
 
+			final Button saveButton = (Button) findViewById(R.id.save);
 			saveButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
@@ -104,21 +131,15 @@ public class JourneyLegActivity extends Activity {
 						journey = Journey.get(context, journeyId);
 					}
 
-					JourneyLeg journeyLeg = new JourneyLeg();
 					journeyLeg.setJourneyId(journey.getId());
-					journeyLeg.setScheduleId(scheduleId);
 
 					journeyLeg.setOriginId(origin.getId());
 					journeyLeg.setOrigin(origin);
-					journeyLeg.setDepartureTime(departureTime.getCurrentHour()
-							+ ":" + departureTime.getCurrentMinute());
 					journeyLeg.setDeparturePlatform(departurePlatform.getText()
 							.toString());
 
 					journeyLeg.setDestinationId(destination.getId());
 					journeyLeg.setDestination(destination);
-					journeyLeg.setArrivalTime(arrivalTime.getCurrentHour()
-							+ ":" + arrivalTime.getCurrentMinute());
 					journeyLeg.setArrivalPlatform(arrivalPlatform.getText()
 							.toString());
 
