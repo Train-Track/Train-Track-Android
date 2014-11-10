@@ -17,7 +17,6 @@ import com.parse.ParseUser;
 
 import dyl.anjon.es.traintrack.fragments.JourneysFragment;
 import dyl.anjon.es.traintrack.fragments.StationsFragment;
-import dyl.anjon.es.traintrack.fragments.UsersFragment;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class MainActivity extends FragmentActivity {
@@ -30,14 +29,11 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Utils session = Utils.getSession();
-		session.setContext(getApplicationContext());
-
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-		
+
 		ParseUser user = ParseUser.getCurrentUser();
 		Utils.log("User is: " + user.toString());
 		user.setUsername("dylan8902");
@@ -93,15 +89,13 @@ public class MainActivity extends FragmentActivity {
 				return new StationsFragment();
 			case 1:
 				return new JourneysFragment();
-			case 2:
-				return new UsersFragment();
 			}
 			return new StationsFragment();
 		}
 
 		@Override
 		public int getCount() {
-			return 3;
+			return 2;
 		}
 
 		@Override

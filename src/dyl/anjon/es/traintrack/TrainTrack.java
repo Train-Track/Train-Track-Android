@@ -14,6 +14,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import dyl.anjon.es.traintrack.models.Journey;
+import dyl.anjon.es.traintrack.models.JourneyLeg;
 import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.models.Station;
 import dyl.anjon.es.traintrack.utils.Utils;
@@ -24,6 +26,8 @@ public class TrainTrack extends Application {
 		super.onCreate();
 		ParseObject.registerSubclass(Station.class);
 		ParseObject.registerSubclass(Operator.class);
+		ParseObject.registerSubclass(Journey.class);
+		ParseObject.registerSubclass(JourneyLeg.class);
 		Parse.enableLocalDatastore(this);
 		Parse.initialize(this, "rvI3JMtQbb3saBrKk5blfeTGdc1uCVs3ueVqwGq2",
 				"3uYi6iO1mE1KMfVm6mqXjHq43Ov9iPmi1u9Htk4q");

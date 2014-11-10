@@ -32,23 +32,20 @@ public class ServiceActivity extends Activity {
 		setContentView(R.layout.activity_service);
 
 		final Intent intent = getIntent();
-		final int journeyId = intent.getIntExtra("journey_id", 0);
+		final String journeyId = intent.getStringExtra("journey_id");
 		serviceId = intent.getStringExtra("service_id");
-		final int originId = intent.getIntExtra("origin_id", 0);
-		final Station origin = Station.get(originId);
-		final int stationId = intent.getIntExtra("station_id", 0);
-		final Station station = Station.get(stationId);
-		final int destinationId = intent.getIntExtra("destination_id", 0);
-		final Station destination = Station.get(destinationId);
+		final String originId = intent.getStringExtra("origin_id");
+		final Station origin = Station.getById(originId);
+		final String stationId = intent.getStringExtra("station_id");
+		final Station station = Station.getById(stationId);
+		final String destinationId = intent.getStringExtra("destination_id");
+		final Station destination = Station.getById(destinationId);
 		final String operator = intent.getStringExtra("operator");
-
-		new GetServiceRequest().execute(serviceId);
 
 		callingPoints = new ArrayList<CallingPoint>();
 
 		final TextView name = (TextView) findViewById(R.id.name);
 		name.setText(origin + " to " + destination);
-
 		final TextView toc = (TextView) findViewById(R.id.toc);
 		toc.setText(operator);
 
@@ -73,18 +70,20 @@ public class ServiceActivity extends Activity {
 						JourneyLegActivity.class);
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("service_id", serviceId);
-				intent.putExtra("origin_id", stationId);
-				intent.putExtra("origin_time", "12:00");
-				intent.putExtra("origin_platform", "9");
-				intent.putExtra("destination_id", callingPoint.getStation()
+				intent.putExtra("departure_station_id", stationId);
+				intent.putExtra("departure_time", "12:00");
+				intent.putExtra("departure_platform", "9");
+				intent.putExtra("arrival_station_id", callingPoint.getStation()
 						.getObjectId());
-				intent.putExtra("destination_time", "19:32");
-				intent.putExtra("destination_platform", "2A");
+				intent.putExtra("arrival_time", "19:32");
+				intent.putExtra("arrival_platform", "3A");
 				startActivityForResult(intent, 1);
 				return;
 			}
 
 		});
+
+		new GetServiceRequest().execute(serviceId);
 
 	}
 

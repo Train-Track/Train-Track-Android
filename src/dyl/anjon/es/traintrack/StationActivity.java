@@ -39,7 +39,7 @@ public class StationActivity extends Activity {
 
 		final Intent intent = getIntent();
 		final String stationId = intent.getStringExtra("station_id");
-		final int journeyId = intent.getIntExtra("journey_id", 0);
+		final String journeyId = intent.getStringExtra("journey_id");
 
 		final TextView name = (TextView) findViewById(R.id.name);
 		final TextView crsCode = (TextView) findViewById(R.id.crs_code);

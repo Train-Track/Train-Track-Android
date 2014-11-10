@@ -90,6 +90,18 @@ public class Station extends ParseObject {
 		return station;
 	}
 
+	public static Station getById(String id) {
+		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
+		query.fromLocalDatastore();
+		Station station = null;
+		try {
+			station = query.get(id);
+		} catch (ParseException e) {
+			Utils.log(e.getMessage());
+		}
+		return station;
+	}
+
 	public String toString() {
 		return getName();
 	}

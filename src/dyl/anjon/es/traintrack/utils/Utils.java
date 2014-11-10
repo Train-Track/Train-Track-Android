@@ -21,15 +21,9 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import android.content.Context;
 import android.util.Log;
-import dyl.anjon.es.traintrack.models.User;
 
 public class Utils {
-
-	private static Utils instance;
-	private User user;
-	private Context context;
 
 	public static boolean DEBUG_MODE = true;
 	public static String API_URL = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb5.asmx";
@@ -39,57 +33,6 @@ public class Utils {
 			+ ACCESS_TOKEN
 			+ "</com:TokenValue></com:AccessToken></soapenv:Header>";
 	public static String SOAP_END = "</soapenv:Envelope>";
-
-	private Utils() {
-	}
-
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return this.user;
-	}
-
-	/**
-	 * @param user
-	 *            the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	/**
-	 * @param user
-	 *            the user to set
-	 */
-	public boolean isLoggedIn() {
-		return this.getUser() != null;
-	}
-
-	/**
-	 * @return the context
-	 */
-	public Context getContext() {
-		return this.context;
-	}
-
-	/**
-	 * @param context
-	 *            the context to set
-	 */
-	public void setContext(Context context) {
-		this.context = context;
-	}
-
-	/**
-	 * @return the session currently stored
-	 */
-	public static synchronized Utils getSession() {
-		if (instance == null) {
-			instance = new Utils();
-		}
-		return instance;
-	}
 
 	/**
 	 * @param message
