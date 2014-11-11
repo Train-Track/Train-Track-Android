@@ -25,7 +25,8 @@ import dyl.anjon.es.traintrack.utils.Utils;
 
 public class JourneysFragment extends Fragment {
 
-	public JourneyRowAdapter adapter;
+	private JourneyRowAdapter adapter;
+	private ArrayList<Journey> journeys;
 
 	public JourneysFragment() {
 	}
@@ -36,8 +37,8 @@ public class JourneysFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_journeys, container,
 				false);
 
-		final ArrayList<Journey> journeys = new ArrayList<Journey>();
 		ListView list = (ListView) rootView.findViewById(R.id.list);
+		journeys = new ArrayList<Journey>();
 		adapter = new JourneyRowAdapter(inflater, journeys);
 		list.setAdapter(adapter);
 
@@ -53,67 +54,61 @@ public class JourneysFragment extends Fragment {
 			}
 
 		});
-/*
-		list.setOnItemLongClickListener(new OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int index, long id) {
-				final Journey journey = (Journey) adapter.getItem(index);
-				new AlertDialog.Builder(getActivity())
-						.setTitle("Journey")
-						.setMessage(journey.toString())
-						.setNegativeButton("Back", null)
-						.setNeutralButton("Edit",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int which) {
-										Intent intent = new Intent().setClass(
-												getActivity(),
-												JourneyActivity.class);
-										intent.putExtra("journey_id",
-												journey.getObjectId());
-										startActivity(intent);
-									}
-								})
-						.setPositiveButton("Delete",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int which) {
-										boolean success = journey
-												.delete(getActivity());
-										if (success) {
-											Toast.makeText(getActivity(),
-													"Journey was deleted",
-													Toast.LENGTH_SHORT).show();
-											ArrayList<Journey> journeys = Journey
-													.getAll(getActivity());
-											adapter.refresh(journeys);
-										}
-									}
-								}).show();
-				return false;
-			}
-		});
-*/
+		/*
+		 * list.setOnItemLongClickListener(new OnItemLongClickListener() {
+		 * public boolean onItemLongClick(AdapterView<?> parent, View view, int
+		 * index, long id) { final Journey journey = (Journey)
+		 * adapter.getItem(index); new AlertDialog.Builder(getActivity())
+		 * .setTitle("Journey") .setMessage(journey.toString())
+		 * .setNegativeButton("Back", null) .setNeutralButton("Edit", new
+		 * DialogInterface.OnClickListener() { public void
+		 * onClick(DialogInterface dialog, int which) { Intent intent = new
+		 * Intent().setClass( getActivity(), JourneyActivity.class);
+		 * intent.putExtra("journey_id", journey.getObjectId());
+		 * startActivity(intent); } }) .setPositiveButton("Delete", new
+		 * DialogInterface.OnClickListener() { public void
+		 * onClick(DialogInterface dialog, int which) { boolean success =
+		 * journey .delete(getActivity()); if (success) {
+		 * Toast.makeText(getActivity(), "Journey was deleted",
+		 * Toast.LENGTH_SHORT).show(); ArrayList<Journey> journeys = Journey
+		 * .getAll(getActivity()); adapter.refresh(journeys); } } }).show();
+		 * return false; } });
+		 */
+		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 
 		ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
 		query.fromLocalDatastore();
-		try {
-			if (query.count() == 0) {
-				query = ParseQuery.getQuery(Journey.class);
-			}
-		} catch (ParseException e) {
-			Utils.log(e.getMessage());
-		}
 		query.findInBackground(new FindCallback<Journey>() {
 			@Override
 			public void done(List<Journey> results, ParseException e) {
-				journeys.addAll(results);
-				adapter.refresh(journeys);
-				Journey.pinAllInBackground(results);
+				if (e == null) {
+					journeys.clear();
+					journeys.addAll(results);
+					adapter.refresh(journeys);
+				} else {
+					Utils.log("Loading journeys: " + e.getMessage());
+				}
 			}
 		});
-
-		return rootView;
+		/*
+		query = ParseQuery.getQuery(Journey.class);
+		query.findInBackground(new FindCallback<Journey>() {
+			@Override
+			public void done(List<Journey> results, ParseException e) {
+				if (e == null) {
+					journeys.addAll(results);
+					adapter.refresh(journeys);
+				} else {
+					Utils.log("Loading journeys: " + e.getMessage());
+				}
+			}
+		});
+		*/
 	}
 
 }

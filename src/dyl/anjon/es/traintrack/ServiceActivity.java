@@ -32,8 +32,10 @@ public class ServiceActivity extends Activity {
 		setContentView(R.layout.activity_service);
 
 		final Intent intent = getIntent();
-		final String journeyId = intent.getStringExtra("journey_id");
 		serviceId = intent.getStringExtra("service_id");
+		new GetServiceRequest().execute(serviceId);
+
+		final String journeyId = intent.getStringExtra("journey_id");
 		final String originId = intent.getStringExtra("origin_id");
 		final Station origin = Station.getById(originId);
 		final String stationId = intent.getStringExtra("station_id");
@@ -82,8 +84,6 @@ public class ServiceActivity extends Activity {
 			}
 
 		});
-
-		new GetServiceRequest().execute(serviceId);
 
 	}
 

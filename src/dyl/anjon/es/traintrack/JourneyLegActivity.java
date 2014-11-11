@@ -56,12 +56,12 @@ public class JourneyLegActivity extends Activity {
 						journeyLeg = result;
 						departureStation.setText(journeyLeg
 								.getDepartureStation().toString());
-						departureTime.setText(journeyLeg.getDepartureTime());
+						departureTime.setText(journeyLeg.getDepartureTime().toString());
 						departurePlatform.setText(journeyLeg
 								.getDeparturePlatform());
 						arrivalStation.setText(journeyLeg.getArrivalStation()
 								.toString());
-						arrivalTime.setText(journeyLeg.getArrivalTime());
+						arrivalTime.setText(journeyLeg.getArrivalTime().toString());
 						arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
 					} else {
 						Utils.log(e.getMessage());
@@ -77,7 +77,8 @@ public class JourneyLegActivity extends Activity {
 			final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
 			final String departureStationId = intent
 					.getStringExtra("departure_station_id");
-			final Station departureStation = Station.getById(departureStationId);
+			final Station departureStation = Station
+					.getById(departureStationId);
 			departureStationTv.setText(departureStation.toString());
 
 			final TextView departurePlatformTv = (TextView) findViewById(R.id.departure_platform);
@@ -88,7 +89,7 @@ public class JourneyLegActivity extends Activity {
 			final TextView departureTimeTv = (TextView) findViewById(R.id.departure_time);
 			String departureTime = intent.getStringExtra("departure_time");
 			departureTimeTv.setText(departureTime);
-			journeyLeg.setArrivalTime(departureTime);
+			journeyLeg.setDepartureTime(Utils.getDateWithTime(departureTime));
 
 			int departureHour = Integer.valueOf(departureTime.split(":")[0]);
 			int departureMinute = Integer.valueOf(departureTime.split(":")[1]);
@@ -97,8 +98,10 @@ public class JourneyLegActivity extends Activity {
 					this, new TimePickerDialog.OnTimeSetListener() {
 						public void onTimeSet(TimePicker view, int hourOfDay,
 								int minute) {
-							journeyLeg.setDepartureTime(hourOfDay + ":"
-									+ minute);
+							departureTimeTv.setText(Utils.zeroPadTime(
+									hourOfDay, minute));
+							journeyLeg.setDepartureTime(Utils.getDateWithTime(
+									hourOfDay, minute));
 						}
 					}, departureHour, departureMinute, true);
 
@@ -122,7 +125,7 @@ public class JourneyLegActivity extends Activity {
 			final TextView arrivalTimeTv = (TextView) findViewById(R.id.arrival_time);
 			String arrivalTime = intent.getStringExtra("arrival_time");
 			arrivalTimeTv.setText(arrivalTime);
-			journeyLeg.setArrivalTime(arrivalTime);
+			journeyLeg.setArrivalTime(Utils.getDateWithTime(arrivalTime));
 
 			int arrivalHour = Integer.valueOf(arrivalTime.split(":")[0]);
 			int arrivalMinute = Integer.valueOf(arrivalTime.split(":")[1]);
@@ -131,11 +134,14 @@ public class JourneyLegActivity extends Activity {
 					this, new TimePickerDialog.OnTimeSetListener() {
 						public void onTimeSet(TimePicker view, int hourOfDay,
 								int minute) {
-							journeyLeg.setArrivalTime(hourOfDay + ":" + minute);
+							arrivalTimeTv.setText(Utils.zeroPadTime(hourOfDay,
+									minute));
+							journeyLeg.setArrivalTime(Utils.getDateWithTime(
+									hourOfDay, minute));
 						}
 					}, arrivalHour, arrivalMinute, true);
 
-			departureTimeTv.setOnClickListener(new OnClickListener() {
+			arrivalTimeTv.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					arrivalTimePicker.show();
@@ -148,6 +154,7 @@ public class JourneyLegActivity extends Activity {
 				public void onClick(View view) {
 
 					if (journeyId == null) {
+						Utils.log("Creating new Journey");
 						journey = new Journey();
 						journey.setUser(ParseUser.getCurrentUser());
 						journey.saveEventually();
@@ -161,7 +168,8 @@ public class JourneyLegActivity extends Activity {
 					journeyLeg.setArrivalPlatform(arrivalPlatformTv.getText()
 							.toString());
 					journeyLeg.saveEventually();
-
+					journeyLeg.pinInBackground();
+/*
 					if (journeyId == null) {
 						Intent intent = new Intent().setClass(
 								getApplicationContext(), JourneyActivity.class);
@@ -175,7 +183,7 @@ public class JourneyLegActivity extends Activity {
 						getParent().setResult(Activity.RESULT_OK);
 					}
 					finish();
-
+*/
 				}
 			});
 

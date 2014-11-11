@@ -36,14 +36,24 @@ public class Journey extends ParseObject {
 	 * @return the origin
 	 */
 	public Station getOrigin() {
-		return new Station();
+		ArrayList<JourneyLeg> journeyLegs = getJourneyLegs();
+		if (journeyLegs.size() > 0) {
+			return journeyLegs.get(0).getDepartureStation();
+		} else {
+			return null;
+		}
 	}
 
 	/**
 	 * @return the destination
 	 */
 	public Station getDestination() {
-		return new Station();
+		ArrayList<JourneyLeg> journeyLegs = getJourneyLegs();
+		if (journeyLegs.size() > 0) {
+			return journeyLegs.get(journeyLegs.size() - 1).getArrivalStation();
+		} else {
+			return null;
+		}
 	}
 
 	public ArrayList<JourneyLeg> getJourneyLegs() {

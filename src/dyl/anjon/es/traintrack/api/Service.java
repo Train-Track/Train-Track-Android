@@ -166,7 +166,6 @@ public class Service {
 		}
 		this.callingPoints.add(thisCallingPoint);
 		this.callingPoints.addAll(getSubsequentCallingPoints());
-		Utils.log(serviceId);
 	}
 
 	private boolean terminatesHere() {

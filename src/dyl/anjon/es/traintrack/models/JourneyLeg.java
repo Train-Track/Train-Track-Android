@@ -1,5 +1,7 @@
 package dyl.anjon.es.traintrack.models;
 
+import java.util.Date;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
@@ -42,15 +44,15 @@ public class JourneyLeg extends ParseObject {
 	/**
 	 * @return the departure time
 	 */
-	public String getDepartureTime() {
-		return getString("departureTime");
+	public Date getDepartureTime() {
+		return getDate("departureTime");
 	}
 
 	/**
 	 * @param departureTime
 	 *            the departure time
 	 */
-	public void setDepartureTime(String departureTime) {
+	public void setDepartureTime(Date departureTime) {
 		put("departureTime", departureTime);
 	}
 
@@ -87,15 +89,15 @@ public class JourneyLeg extends ParseObject {
 	/**
 	 * @return the arrival time
 	 */
-	public String getArrivalTime() {
-		return getString("arrivalTime");
+	public Date getArrivalTime() {
+		return getDate("arrivalTime");
 	}
 
 	/**
 	 * @param arrivalTime
 	 *            the arrival time
 	 */
-	public void setArrivalTime(String arrivalTime) {
+	public void setArrivalTime(Date arrivalTime) {
 		put("arrivalTime", arrivalTime);
 	}
 

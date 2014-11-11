@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,6 +42,25 @@ public class Utils {
 	 */
 	public static void log(String message) {
 		Log.i("TrainTrack", message);
+	}
+
+	/**
+	 * @param hour
+	 *            the hour
+	 * @param minute
+	 *            the minute
+	 */
+	public static String zeroPadTime(int hour, int minute) {
+		String time = "";
+		if (hour < 10) {
+			time = "0";
+		}
+		time += hour + ":";
+		if (minute < 10) {
+			time += "0";
+		}
+		time += minute;
+		return time;
 	}
 
 	/**
@@ -93,5 +114,32 @@ public class Utils {
 			Utils.log(e.getMessage());
 		}
 		return doc;
+	}
+
+	/**
+	 * @param hourOfDay
+	 *            0-23 hours
+	 * @param minute
+	 *            0 - 59 minutes
+	 * 
+	 * @return date object
+	 */
+	public static Date getDateWithTime(int hourOfDay, int minute) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR, hourOfDay);
+		cal.set(Calendar.MINUTE, minute);
+		return cal.getTime();
+	}
+
+	/**
+	 * @param time
+	 *            in the format hh:mm
+	 * 
+	 * @return date object
+	 */
+	public static Date getDateWithTime(String time) {
+		int hourOfDay = Integer.valueOf(time.split(":")[0]);
+		int minute = Integer.valueOf(time.split(":")[1]);
+		return getDateWithTime(hourOfDay, minute);
 	}
 }
