@@ -1,6 +1,8 @@
 package dyl.anjon.es.traintrack.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -116,6 +118,16 @@ public class JourneyLeg extends ParseObject {
 	public String toString() {
 		return this.getDepartureStation().toString() + " to "
 				+ this.getArrivalStation().toString();
+	}
+
+	public String getDepartureTimeAsString() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
+		return dateFormat.format(getDepartureTime());
+	}
+	
+	public String getArrivalTimeAsString() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
+		return dateFormat.format(getArrivalTime());
 	}
 
 }

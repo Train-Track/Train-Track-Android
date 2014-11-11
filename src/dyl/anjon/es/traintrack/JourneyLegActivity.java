@@ -56,14 +56,13 @@ public class JourneyLegActivity extends Activity {
 						journeyLeg = result;
 						departureStation.setText(journeyLeg
 								.getDepartureStation().toString());
-						departureTime.setText(journeyLeg.getDepartureTime()
-								.toString());
+						departureTime.setText(journeyLeg
+								.getDepartureTimeAsString());
 						departurePlatform.setText(journeyLeg
 								.getDeparturePlatform());
 						arrivalStation.setText(journeyLeg.getArrivalStation()
 								.toString());
-						arrivalTime.setText(journeyLeg.getArrivalTime()
-								.toString());
+						arrivalTime.setText(journeyLeg.getArrivalTimeAsString());
 						arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
 					} else {
 						Utils.log(e.getMessage());
