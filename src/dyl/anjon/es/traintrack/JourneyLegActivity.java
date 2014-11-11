@@ -56,12 +56,14 @@ public class JourneyLegActivity extends Activity {
 						journeyLeg = result;
 						departureStation.setText(journeyLeg
 								.getDepartureStation().toString());
-						departureTime.setText(journeyLeg.getDepartureTime().toString());
+						departureTime.setText(journeyLeg.getDepartureTime()
+								.toString());
 						departurePlatform.setText(journeyLeg
 								.getDeparturePlatform());
 						arrivalStation.setText(journeyLeg.getArrivalStation()
 								.toString());
-						arrivalTime.setText(journeyLeg.getArrivalTime().toString());
+						arrivalTime.setText(journeyLeg.getArrivalTime()
+								.toString());
 						arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
 					} else {
 						Utils.log(e.getMessage());
@@ -169,13 +171,6 @@ public class JourneyLegActivity extends Activity {
 							.toString());
 					journeyLeg.saveEventually();
 					journeyLeg.pinInBackground();
-/*
-					if (journeyId == null) {
-						Intent intent = new Intent().setClass(
-								getApplicationContext(), JourneyActivity.class);
-						intent.putExtra("journey_id", journey.getObjectId());
-						startActivity(intent);
-					}
 
 					if (getParent() == null) {
 						setResult(Activity.RESULT_OK);
@@ -183,7 +178,7 @@ public class JourneyLegActivity extends Activity {
 						getParent().setResult(Activity.RESULT_OK);
 					}
 					finish();
-*/
+
 				}
 			});
 
