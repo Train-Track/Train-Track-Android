@@ -72,14 +72,18 @@ public class StationsFragment extends Fragment {
 				query = ParseQuery.getQuery(Station.class);
 			}
 		} catch (ParseException e) {
-			Utils.log(e.getMessage());
+			Utils.log("Counting local stations: " + e.getMessage());
 		}
 		query.findInBackground(new FindCallback<Station>() {
 			@Override
 			public void done(List<Station> results, ParseException e) {
-				stations.addAll(results);
-				adapter.refresh(stations);
-				Station.pinAllInBackground(results);
+				if (e == null) {
+					stations.addAll(results);
+					adapter.refresh(stations);
+					Station.pinAllInBackground(results);
+				} else {
+					Utils.log("Downloading stations: " + e.getMessage());
+				}
 			}
 		});
 
