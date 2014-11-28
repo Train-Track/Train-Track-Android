@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -29,26 +30,40 @@ public class Station extends ParseObject {
 		return getString("name");
 	}
 
+	/**
+	 * @return the latitude
+	 */
 	public double getLatitude() {
-		// TODO Auto-generated method stub
-		return 0;
+		ParseGeoPoint location = getParseGeoPoint("location");
+		return location.getLatitude();
 	}
 
+	/**
+	 * @return the longitude
+	 */
 	public double getLongitude() {
-		// TODO Auto-generated method stub
-		return 0;
+		ParseGeoPoint location = getParseGeoPoint("location");
+		return location.getLongitude();
 	}
 
+	/**
+	 * @return all the stations
+	 */
 	public static ArrayList<Station> getAll() {
-		// TODO Auto-generated method stub
-		return new ArrayList<Station>();
+		ArrayList<Station> stations = new ArrayList<Station>();
+		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
+		query.fromLocalDatastore();
+		try {
+			stations.addAll(query.find());
+		} catch (ParseException e) {
+			Utils.log(e.getMessage());
+		}
+		return stations;
 	}
 
-	public static Station get(int stationId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	/**
+	 * @return true if favourite
+	 */
 	public boolean isFavourite() {
 		// TODO Auto-generated method stub
 		return false;
@@ -77,6 +92,11 @@ public class Station extends ParseObject {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * @param crs
+	 *            CRS Code
+	 * @return the station
+	 */
 	public static Station getByCrs(String crs) {
 		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
 		query.fromLocalDatastore();
@@ -90,6 +110,11 @@ public class Station extends ParseObject {
 		return station;
 	}
 
+	/**
+	 * @param id
+	 *            station ID
+	 * @return the station
+	 */
 	public static Station getById(String id) {
 		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
 		query.fromLocalDatastore();
@@ -102,6 +127,9 @@ public class Station extends ParseObject {
 		return station;
 	}
 
+	/**
+	 * @return the name of the station
+	 */
 	public String toString() {
 		return getName();
 	}
