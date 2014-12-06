@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
 
 import dyl.anjon.es.traintrack.fragments.JourneysFragment;
@@ -35,10 +36,11 @@ public class MainActivity extends FragmentActivity {
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
 		ParseUser user = ParseUser.getCurrentUser();
-		Utils.log("User is: " + user.toString());
-		user.setUsername("dylan8902");
-		user.setPassword("bob");
-		user.saveInBackground();
+		if (ParseAnonymousUtils.isLinked(user)) {
+			Utils.log("User is anon");
+		} else {
+			Utils.log("User is " + user.getUsername());
+		}
 
 	}
 
