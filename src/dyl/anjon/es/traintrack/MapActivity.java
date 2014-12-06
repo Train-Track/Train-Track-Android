@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import dyl.anjon.es.traintrack.api.CallingPoint;
 import dyl.anjon.es.traintrack.api.Service;
 import dyl.anjon.es.traintrack.models.Station;
-import dyl.anjon.es.traintrack.utils.Utils;
 
 public class MapActivity extends Activity {
 
