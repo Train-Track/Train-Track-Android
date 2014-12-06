@@ -25,7 +25,8 @@
         android:id="@+id/distance"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textIsSelectable="false" />
+        android:gravity="right"
+        android:textIsSelectable="false"
+        android:textSize="16sp" />
 
 </LinearLayout>

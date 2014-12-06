@@ -194,8 +194,6 @@ public class Station extends ParseObject {
 				double distance = station.getLocation().distanceInKilometersTo(
 						location);
 				station.setDistance(distance);
-				Utils.log("The distance to " + station.getName() + " is: "
-						+ station.getDistance());
 			}
 			stations.addAll(list);
 		} catch (ParseException e) {
