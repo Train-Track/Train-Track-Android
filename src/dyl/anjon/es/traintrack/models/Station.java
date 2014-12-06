@@ -1,6 +1,10 @@
 package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import android.location.Location;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -12,6 +16,8 @@ import dyl.anjon.es.traintrack.utils.Utils;
 
 @ParseClassName("Station")
 public class Station extends ParseObject {
+
+	private double distance;
 
 	public Station() {
 	}
@@ -38,34 +44,24 @@ public class Station extends ParseObject {
 	}
 
 	/**
+	 * @return the location
+	 */
+	public ParseGeoPoint getLocation() {
+		return getParseGeoPoint("location");
+	}
+
+	/**
 	 * @return the latitude
 	 */
 	public double getLatitude() {
-		ParseGeoPoint location = getParseGeoPoint("location");
-		return location.getLatitude();
+		return getLocation().getLatitude();
 	}
 
 	/**
 	 * @return the longitude
 	 */
 	public double getLongitude() {
-		ParseGeoPoint location = getParseGeoPoint("location");
-		return location.getLongitude();
-	}
-
-	/**
-	 * @return all the stations
-	 */
-	public static ArrayList<Station> getAll() {
-		ArrayList<Station> stations = new ArrayList<Station>();
-		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-		query.fromLocalDatastore();
-		try {
-			stations.addAll(query.find());
-		} catch (ParseException e) {
-			Utils.log(e.getMessage());
-		}
-		return stations;
+		return getLocation().getLongitude();
 	}
 
 	/**
@@ -76,27 +72,56 @@ public class Station extends ParseObject {
 		return false;
 	}
 
-	public void setFavourite(boolean b) {
+	/**
+	 * @param favourite
+	 */
+	public void setFavourite(boolean favourite) {
 		// TODO Auto-generated method stub
 	}
 
-	public int getDistance() {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * @param distance
+	 *            (in km)
+	 */
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
-	public CharSequence getDistanceText() {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * @return distance (km)
+	 */
+	public double getDistance() {
+		return this.distance;
 	}
 
-	public boolean isNameSimilarTo(String string) {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * @return text representation of distance
+	 */
+	public String getDistanceText() {
+		double distance = getDistance();
+		String format = "";
+		if (distance > 100) {
+			format = "%.0f km";
+		} else if (distance > 0) {
+			format = "%.2f km";
+		}
+		return String.format(Locale.getDefault(), format, distance);
 	}
 
-	public void setDistance(float f) {
-		// TODO Auto-generated method stub
+	/**
+	 * @param string
+	 * @return true if string is within name
+	 */
+	public boolean isNameSimilarTo(CharSequence string) {
+		return getName().toLowerCase(Locale.UK).contains(
+				string.toString().toLowerCase(Locale.UK));
+	}
+
+	/**
+	 * @return the name of the station
+	 */
+	public String toString() {
+		return getName();
 	}
 
 	/**
@@ -135,10 +160,48 @@ public class Station extends ParseObject {
 	}
 
 	/**
-	 * @return the name of the station
+	 * @return all the stations
 	 */
-	public String toString() {
-		return getName();
+	public static ArrayList<Station> getAll() {
+		ArrayList<Station> stations = new ArrayList<Station>();
+		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
+		query.fromLocalDatastore();
+		query.orderByAscending("name");
+		try {
+			stations.addAll(query.find());
+		} catch (ParseException e) {
+			Utils.log(e.getMessage());
+		}
+		return stations;
+	}
+
+	/**
+	 * @param gps
+	 *            Android location object
+	 * @return nearby stations
+	 */
+	public static ArrayList<Station> getAllNear(Location gps) {
+		ArrayList<Station> stations = new ArrayList<Station>();
+		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
+		query.fromLocalDatastore();
+		ParseGeoPoint location = new ParseGeoPoint();
+		location.setLatitude(gps.getLatitude());
+		location.setLongitude(gps.getLongitude());
+		query.whereNear("location", location);
+		try {
+			List<Station> list = query.find();
+			for (Station station : list) {
+				double distance = station.getLocation().distanceInKilometersTo(
+						location);
+				station.setDistance(distance);
+				Utils.log("The distance to " + station.getName() + " is: "
+						+ station.getDistance());
+			}
+			stations.addAll(list);
+		} catch (ParseException e) {
+			Utils.log(e.getMessage());
+		}
+		return stations;
 	}
 
 }

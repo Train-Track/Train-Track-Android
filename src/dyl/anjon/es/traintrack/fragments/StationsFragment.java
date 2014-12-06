@@ -1,8 +1,6 @@
 package dyl.anjon.es.traintrack.fragments;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import android.content.Context;
@@ -122,16 +120,7 @@ public class StationsFragment extends Fragment {
 				if (gps == null) {
 					return;
 				}
-				for (int i = 0; i < stations.size(); i++) {
-					Station station = stations.get(i);
-					float results[] = { 0, 0, 0 };
-					Location.distanceBetween(station.getLatitude(),
-							station.getLongitude(), gps.getLatitude(),
-							gps.getLongitude(), results);
-					station.setDistance(results[0]);
-				}
-				Collections.sort(stations, new DistanceComparator());
-				adapter.refresh(stations);
+				adapter.refresh(Station.getAllNear(gps));
 				list.smoothScrollToPosition(0);
 			}
 		});
@@ -186,13 +175,6 @@ public class StationsFragment extends Fragment {
 	private void updateLocation(Location gps) {
 		if (gps != null) {
 			this.gps = gps;
-		}
-	}
-
-	public class DistanceComparator implements Comparator<Station> {
-		@Override
-		public int compare(Station o1, Station o2) {
-			return Float.compare(o1.getDistance(), o2.getDistance());
 		}
 	}
 

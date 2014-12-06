@@ -2,7 +2,6 @@ package dyl.anjon.es.traintrack.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,11 +75,9 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
 					results.count = origRowList.size();
 					results.values = origRowList;
 				} else {
-					String string = constraint.toString()
-							.toLowerCase(Locale.ENGLISH).toString();
 					for (int i = 0; i < origRowList.size(); i++) {
 						Station station = origRowList.get(i);
-						if (station.isNameSimilarTo(string)) {
+						if (station.isNameSimilarTo(constraint)) {
 							list.add(station);
 						}
 					}
