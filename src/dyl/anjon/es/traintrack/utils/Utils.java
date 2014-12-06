@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,15 +23,9 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import android.content.Context;
 import android.util.Log;
-import dyl.anjon.es.traintrack.models.User;
 
 public class Utils {
-
-	private static Utils instance;
-	private User user;
-	private Context context;
 
 	public static boolean DEBUG_MODE = true;
 	public static String API_URL = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb5.asmx";
@@ -40,63 +36,31 @@ public class Utils {
 			+ "</com:TokenValue></com:AccessToken></soapenv:Header>";
 	public static String SOAP_END = "</soapenv:Envelope>";
 
-	private Utils() {
-	}
-
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return this.user;
-	}
-
-	/**
-	 * @param user
-	 *            the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	/**
-	 * @param user
-	 *            the user to set
-	 */
-	public boolean isLoggedIn() {
-		return this.getUser() != null;
-	}
-
-	/**
-	 * @return the context
-	 */
-	public Context getContext() {
-		return this.context;
-	}
-
-	/**
-	 * @param context
-	 *            the context to set
-	 */
-	public void setContext(Context context) {
-		this.context = context;
-	}
-
-	/**
-	 * @return the session currently stored
-	 */
-	public static synchronized Utils getSession() {
-		if (instance == null) {
-			instance = new Utils();
-		}
-		return instance;
-	}
-
 	/**
 	 * @param message
 	 *            the log message to write
 	 */
 	public static void log(String message) {
 		Log.i("TrainTrack", message);
+	}
+
+	/**
+	 * @param hour
+	 *            the hour
+	 * @param minute
+	 *            the minute
+	 */
+	public static String zeroPadTime(int hour, int minute) {
+		String time = "";
+		if (hour < 10) {
+			time = "0";
+		}
+		time += hour + ":";
+		if (minute < 10) {
+			time += "0";
+		}
+		time += minute;
+		return time;
 	}
 
 	/**
@@ -150,5 +114,32 @@ public class Utils {
 			Utils.log(e.getMessage());
 		}
 		return doc;
+	}
+
+	/**
+	 * @param hourOfDay
+	 *            0-23 hours
+	 * @param minute
+	 *            0 - 59 minutes
+	 * 
+	 * @return date object
+	 */
+	public static Date getDateWithTime(int hourOfDay, int minute) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR, hourOfDay);
+		cal.set(Calendar.MINUTE, minute);
+		return cal.getTime();
+	}
+
+	/**
+	 * @param time
+	 *            in the format hh:mm
+	 * 
+	 * @return date object
+	 */
+	public static Date getDateWithTime(String time) {
+		int hourOfDay = Integer.valueOf(time.split(":")[0]);
+		int minute = Integer.valueOf(time.split(":")[1]);
+		return getDateWithTime(hourOfDay, minute);
 	}
 }

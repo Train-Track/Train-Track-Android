@@ -15,7 +15,6 @@ import dyl.anjon.es.traintrack.utils.Utils;
 
 public class Service {
 
-	public static final String TABLE_NAME = "services";
 	private String serviceId;
 	private String serviceType;
 	private Time generatedAt;
@@ -167,7 +166,6 @@ public class Service {
 		}
 		this.callingPoints.add(thisCallingPoint);
 		this.callingPoints.addAll(getSubsequentCallingPoints());
-		Utils.log(serviceId);
 	}
 
 	private boolean terminatesHere() {
@@ -368,7 +366,7 @@ public class Service {
 				+ Utils.SOAP_END;
 		String xmlResponse = "";
 		if (Utils.DEBUG_MODE) {
-			xmlResponse = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body><GetServiceDetailsResponse xmlns=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\"><GetServiceDetailsResult><generatedAt>2014-10-18T00:50:05.7673566+01:00</generatedAt><serviceType>train</serviceType><locationName>London Paddington</locationName><crs>PAD</crs><operator>First Great Western</operator><operatorCode>GW</operatorCode><platform>9</platform><std>01:44</std><etd>On time</etd><previousCallingPoints /><subsequentCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Ealing Broadway</locationName><crs>EAL</crs><st>01:52</st><et>On time</et></callingPoint><callingPoint><locationName>Southall</locationName><crs>STL</crs><st>01:57</st><et>On time</et></callingPoint><callingPoint><locationName>Hayes &amp; Harlington</locationName><crs>HAY</crs><st>02:01</st><et>On time</et></callingPoint><callingPoint><locationName>West Drayton</locationName><crs>WDT</crs><st>02:05</st><et>On time</et></callingPoint><callingPoint><locationName>Slough</locationName><crs>SLO</crs><st>02:13</st><et>On time</et></callingPoint><callingPoint><locationName>Maidenhead</locationName><crs>MAI</crs><st>02:20</st><et>On time</et></callingPoint><callingPoint><locationName>Twyford</locationName><crs>TWY</crs><st>02:29</st><et>On time</et></callingPoint><callingPoint><locationName>Reading</locationName><crs>RDG</crs><st>02:38</st><et>On time</et></callingPoint></callingPointList></subsequentCallingPoints></GetServiceDetailsResult></GetServiceDetailsResponse></soap:Body></soap:Envelope>";
+			xmlResponse = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body><GetServiceDetailsResponse xmlns=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\"><GetServiceDetailsResult><generatedAt>2014-10-18T00:50:05.7673566+01:00</generatedAt><serviceType>train</serviceType><locationName>Accrington</locationName><crs>ACR</crs><operator>First Great Western</operator><operatorCode>GW</operatorCode><platform>9</platform><std>01:44</std><etd>On time</etd><previousCallingPoints /><subsequentCallingPoints><callingPointList serviceType=\"train\" serviceChangeRequired=\"false\"><callingPoint><locationName>Amberley</locationName><crs>AMY</crs><st>01:52</st><et>On time</et></callingPoint><callingPoint><locationName>Adisham</locationName><crs>ADM</crs><st>01:57</st><et>On time</et></callingPoint><callingPoint><locationName>Angel Road</locationName><crs>AGR</crs><st>02:01</st><et>On time</et></callingPoint><callingPoint><locationName>Aberdeen</locationName><crs>ABD</crs><st>02:05</st><et>On time</et></callingPoint><callingPoint><locationName>Ascot</locationName><crs>ACT</crs><st>02:13</st><et>On time</et></callingPoint><callingPoint><locationName>Ash</locationName><crs>ASH</crs><st>02:20</st><et>On time</et></callingPoint><callingPoint><locationName>Aintree</locationName><crs>AIN</crs><st>02:29</st><et>On time</et></callingPoint><callingPoint><locationName>Adwick</locationName><crs>AWK</crs><st>02:38</st><et>On time</et></callingPoint></callingPointList></subsequentCallingPoints></GetServiceDetailsResult></GetServiceDetailsResponse></soap:Body></soap:Envelope>";
 		} else {
 			xmlResponse = Utils.httpPost(Utils.API_URL, xml);
 		}

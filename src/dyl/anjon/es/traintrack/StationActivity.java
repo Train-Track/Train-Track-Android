@@ -13,10 +13,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseImageView;
+import com.parse.ParseQuery;
+
 import dyl.anjon.es.traintrack.adapters.ServiceItemRowAdapter;
 import dyl.anjon.es.traintrack.api.ServiceItem;
 import dyl.anjon.es.traintrack.api.StationBoard;
+import dyl.anjon.es.traintrack.models.Image;
 import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class StationActivity extends Activity {
 
@@ -32,14 +40,13 @@ public class StationActivity extends Activity {
 		setContentView(R.layout.activity_station);
 
 		final Intent intent = getIntent();
-		final int stationId = intent.getIntExtra("station_id", 0);
-		station = Station.get(stationId);
-		final int journeyId = intent.getIntExtra("journey_id", 0);
+		final String stationId = intent.getStringExtra("station_id");
+		final String journeyId = intent.getStringExtra("journey_id");
 
 		final TextView name = (TextView) findViewById(R.id.name);
-		name.setText(station.getName());
 		final TextView crsCode = (TextView) findViewById(R.id.crs_code);
-		crsCode.setText(station.getCrsCode());
+		final ParseImageView image = (ParseImageView) findViewById(R.id.image);
+		image.setPlaceholder(getResources().getDrawable(R.drawable.platform));
 
 		generatedAt = (TextView) findViewById(R.id.generated_at);
 		nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
@@ -55,10 +62,11 @@ public class StationActivity extends Activity {
 						ServiceActivity.class);
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("service_id", serviceItem.getServiceId());
-				intent.putExtra("origin_id", serviceItem.getOrigin().getId());
-				intent.putExtra("station_id", station.getId());
+				intent.putExtra("origin_id", serviceItem.getOrigin()
+						.getObjectId());
+				intent.putExtra("station_id", station.getObjectId());
 				intent.putExtra("destination_id", serviceItem.getDestination()
-						.getId());
+						.getObjectId());
 				intent.putExtra("operator", serviceItem.getOperator()
 						.toString());
 				startActivityForResult(intent, 1);
@@ -67,14 +75,45 @@ public class StationActivity extends Activity {
 
 		});
 
-		new GetBoardRequest().execute(station.getCrsCode());
+		final GetCallback<Image> imageCallback = new GetCallback<Image>() {
+			@Override
+			public void done(Image stationImage, ParseException e) {
+				if ((e == null) && (stationImage != null)) {
+					image.setParseFile(stationImage.getFile());
+					image.loadInBackground(null);
+				} else {
+					Utils.log("Station image problem for " + station);
+				}
+			}
+		};
+
+		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
+		query.fromLocalDatastore();
+		query.getInBackground(stationId, new GetCallback<Station>() {
+			@Override
+			public void done(Station result, ParseException e) {
+				if (e == null) {
+					station = result;
+					name.setText(station.getName());
+					crsCode.setText(station.getCrsCode());
+					if (station.getImage() != null) {
+						station.getImage().fetchInBackground(imageCallback);
+					} else {
+						Utils.log("Station image problem for " + station);
+					}
+					new GetBoardRequest().execute(station.getCrsCode());
+				} else {
+					Utils.log("Getting station :" + e.getMessage());
+				}
+			}
+		});
 
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.station, menu);
-		if (station.isFavourite()) {
+		if ((station != null) && (station.isFavourite())) {
 			menu.findItem(R.id.favourite).setIcon(
 					android.R.drawable.btn_star_big_on);
 		}
@@ -92,14 +131,14 @@ public class StationActivity extends Activity {
 				item.setIcon(android.R.drawable.btn_star_big_off);
 				station.setFavourite(false);
 			}
-			station.save();
+			// station.save();
 			return true;
 		case R.id.refresh:
 			new GetBoardRequest().execute(station.getCrsCode());
 			return true;
 		case R.id.map:
 			Intent intent = new Intent().setClass(this, MapActivity.class);
-			intent.putExtra("station_id", station.getId());
+			intent.putExtra("station_id", station.getObjectId());
 			startActivity(intent);
 			return true;
 		default:

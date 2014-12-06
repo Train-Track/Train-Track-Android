@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import dyl.anjon.es.traintrack.api.CallingPoint;
 import dyl.anjon.es.traintrack.api.Service;
 import dyl.anjon.es.traintrack.models.Station;
-import dyl.anjon.es.traintrack.utils.Utils;
 
 public class MapActivity extends Activity {
 
@@ -41,6 +40,9 @@ public class MapActivity extends Activity {
 
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
+		map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(54.47942,
+				-4.232974)));
+		map.animateCamera(CameraUpdateFactory.zoomTo(5));
 		map.setMyLocationEnabled(true);
 		map.setOnMapLoadedCallback(new OnMapLoadedCallback() {
 			@Override
@@ -58,7 +60,7 @@ public class MapActivity extends Activity {
 			public void onInfoWindowClick(Marker marker) {
 				Intent intent = new Intent().setClass(getApplicationContext(),
 						StationActivity.class);
-				intent.putExtra("station_id", hashmap.get(marker).getId());
+				intent.putExtra("station_id", hashmap.get(marker).getObjectId());
 				startActivity(intent);
 			}
 		});
@@ -85,15 +87,15 @@ public class MapActivity extends Activity {
 						station.getLongitude());
 				points[i] = pos;
 				builder.include(pos);
-				map.addMarker(new MarkerOptions()
+				Marker m = map.addMarker(new MarkerOptions()
 						.position(pos)
 						.title(station.getName())
 						.snippet(callingPoint.getScheduledTime())
 						.icon(BitmapDescriptorFactory
 								.fromResource(R.drawable.ic_launcher))
 						.visible(true));
+				hashmap.put(m, station);
 			}
-
 			map.addPolyline(new PolylineOptions().add(points).width(12)
 					.color(Color.RED));
 			map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
@@ -106,9 +108,9 @@ public class MapActivity extends Activity {
 		@Override
 		protected ArrayList<Station> doInBackground(String... service) {
 			ArrayList<Station> stations = new ArrayList<Station>();
-			int stationId = getIntent().getIntExtra("station_id", 0);
-			if (stationId > 0) {
-				stations.add(Station.get(stationId));
+			String stationId = getIntent().getStringExtra("station_id");
+			if (stationId != null) {
+				stations.add(Station.getById(stationId));
 			}
 			boolean allStations = getIntent().getBooleanExtra("all_stations",
 					false);
@@ -123,14 +125,18 @@ public class MapActivity extends Activity {
 			super.onPostExecute(stations);
 			BitmapDescriptor icon = BitmapDescriptorFactory
 					.fromResource(R.drawable.ic_launcher);
-			Utils.log("Starting the loop");
 			for (Station s : stations) {
 				LatLng pos = new LatLng(s.getLatitude(), s.getLongitude());
 				Marker m = map.addMarker(new MarkerOptions().position(pos)
 						.title(s.getName())
 						.snippet("View Arrival/Departure Board").icon(icon));
 				hashmap.put(m, s);
-				Utils.log("Ending the loop");
+			}
+			if (stations.size() == 1) {
+				map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
+						stations.get(0).getLatitude(), stations.get(0)
+								.getLongitude())));
+				map.animateCamera(CameraUpdateFactory.zoomTo(15));
 			}
 		}
 	}

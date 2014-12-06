@@ -14,13 +14,19 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
 import dyl.anjon.es.traintrack.adapters.JourneyLegRowAdapter;
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class JourneyActivity extends Activity {
 
-	private int journeyId = 0;
+	private String journeyId = "";
 	private Journey journey;
 	private JourneyLegRowAdapter adapter;
 
@@ -30,19 +36,12 @@ public class JourneyActivity extends Activity {
 		setContentView(R.layout.activity_journey);
 
 		final Intent intent = getIntent();
-		journeyId = intent.getIntExtra("journey_id", 0);
-
-		journey = Journey.get(this, journeyId);
-		if (journey == null) {
-			finish();
-		}
+		journeyId = intent.getStringExtra("journey_id");
 
 		final TextView name = (TextView) findViewById(R.id.name);
-		name.setText(journey.getOrigin().toString() + " to "
-				+ journey.getDestination().toString());
-
+		final ArrayList<JourneyLeg> journeyLegs = new ArrayList<JourneyLeg>();
 		adapter = new JourneyLegRowAdapter(LayoutInflater.from(this),
-				journey.getJourneyLegs());
+				journeyLegs);
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -51,12 +50,30 @@ public class JourneyActivity extends Activity {
 				JourneyLeg journeyLeg = (JourneyLeg) adapter.getItem(index);
 				Intent intent = new Intent().setClass(getApplicationContext(),
 						JourneyLegActivity.class);
-				intent.putExtra("journey_leg_id", journeyLeg.getId());
+				intent.putExtra("journey_leg_id", journeyLeg.getObjectId());
 				intent.putExtra("journey_id", journeyId);
 				startActivity(intent);
 				return;
 			}
 
+		});
+
+		ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
+		query.fromLocalDatastore();
+		query.getInBackground(journeyId, new GetCallback<Journey>() {
+			@Override
+			public void done(Journey result, ParseException e) {
+				if (e != null) {
+					Utils.log(e.getMessage());
+				} else {
+					journey = result;
+					name.setText(journey.getOrigin().toString() + " to "
+							+ journey.getDestination().toString());
+					journeyLegs.addAll(journey.getJourneyLegs());
+					adapter.notifyDataSetChanged();
+				}
+
+			}
 		});
 
 	}
@@ -75,18 +92,17 @@ public class JourneyActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 			Intent intent = new Intent().setClass(getApplicationContext(),
 					StationActivity.class);
-			intent.putExtra("station_id", journey.getDestination().getId());
+			intent.putExtra("station_id", journey.getDestination()
+					.getObjectId());
 			intent.putExtra("journey_id", journeyId);
 			startActivity(intent);
 			finish();
 			return true;
 		case R.id.delete_journey:
-			boolean success = journey.delete(getApplicationContext());
-			if (success) {
-				Toast.makeText(getApplicationContext(), "Journey was deleted",
-						Toast.LENGTH_SHORT).show();
-				finish();
-			}
+			journey.deleteEventually();
+			Toast.makeText(getApplicationContext(), "Journey was deleted",
+					Toast.LENGTH_SHORT).show();
+			finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -95,11 +111,13 @@ public class JourneyActivity extends Activity {
 
 	public void onResume() {
 		super.onResume();
+		/*
 		ArrayList<JourneyLeg> journeyLegs = journey.getJourneyLegs();
 		if (journeyLegs.size() == 0) {
 			finish();
 		}
 		adapter.refresh(journeyLegs);
+		*/
 	}
 
 }

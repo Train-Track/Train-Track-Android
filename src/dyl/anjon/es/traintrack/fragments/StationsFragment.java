@@ -3,6 +3,7 @@ package dyl.anjon.es.traintrack.fragments;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,11 +23,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
 import dyl.anjon.es.traintrack.MapActivity;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.StationActivity;
 import dyl.anjon.es.traintrack.adapters.StationRowAdapter;
 import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class StationsFragment extends Fragment {
 
@@ -41,9 +48,8 @@ public class StationsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_stations, container,
 				false);
 
-		final ArrayList<Station> stations = Station.getAll();
-
-		ListView list = (ListView) rootView.findViewById(R.id.list);
+		final ArrayList<Station> stations = new ArrayList<Station>();
+		final ListView list = (ListView) rootView.findViewById(R.id.list);
 		final StationRowAdapter adapter = new StationRowAdapter(inflater,
 				stations);
 		list.setAdapter(adapter);
@@ -53,11 +59,35 @@ public class StationsFragment extends Fragment {
 				Station station = (Station) adapter.getItem(index);
 				Intent intent = new Intent().setClass(getActivity(),
 						StationActivity.class);
-				intent.putExtra("station_id", station.getId());
+				intent.putExtra("station_id", station.getObjectId());
 				startActivity(intent);
 				return;
 			}
+		});
 
+		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
+		query.fromLocalDatastore();
+		try {
+			int count = query.count();
+			Utils.log("Local stations count is " + count + " . Fetching...");
+			if (count == 0) {
+				query = ParseQuery.getQuery(Station.class);
+			}
+		} catch (ParseException e) {
+			Utils.log("Counting local stations: " + e.getMessage());
+		}
+		query.orderByAscending("name");
+		query.findInBackground(new FindCallback<Station>() {
+			@Override
+			public void done(List<Station> results, ParseException e) {
+				if (e == null) {
+					stations.addAll(results);
+					adapter.refresh(stations);
+					Station.pinAllInBackground(results);
+				} else {
+					Utils.log("Getting stations: " + e.getMessage());
+				}
+			}
 		});
 
 		EditText search = (EditText) rootView.findViewById(R.id.search);
@@ -72,12 +102,21 @@ public class StationsFragment extends Fragment {
 			public void onTextChanged(CharSequence search, int arg1, int arg2,
 					int arg3) {
 				adapter.getFilter().filter(search);
+				list.smoothScrollToPosition(0);
+			}
+		});
+
+		Button aZ = (Button) rootView.findViewById(R.id.a_z);
+		aZ.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				adapter.refresh(Station.getAll());
+				list.smoothScrollToPosition(0);
 			}
 		});
 
 		Button nearby = (Button) rootView.findViewById(R.id.nearby);
 		nearby.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				if (gps == null) {
@@ -93,8 +132,8 @@ public class StationsFragment extends Fragment {
 				}
 				Collections.sort(stations, new DistanceComparator());
 				adapter.refresh(stations);
+				list.smoothScrollToPosition(0);
 			}
-
 		});
 
 		Button favourites = (Button) rootView.findViewById(R.id.favourites);
@@ -102,14 +141,7 @@ public class StationsFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				adapter.getFavouriteFilter().filter(null);
-			}
-		});
-
-		Button aZ = (Button) rootView.findViewById(R.id.a_z);
-		aZ.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				adapter.refresh(Station.getAll());
+				list.smoothScrollToPosition(0);
 			}
 		});
 
