@@ -1,14 +1,18 @@
 package dyl.anjon.es.traintrack;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -16,8 +20,11 @@ import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseImageView;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import dyl.anjon.es.traintrack.adapters.ServiceItemRowAdapter;
 import dyl.anjon.es.traintrack.api.ServiceItem;
@@ -33,6 +40,11 @@ public class StationActivity extends Activity {
 	private ArrayList<ServiceItem> serviceItems;
 	private TextView nrccMessage;
 	private TextView generatedAt;
+	private SaveCallback savedFileCallback;
+	private SaveCallback savedImageCallback;
+	private ParseFile imageFile;
+	private Image newImage;
+	static final int TAKE_PHOTO = 12;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +54,13 @@ public class StationActivity extends Activity {
 		final Intent intent = getIntent();
 		final String stationId = intent.getStringExtra("station_id");
 		final String journeyId = intent.getStringExtra("journey_id");
-
 		final TextView name = (TextView) findViewById(R.id.name);
 		final TextView crsCode = (TextView) findViewById(R.id.crs_code);
-		final ParseImageView image = (ParseImageView) findViewById(R.id.image);
-		image.setPlaceholder(getResources().getDrawable(R.drawable.platform));
-
 		generatedAt = (TextView) findViewById(R.id.generated_at);
 		nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
 		serviceItems = new ArrayList<ServiceItem>();
 		adapter = new ServiceItemRowAdapter(serviceItems, station, this);
+
 		final ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -75,6 +84,19 @@ public class StationActivity extends Activity {
 
 		});
 
+		final ParseImageView image = (ParseImageView) findViewById(R.id.image);
+		image.setPlaceholder(getResources().getDrawable(R.drawable.platform));
+		image.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent takePictureIntent = new Intent(
+						MediaStore.ACTION_IMAGE_CAPTURE);
+				if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+					startActivityForResult(takePictureIntent, TAKE_PHOTO);
+				}
+			}
+		});
+
 		final GetCallback<Image> imageCallback = new GetCallback<Image>() {
 			@Override
 			public void done(Image stationImage, ParseException e) {
@@ -83,6 +105,31 @@ public class StationActivity extends Activity {
 					image.loadInBackground(null);
 				} else {
 					Utils.log("Station image problem for " + station);
+				}
+			}
+		};
+		savedImageCallback = new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				if (e == null) {
+					Utils.log("Image saved");
+				} else {
+					Utils.log("Image save: " + e.getMessage());
+				}
+			}
+		};
+		savedFileCallback = new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				if (e == null) {
+					Utils.log("File saved");
+					newImage = new Image();
+					newImage.setTitle(station.getName());
+					newImage.setFile(imageFile);
+					newImage.setUser(ParseUser.getCurrentUser());
+					newImage.saveInBackground(savedImageCallback);
+				} else {
+					Utils.log("File save: " + e.getMessage());
 				}
 			}
 		};
@@ -99,11 +146,11 @@ public class StationActivity extends Activity {
 					if (station.getImage() != null) {
 						station.getImage().fetchInBackground(imageCallback);
 					} else {
-						Utils.log("Station image problem for " + station);
+						Utils.log("No image for " + station);
 					}
 					new GetBoardRequest().execute(station.getCrsCode());
 				} else {
-					Utils.log("Getting station :" + e.getMessage());
+					Utils.log("Getting station: " + e.getMessage());
 				}
 			}
 		});
@@ -149,7 +196,15 @@ public class StationActivity extends Activity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK) {
+		if (requestCode == TAKE_PHOTO && resultCode == RESULT_OK) {
+			Bundle extras = data.getExtras();
+			Bitmap bmp = (Bitmap) extras.get("data");
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			byte[] byteArray = stream.toByteArray();
+			imageFile = new ParseFile(station.getCrsCode() + ".png", byteArray);
+			imageFile.saveInBackground(savedFileCallback);
+		} else if (resultCode == Activity.RESULT_OK) {
 			if (getParent() == null) {
 				setResult(Activity.RESULT_OK);
 			} else {

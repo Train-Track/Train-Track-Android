@@ -19,6 +19,7 @@ public class Image extends ParseObject {
 	}
 
 	/**
+		put("title", title);
 	 * @return the user
 	 */
 	public ParseUser getUser() {
