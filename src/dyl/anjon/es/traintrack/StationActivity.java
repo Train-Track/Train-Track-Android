@@ -16,11 +16,13 @@ import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 
 import dyl.anjon.es.traintrack.adapters.ServiceItemRowAdapter;
 import dyl.anjon.es.traintrack.api.ServiceItem;
 import dyl.anjon.es.traintrack.api.StationBoard;
+import dyl.anjon.es.traintrack.models.Image;
 import dyl.anjon.es.traintrack.models.Station;
 import dyl.anjon.es.traintrack.utils.Utils;
 
@@ -43,6 +45,8 @@ public class StationActivity extends Activity {
 
 		final TextView name = (TextView) findViewById(R.id.name);
 		final TextView crsCode = (TextView) findViewById(R.id.crs_code);
+		final ParseImageView image = (ParseImageView) findViewById(R.id.image);
+		image.setPlaceholder(getResources().getDrawable(R.drawable.platform));
 
 		generatedAt = (TextView) findViewById(R.id.generated_at);
 		nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
@@ -71,20 +75,36 @@ public class StationActivity extends Activity {
 
 		});
 
+		final GetCallback<Image> imageCallback = new GetCallback<Image>() {
+			@Override
+			public void done(Image stationImage, ParseException e) {
+				if ((e == null) && (stationImage != null)) {
+					image.setParseFile(stationImage.getFile());
+					image.loadInBackground(null);
+				} else {
+					Utils.log("Station image problem for " + station);
+				}
+			}
+		};
+
 		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
 		query.fromLocalDatastore();
 		query.getInBackground(stationId, new GetCallback<Station>() {
 			@Override
 			public void done(Station result, ParseException e) {
-				if (e != null) {
-					Utils.log(e.getMessage());
-				} else {
+				if (e == null) {
 					station = result;
 					name.setText(station.getName());
 					crsCode.setText(station.getCrsCode());
+					if (station.getImage() != null) {
+						station.getImage().fetchInBackground(imageCallback);
+					} else {
+						Utils.log("Station image problem for " + station);
+					}
 					new GetBoardRequest().execute(station.getCrsCode());
+				} else {
+					Utils.log("Getting station :" + e.getMessage());
 				}
-
 			}
 		});
 

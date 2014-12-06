@@ -31,6 +31,13 @@ public class Station extends ParseObject {
 	}
 
 	/**
+	 * @return the image
+	 */
+	public Image getImage() {
+		return (Image) getParseObject("image");
+	}
+
+	/**
 	 * @return the latitude
 	 */
 	public double getLatitude() {
