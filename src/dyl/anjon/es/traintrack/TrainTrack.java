@@ -3,7 +3,6 @@ package dyl.anjon.es.traintrack;
 import java.util.List;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -36,11 +35,10 @@ public class TrainTrack extends Application {
 		ParsePush.subscribeInBackground("broadcast", new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
-				if (e != null) {
-					Log.d("com.parse.push",
-							"successfully subscribed to the broadcast channel.");
+				if (e == null) {
+					Utils.log("successfully subscribed to the broadcast channel.");
 				} else {
-					Log.e("com.parse.push", "failed to subscribe for push", e);
+					Utils.log("failed to subscribe to the broadcast channel.");
 				}
 			}
 		});
