@@ -19,7 +19,14 @@ public class Image extends ParseObject {
 	}
 
 	/**
+	 * @param title
+	 *            the title of the image
+	 */
+	public void setTitle(String title) {
 		put("title", title);
+	}
+
+	/**
 	 * @return the user
 	 */
 	public ParseUser getUser() {
@@ -27,10 +34,26 @@ public class Image extends ParseObject {
 	}
 
 	/**
+	 * @param user
+	 *            the owner
+	 */
+	public void setUser(ParseUser user) {
+		put("user", user);
+	}
+
+	/**
 	 * @return the file
 	 */
 	public ParseFile getFile() {
 		return getParseFile("file");
+	}
+
+	/**
+	 * @param file
+	 *            the data file
+	 */
+	public void setFile(ParseFile file) {
+		put("file", file);
 	}
 
 	/**
