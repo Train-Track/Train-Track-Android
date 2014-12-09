@@ -1,15 +1,11 @@
 package dyl.anjon.es.traintrack;
 
-import java.util.List;
-
 import android.app.Application;
 
-import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -43,23 +39,6 @@ public class TrainTrack extends Application {
 			}
 		});
 		ParseUser.enableAutomaticUser();
-
-		ParseQuery<Operator> query = ParseQuery.getQuery(Operator.class);
-		query.fromLocalDatastore();
-		try {
-			if (query.count() == 0) {
-				query = ParseQuery.getQuery(Operator.class);
-				query.findInBackground(new FindCallback<Operator>() {
-					@Override
-					public void done(List<Operator> results, ParseException e) {
-						Operator.pinAllInBackground(results);
-					}
-				});
-			}
-		} catch (ParseException e) {
-			Utils.log(e.getMessage());
-		}
-
 	}
 
 }

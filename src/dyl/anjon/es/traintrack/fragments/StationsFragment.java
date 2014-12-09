@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,6 +37,11 @@ import dyl.anjon.es.traintrack.utils.Utils;
 public class StationsFragment extends Fragment {
 
 	private Location gps;
+	private CountCallback countCallback;
+	private FindCallback<Station> findStationCallback;
+	private ArrayList<Station> stations;
+	private ListView list;
+	private StationRowAdapter adapter;
 
 	public StationsFragment() {
 	}
@@ -46,10 +52,9 @@ public class StationsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_stations, container,
 				false);
 
-		final ArrayList<Station> stations = new ArrayList<Station>();
-		final ListView list = (ListView) rootView.findViewById(R.id.list);
-		final StationRowAdapter adapter = new StationRowAdapter(inflater,
-				stations);
+		stations = new ArrayList<Station>();
+		list = (ListView) rootView.findViewById(R.id.list);
+		adapter = new StationRowAdapter(inflater, stations);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View view, int index,
@@ -63,30 +68,37 @@ public class StationsFragment extends Fragment {
 			}
 		});
 
-		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-		query.fromLocalDatastore();
-		try {
-			int count = query.count();
-			Utils.log("Local stations count is " + count + " . Fetching...");
-			if (count == 0) {
-				query = ParseQuery.getQuery(Station.class);
-			}
-		} catch (ParseException e) {
-			Utils.log("Counting local stations: " + e.getMessage());
-		}
-		query.orderByAscending("name");
-		query.findInBackground(new FindCallback<Station>() {
+		findStationCallback = new FindCallback<Station>() {
 			@Override
 			public void done(List<Station> results, ParseException e) {
 				if (e == null) {
 					stations.addAll(results);
 					adapter.refresh(stations);
+					list.setSelection(0);
 					Station.pinAllInBackground(results);
 				} else {
 					Utils.log("Getting stations: " + e.getMessage());
 				}
 			}
-		});
+		};
+
+		countCallback = new CountCallback() {
+			@Override
+			public void done(int count, ParseException e) {
+				if (e == null) {
+					ParseQuery<Station> query = ParseQuery
+							.getQuery(Station.class);
+					query.orderByAscending("name");
+					query.setLimit(1000);
+					if (count > 0) {
+						query.fromLocalDatastore();
+					}
+					query.findInBackground(findStationCallback);
+				} else {
+					Utils.log("Counting stations: " + e.getMessage());
+				}
+			}
+		};
 
 		EditText search = (EditText) rootView.findViewById(R.id.search);
 		search.addTextChangedListener(new TextWatcher() {
@@ -108,8 +120,7 @@ public class StationsFragment extends Fragment {
 		aZ.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				adapter.refresh(Station.getAll());
-				list.smoothScrollToPosition(0);
+				loadStations();
 			}
 		});
 
@@ -120,8 +131,9 @@ public class StationsFragment extends Fragment {
 				if (gps == null) {
 					return;
 				}
-				adapter.refresh(Station.getAllNear(gps));
-				list.smoothScrollToPosition(0);
+				adapter.getNearbyFilter().filter(
+						gps.getLatitude() + "," + gps.getLongitude());
+				list.setSelection(0);
 			}
 		});
 
@@ -130,7 +142,7 @@ public class StationsFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				adapter.getFavouriteFilter().filter(null);
-				list.smoothScrollToPosition(0);
+				list.setSelection(0);
 			}
 		});
 
@@ -169,12 +181,26 @@ public class StationsFragment extends Fragment {
 		locationManager.requestLocationUpdates(
 				LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
+		loadStations();
+
 		return rootView;
 	}
 
 	private void updateLocation(Location gps) {
 		if (gps != null) {
 			this.gps = gps;
+		}
+	}
+
+	private void loadStations() {
+		if (stations.isEmpty()) {
+			ParseQuery<Station> stationCount = ParseQuery
+					.getQuery(Station.class);
+			stationCount.fromLocalDatastore();
+			stationCount.countInBackground(countCallback);
+		} else {
+			adapter.refresh(stations);
+			list.setSelection(0);
 		}
 	}
 

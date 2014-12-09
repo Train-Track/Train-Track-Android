@@ -1,5 +1,7 @@
 package dyl.anjon.es.traintrack;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,11 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseAnonymousUtils;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import dyl.anjon.es.traintrack.fragments.JourneysFragment;
 import dyl.anjon.es.traintrack.fragments.StationsFragment;
+import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class MainActivity extends FragmentActivity {
@@ -40,6 +46,27 @@ public class MainActivity extends FragmentActivity {
 			Utils.log("User is anon");
 		} else {
 			Utils.log("User is " + user.getUsername());
+		}
+
+		ParseQuery<Operator> operatorQuery = ParseQuery
+				.getQuery(Operator.class);
+		operatorQuery.fromLocalDatastore();
+		try {
+			if (operatorQuery.count() == 0) {
+				operatorQuery = ParseQuery.getQuery(Operator.class);
+				operatorQuery.findInBackground(new FindCallback<Operator>() {
+					@Override
+					public void done(List<Operator> results, ParseException e) {
+						if (e == null) {
+							Operator.pinAllInBackground(results);
+						} else {
+							Utils.log("Getting operators: " + e.getMessage());
+						}
+					}
+				});
+			}
+		} catch (ParseException e) {
+			Utils.log("Counting local operators:: " + e.getMessage());
 		}
 
 	}

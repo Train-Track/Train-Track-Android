@@ -3,6 +3,9 @@ package dyl.anjon.es.traintrack.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.parse.ParseGeoPoint;
+
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,12 +114,50 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
 					origRowList = new ArrayList<Station>(rowList);
 				}
 
-				for (int i = 0; i < origRowList.size(); i++) {
-					Station station = origRowList.get(i);
+				for (Station station : origRowList) {
 					if (station.isFavourite()) {
 						list.add(station);
 					}
 				}
+				results.count = list.size();
+				results.values = list;
+				return results;
+			}
+		};
+		return filter;
+
+	}
+
+	public Filter getNearbyFilter() {
+		Filter filter = new Filter() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void publishResults(CharSequence constraint,
+					FilterResults results) {
+				rowList = (List<Station>) results.values;
+				notifyDataSetChanged();
+			}
+
+			@Override
+			protected FilterResults performFiltering(CharSequence gps) {
+				FilterResults results = new FilterResults();
+				List<Station> list = new ArrayList<Station>();
+				String[] geo = gps.toString().split(",");
+				ParseGeoPoint location = new ParseGeoPoint(
+						Double.valueOf(geo[0]), Double.valueOf(geo[1]));
+
+				if (origRowList == null) {
+					origRowList = new ArrayList<Station>(rowList);
+				}
+
+				for (Station station : origRowList) {
+					double distance = station.getLocation()
+							.distanceInKilometersTo(location);
+					station.setDistance(distance);
+					list.add(station);
+				}
+
 				results.count = list.size();
 				results.values = list;
 				return results;

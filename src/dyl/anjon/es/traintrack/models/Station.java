@@ -1,10 +1,7 @@
 package dyl.anjon.es.traintrack.models;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-
-import android.location.Location;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -169,33 +166,6 @@ public class Station extends ParseObject {
 		query.orderByAscending("name");
 		try {
 			stations.addAll(query.find());
-		} catch (ParseException e) {
-			Utils.log(e.getMessage());
-		}
-		return stations;
-	}
-
-	/**
-	 * @param gps
-	 *            Android location object
-	 * @return nearby stations
-	 */
-	public static ArrayList<Station> getAllNear(Location gps) {
-		ArrayList<Station> stations = new ArrayList<Station>();
-		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-		query.fromLocalDatastore();
-		ParseGeoPoint location = new ParseGeoPoint();
-		location.setLatitude(gps.getLatitude());
-		location.setLongitude(gps.getLongitude());
-		query.whereNear("location", location);
-		try {
-			List<Station> list = query.find();
-			for (Station station : list) {
-				double distance = station.getLocation().distanceInKilometersTo(
-						location);
-				station.setDistance(distance);
-			}
-			stations.addAll(list);
 		} catch (ParseException e) {
 			Utils.log(e.getMessage());
 		}
