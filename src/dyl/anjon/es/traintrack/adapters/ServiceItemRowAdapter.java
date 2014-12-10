@@ -87,7 +87,10 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 				holder.scheduledTime.setPaintFlags(0);
 			}
 		} else {
-			holder.destination.setText(serviceItem.getDestination().toString());
+			Station destination = serviceItem.getDestination();
+			if (destination != null) {
+				holder.destination.setText(destination.toString());
+			}
 			if (serviceItem.isDelayedDeparting()) {
 				holder.estimatedTime.setTextColor(Color.RED);
 				holder.scheduledTime.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -98,7 +101,7 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 		}
 		if (serviceItem.startsHere()) {
 			holder.origin.setText("Starts Here");
-		} else {
+		} else if (serviceItem.getOrigin() != null) {
 			holder.origin.setText("From " + serviceItem.getOrigin().toString());
 		}
 		holder.origin.setText(holder.origin.getText() + " - "
