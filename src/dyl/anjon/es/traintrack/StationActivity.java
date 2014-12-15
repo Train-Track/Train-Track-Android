@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
@@ -35,9 +36,11 @@ import dyl.anjon.es.traintrack.utils.Utils;
 
 public class StationActivity extends Activity {
 
+	private String stationId;
 	private Station station;
 	private ServiceItemRowAdapter adapter;
 	private ArrayList<ServiceItem> serviceItems;
+	private ProgressBar progress;
 	private TextView nrccMessage;
 	private TextView generatedAt;
 	private SaveCallback savedFileCallback;
@@ -52,10 +55,15 @@ public class StationActivity extends Activity {
 		setContentView(R.layout.activity_station);
 
 		final Intent intent = getIntent();
-		final String stationId = intent.getStringExtra("station_id");
+		stationId = intent.getStringExtra("station_id");
+		final String stationName = intent.getStringExtra("station_name");
+		final String stationCrs = intent.getStringExtra("station_crs");
 		final String journeyId = intent.getStringExtra("journey_id");
-		final TextView name = (TextView) findViewById(R.id.name);
 		final TextView crsCode = (TextView) findViewById(R.id.crs_code);
+		crsCode.setText(stationCrs);
+		final TextView name = (TextView) findViewById(R.id.name);
+		name.setText(stationName);
+		progress = (ProgressBar) findViewById(R.id.progress);
 		generatedAt = (TextView) findViewById(R.id.generated_at);
 		nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
 		serviceItems = new ArrayList<ServiceItem>();
@@ -71,13 +79,13 @@ public class StationActivity extends Activity {
 						ServiceActivity.class);
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("service_id", serviceItem.getServiceId());
-				intent.putExtra("origin_id", serviceItem.getOrigin()
-						.getObjectId());
-				intent.putExtra("station_id", station.getObjectId());
-				intent.putExtra("destination_id", serviceItem.getDestination()
-						.getObjectId());
-				intent.putExtra("operator", serviceItem.getOperator()
-						.toString());
+				intent.putExtra("origin_name", serviceItem.getOriginName());
+				intent.putExtra("station_id", stationId);
+				intent.putExtra("station_crs", stationCrs);
+				intent.putExtra("station_name", stationName);
+				intent.putExtra("destination_name", serviceItem.getDestinationName());
+				intent.putExtra("operator_code", serviceItem.getOperatorCode());
+				intent.putExtra("operator_name", serviceItem.getOperatorName());
 				startActivityForResult(intent, 1);
 				return;
 			}
@@ -135,7 +143,6 @@ public class StationActivity extends Activity {
 		};
 
 		ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-		query.fromLocalDatastore();
 		query.getInBackground(stationId, new GetCallback<Station>() {
 			@Override
 			public void done(Station result, ParseException e) {
@@ -148,6 +155,7 @@ public class StationActivity extends Activity {
 					} else {
 						Utils.log("No image for " + station);
 					}
+					result.pinInBackground();
 					new GetBoardRequest().execute(station.getCrsCode());
 				} else {
 					Utils.log("Getting station: " + e.getMessage());
@@ -185,7 +193,7 @@ public class StationActivity extends Activity {
 			return true;
 		case R.id.map:
 			Intent intent = new Intent().setClass(this, MapActivity.class);
-			intent.putExtra("station_id", station.getObjectId());
+			intent.putExtra("station_id", stationId);
 			startActivity(intent);
 			return true;
 		default:
@@ -218,12 +226,15 @@ public class StationActivity extends Activity {
 
 		@Override
 		protected StationBoard doInBackground(String... crs) {
+			Utils.log("Getting station board...");
 			return StationBoard.getByCrs(crs[0]);
 		}
 
 		@Override
 		protected void onPostExecute(StationBoard board) {
 			super.onPostExecute(board);
+			Utils.log("Got station board.");
+			progress.setVisibility(View.GONE);
 			serviceItems.clear();
 			serviceItems.addAll(board.getTrainServices());
 			adapter.notifyDataSetChanged();

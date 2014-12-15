@@ -6,12 +6,14 @@ import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.models.Station;
 
 public class CallingPoint {
-	
+
 	public static int START = R.drawable.start;
 	public static int STOP = R.drawable.stop;
 	public static int END = R.drawable.end;
 
 	private Station station;
+	private String stationCrs;
+	private String stationName;
 	private String scheduledTime;
 	private String estimatedTime;
 	private String actualTime;
@@ -23,7 +25,15 @@ public class CallingPoint {
 
 	public CallingPoint(Element cp) {
 		if (cp.getElementsByTagName("crs").getLength() > 0) {
-			setStationByCrs(cp.getElementsByTagName("crs").item(0)
+			setStationCrs(cp.getElementsByTagName("crs").item(0)
+					.getTextContent());
+			/*
+			 * setStationByCrs(cp.getElementsByTagName("crs").item(0)
+			 * .getTextContent());
+			 */
+		}
+		if (cp.getElementsByTagName("locationName").getLength() > 0) {
+			setStationName(cp.getElementsByTagName("locationName").item(0)
 					.getTextContent());
 		}
 		if (cp.getElementsByTagName("st").getLength() > 0) {
@@ -46,6 +56,22 @@ public class CallingPoint {
 
 	public void setStation(Station station) {
 		this.station = station;
+	}
+
+	public String getStationCrs() {
+		return stationCrs;
+	}
+
+	public void setStationCrs(String stationCrs) {
+		this.stationCrs = stationCrs;
+	}
+
+	public String getStationName() {
+		return stationName;
+	}
+
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
 	}
 
 	public String getScheduledTime() {
@@ -81,7 +107,7 @@ public class CallingPoint {
 	}
 
 	public String toString() {
-		return "Name: " + getStation() + "\n";
+		return getStationName() + "\n";
 	}
 
 	public void setStationByCrs(String crs) {

@@ -3,9 +3,7 @@ package dyl.anjon.es.traintrack.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.parse.ParseGeoPoint;
-
-import android.location.Location;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
+import com.parse.ParseGeoPoint;
+
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.models.Station;
 

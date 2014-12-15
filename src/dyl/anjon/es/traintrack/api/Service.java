@@ -8,9 +8,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.text.format.Time;
-
-import dyl.anjon.es.traintrack.models.Station;
-import dyl.anjon.es.traintrack.models.Operator;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class Service {
@@ -18,11 +15,11 @@ public class Service {
 	private String serviceId;
 	private String serviceType;
 	private Time generatedAt;
-	private Operator operator;
 	private String operatorCode;
+	private String operatorName;
 	private String platform;
-	private Station station;
-	private String crs;
+	private String stationCrs;
+	private String stationName;
 	private boolean isCancelled;
 	private String scheduledTimeArrival;
 	private String actualTimeArrival;
@@ -60,18 +57,14 @@ public class Service {
 				Time t = new Time();
 				t.parse3339(node.getTextContent());
 				setGeneratedAt(t);
-				setStation(Station.getByCrs(getCrs()));
 			} else if (node.getNodeName().equalsIgnoreCase("crs")) {
-				setCrs(node.getTextContent());
-				setStation(Station.getByCrs(getCrs()));
+				setStationCrs(node.getTextContent());
+			} else if (node.getNodeName().equalsIgnoreCase("locationName")) {
+				setStationName(node.getTextContent());
 			} else if (node.getNodeName().equalsIgnoreCase("operatorCode")) {
 				setOperatorCode(node.getTextContent());
-				Operator operator = Operator.getByCode(getOperatorCode());
-				if (operator != null) {
-					setOperator(operator);
-				} else {
-					Utils.log("NO OPERATOR FOUND IN DB!");
-				}
+			} else if (node.getNodeName().equalsIgnoreCase("operator")) {
+				setOperatorName(node.getTextContent());
 			} else if (node.getNodeName().equalsIgnoreCase("isCancelled")) {
 				setCancelled(Boolean.valueOf(node.getTextContent()));
 			} else if (node.getNodeName().equalsIgnoreCase("disruptionReason")) {
@@ -147,7 +140,8 @@ public class Service {
 		this.callingPoints = new ArrayList<CallingPoint>();
 		this.callingPoints.addAll(getPreviousCallingPoints());
 		CallingPoint thisCallingPoint = new CallingPoint();
-		thisCallingPoint.setStation(getStation());
+		thisCallingPoint.setStationName(getStationName());
+		thisCallingPoint.setStationCrs(getStationCrs());
 		if (terminatesHere()) {
 			thisCallingPoint.setScheduledTime(getScheduledTimeArrival());
 			thisCallingPoint.setEstimatedTime(getEstimatedTimeArrival());
@@ -204,20 +198,20 @@ public class Service {
 		this.generatedAt = generatedAt;
 	}
 
-	public Operator getOperator() {
-		return operator;
-	}
-
-	public void setOperator(Operator operator) {
-		this.operator = operator;
-	}
-
 	public String getOperatorCode() {
 		return operatorCode;
 	}
 
 	public void setOperatorCode(String operatorCode) {
 		this.operatorCode = operatorCode;
+	}
+
+	public String getOperatorName() {
+		return operatorName;
+	}
+
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName;
 	}
 
 	public String getPlatform() {
@@ -228,20 +222,20 @@ public class Service {
 		this.platform = platform;
 	}
 
-	public Station getStation() {
-		return station;
+	public String getStationCrs() {
+		return stationCrs;
 	}
 
-	public void setStation(Station station) {
-		this.station = station;
+	public void setStationCrs(String stationCrs) {
+		this.stationCrs = stationCrs;
 	}
 
-	public String getCrs() {
-		return crs;
+	public String getStationName() {
+		return stationName;
 	}
 
-	public void setCrs(String crs) {
-		this.crs = crs;
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
 	}
 
 	public void setCancelled(Boolean isCancelled) {

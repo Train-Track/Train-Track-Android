@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -37,7 +36,6 @@ import dyl.anjon.es.traintrack.utils.Utils;
 public class StationsFragment extends Fragment {
 
 	private Location gps;
-	private CountCallback countCallback;
 	private FindCallback<Station> findStationCallback;
 	private ArrayList<Station> stations;
 	private ListView list;
@@ -63,6 +61,8 @@ public class StationsFragment extends Fragment {
 				Intent intent = new Intent().setClass(getActivity(),
 						StationActivity.class);
 				intent.putExtra("station_id", station.getObjectId());
+				intent.putExtra("station_crs", station.getCrsCode());
+				intent.putExtra("station_name", station.getName());
 				startActivity(intent);
 				return;
 			}
@@ -75,27 +75,15 @@ public class StationsFragment extends Fragment {
 					stations.addAll(results);
 					adapter.refresh(stations);
 					list.setSelection(0);
+					Utils.log("Got all stations.");
 					Station.pinAllInBackground(results);
 				} else {
-					Utils.log("Getting stations: " + e.getMessage());
-				}
-			}
-		};
-
-		countCallback = new CountCallback() {
-			@Override
-			public void done(int count, ParseException e) {
-				if (e == null) {
-					ParseQuery<Station> query = ParseQuery
-							.getQuery(Station.class);
-					query.orderByAscending("name");
-					query.setLimit(1000);
-					if (count > 0) {
-						query.fromLocalDatastore();
-					}
-					query.findInBackground(findStationCallback);
-				} else {
-					Utils.log("Counting stations: " + e.getMessage());
+					Utils.log(e.getMessage());
+					ParseQuery<Station> q = ParseQuery.getQuery(Station.class);
+					q.orderByAscending("name");
+					q.setLimit(1000);
+					Utils.log("Getting stations from online datastore...");
+					q.findInBackground(findStationCallback);
 				}
 			}
 		};
@@ -194,10 +182,12 @@ public class StationsFragment extends Fragment {
 
 	private void loadStations() {
 		if (stations.isEmpty()) {
-			ParseQuery<Station> stationCount = ParseQuery
-					.getQuery(Station.class);
-			stationCount.fromLocalDatastore();
-			stationCount.countInBackground(countCallback);
+			ParseQuery<Station> q = ParseQuery.getQuery(Station.class);
+			q.orderByAscending("name");
+			q.setLimit(1000);
+			q.fromLocalDatastore();
+			Utils.log("Getting stations...");
+			q.findInBackground(findStationCallback);
 		} else {
 			adapter.refresh(stations);
 			list.setSelection(0);

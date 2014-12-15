@@ -12,15 +12,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.adapters.CallingPointRowAdapter;
 import dyl.anjon.es.traintrack.api.CallingPoint;
 import dyl.anjon.es.traintrack.api.Service;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class ServiceActivity extends Activity {
 
 	private CallingPointRowAdapter adapter;
+	private ProgressBar progress;
 	private ArrayList<CallingPoint> callingPoints;
 	private TextView disruptionReason;
 	private TextView generatedAt;
@@ -36,25 +38,27 @@ public class ServiceActivity extends Activity {
 		new GetServiceRequest().execute(serviceId);
 
 		final String journeyId = intent.getStringExtra("journey_id");
-		final String originId = intent.getStringExtra("origin_id");
-		final Station origin = Station.getById(originId);
+		final String originName = intent.getStringExtra("origin_name");
 		final String stationId = intent.getStringExtra("station_id");
-		final Station station = Station.getById(stationId);
-		final String destinationId = intent.getStringExtra("destination_id");
-		final Station destination = Station.getById(destinationId);
-		final String operator = intent.getStringExtra("operator");
+		final String stationCrs = intent.getStringExtra("station_crs");
+		final String stationName = intent.getStringExtra("station_name");
+		final String destinationName = intent
+				.getStringExtra("destination_name");
+		final String operatorCode = intent.getStringExtra("operator_code");
+		final String operatorName = intent.getStringExtra("operator_name");
 
 		callingPoints = new ArrayList<CallingPoint>();
 
 		final TextView name = (TextView) findViewById(R.id.name);
-		name.setText(origin + " to " + destination);
+		name.setText(originName + " to " + destinationName);
 		final TextView toc = (TextView) findViewById(R.id.toc);
-		toc.setText(operator);
+		toc.setText(operatorName);
 
+		progress = (ProgressBar) findViewById(R.id.progress);
 		disruptionReason = (TextView) findViewById(R.id.disruption_reason);
 		generatedAt = (TextView) findViewById(R.id.generated_at);
 
-		adapter = new CallingPointRowAdapter(callingPoints, station, this);
+		adapter = new CallingPointRowAdapter(callingPoints, stationCrs, this);
 		ListView list = (ListView) findViewById(R.id.list);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -73,12 +77,16 @@ public class ServiceActivity extends Activity {
 				intent.putExtra("journey_id", journeyId);
 				intent.putExtra("service_id", serviceId);
 				intent.putExtra("departure_station_id", stationId);
+				intent.putExtra("departure_station_crs", stationCrs);
+				intent.putExtra("departure_station_name", stationName);
 				intent.putExtra("departure_time", "12:00");
 				intent.putExtra("departure_platform", "9");
-				intent.putExtra("arrival_station_id", callingPoint.getStation()
-						.getObjectId());
+				intent.putExtra("arrival_station_crs",
+						callingPoint.getStationCrs());
 				intent.putExtra("arrival_time", "19:32");
 				intent.putExtra("arrival_platform", "3A");
+				intent.putExtra("operator_code", operatorCode);
+				intent.putExtra("operator_name", operatorName);
 				startActivityForResult(intent, 1);
 				return;
 			}
@@ -126,12 +134,15 @@ public class ServiceActivity extends Activity {
 
 		@Override
 		protected Service doInBackground(String... service) {
+			Utils.log("Getting service...");
 			return Service.getByServiceId(service[0]);
 		}
 
 		@Override
 		protected void onPostExecute(Service s) {
 			super.onPostExecute(s);
+			Utils.log("Got service.");
+			progress.setVisibility(View.GONE);
 			callingPoints.clear();
 			callingPoints.addAll(s.getCallingPoints());
 			adapter.notifyDataSetChanged();

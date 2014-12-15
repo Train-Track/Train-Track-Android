@@ -2,6 +2,7 @@ package dyl.anjon.es.traintrack.adapters;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -87,10 +88,7 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 				holder.scheduledTime.setPaintFlags(0);
 			}
 		} else {
-			Station destination = serviceItem.getDestination();
-			if (destination != null) {
-				holder.destination.setText(destination.toString());
-			}
+			holder.destination.setText(serviceItem.getDestinationName());
 			if (serviceItem.isDelayedDeparting()) {
 				holder.estimatedTime.setTextColor(Color.RED);
 				holder.scheduledTime.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -101,11 +99,11 @@ public class ServiceItemRowAdapter extends BaseAdapter {
 		}
 		if (serviceItem.startsHere()) {
 			holder.origin.setText("Starts Here");
-		} else if (serviceItem.getOrigin() != null) {
-			holder.origin.setText("From " + serviceItem.getOrigin().toString());
+		} else {
+			holder.origin.setText(serviceItem.getOriginName());
 		}
 		holder.origin.setText(holder.origin.getText() + " - "
-				+ serviceItem.getOperator());
+				+ serviceItem.getOperatorName());
 		holder.platform.setText(serviceItem.getPlatform());
 
 		return convertView;

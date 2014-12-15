@@ -20,7 +20,6 @@ import com.parse.ParseUser;
 
 import dyl.anjon.es.traintrack.models.Journey;
 import dyl.anjon.es.traintrack.models.JourneyLeg;
-import dyl.anjon.es.traintrack.models.Station;
 import dyl.anjon.es.traintrack.utils.Utils;
 
 public class JourneyLegActivity extends Activity {
@@ -76,11 +75,15 @@ public class JourneyLegActivity extends Activity {
 			journeyLeg = new JourneyLeg();
 
 			final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
-			final String departureStationId = intent
-					.getStringExtra("departure_station_id");
-			final Station departureStation = Station
-					.getById(departureStationId);
-			departureStationTv.setText(departureStation.toString());
+			// final String departureStationId = intent
+			// .getStringExtra("departure_station_id");
+			// final String departureStationCrs = intent
+			// .getStringExtra("departure_station_crs");
+			final String departureStationName = intent
+					.getStringExtra("departure_station_name");
+			// final Station departureStation = Station
+			// .getById(departureStationId);
+			departureStationTv.setText(departureStationName);
 
 			final TextView departurePlatformTv = (TextView) findViewById(R.id.departure_platform);
 			String departurePlatform = intent
@@ -114,10 +117,13 @@ public class JourneyLegActivity extends Activity {
 			});
 
 			final TextView arrivalStationTv = (TextView) findViewById(R.id.arrival_station);
-			final String arrivalStationId = intent
-					.getStringExtra("arrival_station_id");
-			final Station arrivalStation = Station.getById(arrivalStationId);
-			arrivalStationTv.setText(arrivalStation.toString());
+			// final String arrivalStationCrs = intent
+			// .getStringExtra("arrival_station_crs");
+			final String arrivalStationName = intent
+					.getStringExtra("arrival_station_name");
+			// final Station arrivalStation =
+			// Station.getByCrs(arrivalStationCrs);
+			arrivalStationTv.setText(arrivalStationName);
 
 			final TextView arrivalPlatformTv = (TextView) findViewById(R.id.arrival_platform);
 			String arrivalPlatform = intent.getStringExtra("arrival_platform");
@@ -162,10 +168,10 @@ public class JourneyLegActivity extends Activity {
 					}
 
 					journeyLeg.setJourney(journey);
-					journeyLeg.setDepartureStation(departureStation);
+					// journeyLeg.setDepartureStation(departureStation);
 					journeyLeg.setDeparturePlatform(departurePlatformTv
 							.getText().toString());
-					journeyLeg.setArrivalStation(arrivalStation);
+					// journeyLeg.setArrivalStation(arrivalStation);
 					journeyLeg.setArrivalPlatform(arrivalPlatformTv.getText()
 							.toString());
 					journeyLeg.saveEventually();

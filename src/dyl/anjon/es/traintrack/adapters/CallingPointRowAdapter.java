@@ -2,6 +2,7 @@ package dyl.anjon.es.traintrack.adapters;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -11,12 +12,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import dyl.anjon.es.traintrack.R;
 import dyl.anjon.es.traintrack.api.CallingPoint;
-import dyl.anjon.es.traintrack.models.Station;
+import dyl.anjon.es.traintrack.utils.Utils;
 
 public class CallingPointRowAdapter extends BaseAdapter {
 
 	private ArrayList<CallingPoint> callingPoints;
-	private Station station = null;
+	private String stationCrs = null;
 	private Context context;
 
 	/**
@@ -28,9 +29,9 @@ public class CallingPointRowAdapter extends BaseAdapter {
 	 *            the context the adapter is being used in
 	 */
 	public CallingPointRowAdapter(ArrayList<CallingPoint> callingPoints,
-			Station station, Context context) {
+			String stationCrs, Context context) {
 		this.callingPoints = callingPoints;
-		this.station = station;
+		this.stationCrs = stationCrs;
 		this.context = context;
 	}
 
@@ -66,15 +67,13 @@ public class CallingPointRowAdapter extends BaseAdapter {
 		holder.icon.setBackgroundDrawable(context.getResources().getDrawable(
 				callingPoint.getIcon()));
 		holder.scheduledTime.setText(callingPoint.getScheduledTime());
-		if (callingPoint.getStation() != null) {
-			holder.station.setText(callingPoint.getStation().toString());
-			if (callingPoint.getStation().equals(this.station)) {
-				holder.station.setTextColor(Color.RED);
-				convertView.setEnabled(false);
-			} else {
-				holder.station.setTextColor(Color.BLACK);
-				convertView.setEnabled(true);
-			}
+		holder.station.setText(callingPoint.getStationName());
+		if (callingPoint.getStationCrs().equals(this.stationCrs)) {
+			holder.station.setTextColor(Utils.BLUE);
+			convertView.setEnabled(false);
+		} else {
+			holder.station.setTextColor(Color.BLACK);
+			convertView.setEnabled(true);
 		}
 		holder.time.setText(callingPoint.getEstimatedTime());
 
