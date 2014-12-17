@@ -49,8 +49,12 @@ public class ServiceFragment extends Fragment {
         progress = (ProgressBar) v.findViewById(R.id.progress);
         disruptionReason = (TextView) v.findViewById(R.id.disruption_reason);
         generatedAt = (TextView) v.findViewById(R.id.generated_at);
-        callingPoints = new ArrayList<CallingPoint>();
+        TextView name = (TextView) v.findViewById(R.id.name);
+        name.setText(serviceItem.getOriginName() + " to " + serviceItem.getDestinationName());
+        TextView toc = (TextView) v.findViewById(R.id.toc);
+        toc.setText(serviceItem.getOperatorName());
 
+        callingPoints = new ArrayList<CallingPoint>();
         adapter = new CallingPointRowAdapter(callingPoints, station.crsCode, getActivity());
         ListView list = (ListView) v.findViewById(R.id.list);
         list.setAdapter(adapter);
