@@ -2,32 +2,32 @@
 <items version="2" >
 
     <item
-        jar="/Users/dylan/AndroidStudioProjects/TrackTrack/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jar="/Users/dylan/Documents/Train-Track-Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/dylan/Documents/Train-Track-Android/app/build/intermediates/pre-dexed/debug/classes-277566326238fb965452786ae880810931e9e0c2.jar" />
+    </item>
+    <item
+        jar="/Users/dylan/Documents/Train-Track-Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="/Users/dylan/AndroidStudioProjects/TrackTrack/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-842050592f697f57c91549c2cb28de7b1e91cab1.jar" />
-    </item>
-    <item
-        jar="/Users/dylan/AndroidStudioProjects/TrackTrack/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="/Users/dylan/AndroidStudioProjects/TrackTrack/app/build/intermediates/pre-dexed/debug/classes-184ad5bd52fa73c634111f0e5c61515cf33460ca.jar" />
+        <dex dex="/Users/dylan/Documents/Train-Track-Android/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-36e6b0ce595d300115818216e46f07fa8047479e.jar" />
     </item>
     <item
         jar="/Applications/adt-bundle-mac-x86_64-20140702/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="/Users/dylan/AndroidStudioProjects/TrackTrack/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-6658c117293958a7383bcbb346a57fefebf27ee4.jar" />
+        <dex dex="/Users/dylan/Documents/Train-Track-Android/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-6658c117293958a7383bcbb346a57fefebf27ee4.jar" />
     </item>
     <item
-        jar="/Users/dylan/AndroidStudioProjects/TrackTrack/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jar="/Users/dylan/Documents/Train-Track-Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="/Users/dylan/AndroidStudioProjects/TrackTrack/app/build/intermediates/pre-dexed/debug/classes-891e048ec0c7308eecb00bcc77bc84d67a3de535.jar" />
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/dylan/Documents/Train-Track-Android/app/build/intermediates/pre-dexed/debug/classes-35e3bad78cc7153b89222964a7c9d6d3264686c4.jar" />
     </item>
 
 </items>

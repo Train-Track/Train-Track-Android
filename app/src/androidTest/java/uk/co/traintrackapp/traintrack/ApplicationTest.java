@@ -1,4 +1,4 @@
-package uk.co.traintrackapp.tracktrack;
+package uk.co.traintrackapp.traintrack;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

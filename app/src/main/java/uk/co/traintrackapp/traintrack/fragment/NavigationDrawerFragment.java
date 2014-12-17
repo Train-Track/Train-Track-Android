@@ -22,7 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import uk.co.traintrackapp.tracktrack.R;
+import uk.co.traintrackapp.traintrack.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

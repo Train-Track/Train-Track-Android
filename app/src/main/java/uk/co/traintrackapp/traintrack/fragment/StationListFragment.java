@@ -13,8 +13,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 
-import uk.co.traintrackapp.tracktrack.R;
-import uk.co.traintrackapp.tracktrack.model.Station;
+import uk.co.traintrackapp.traintrack.R;
+import uk.co.traintrackapp.traintrack.model.Station;
 
 /**
  * A fragment representing a list of Items.
@@ -22,7 +22,7 @@ import uk.co.traintrackapp.tracktrack.model.Station;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link uk.co.traintrackapp.traintrack.fragment.StationListFragment.OnFragmentInteractionListener}
  * interface.
  */
 public class StationListFragment extends Fragment implements AbsListView.OnItemClickListener {

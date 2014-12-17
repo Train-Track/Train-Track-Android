@@ -6,9 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import uk.co.traintrackapp.tracktrack.R;
-import uk.co.traintrackapp.tracktrack.model.Station;
+import uk.co.traintrackapp.traintrack.R;
+import uk.co.traintrackapp.traintrack.model.Station;
 
 public class StationFragment extends Fragment {
 

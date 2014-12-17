@@ -1,4 +1,4 @@
-package uk.co.traintrackapp.tracktrack.model;
+package uk.co.traintrackapp.traintrack.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
