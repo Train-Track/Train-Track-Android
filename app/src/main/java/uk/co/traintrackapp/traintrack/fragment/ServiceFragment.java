@@ -104,7 +104,7 @@ public class ServiceFragment extends Fragment {
             mListener = (OnServiceFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnServiceFragmentInteractionListener");
         }
     }
 

@@ -74,7 +74,7 @@ public class StationFragment extends Fragment {
             mListener = (OnStationFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnStationFragmentInteractionListener");
         }
     }
 

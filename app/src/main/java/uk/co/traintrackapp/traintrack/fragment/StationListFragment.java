@@ -82,7 +82,7 @@ public class StationListFragment extends Fragment implements AbsListView.OnItemC
             mListener = (OnStationListFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnStationListFragmentInteractionListener");
         }
     }
 
