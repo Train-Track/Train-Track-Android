@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 
+import uk.co.traintrackapp.traintrack.api.CallingPoint;
+import uk.co.traintrackapp.traintrack.api.ServiceItem;
+import uk.co.traintrackapp.traintrack.fragment.ServiceFragment;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.fragment.NavigationDrawerFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationFragment;
@@ -14,7 +17,10 @@ import uk.co.traintrackapp.traintrack.fragment.StationListFragment;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, StationListFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        StationListFragment.OnStationListFragmentInteractionListener,
+        StationFragment.OnStationFragmentInteractionListener,
+        ServiceFragment.OnServiceFragmentInteractionListener{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -25,6 +31,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private Station departingStation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +115,8 @@ public class MainActivity extends ActionBarActivity
     }
     */
 
-    public void onFragmentInteraction(Station station) {
+    public void onStationListFragmentInteractionListener(Station station) {
+        departingStation = station;
         StationFragment stationFragment = new StationFragment();
         stationFragment.setStation(station);
         mTitle = station.name;
@@ -119,6 +127,24 @@ public class MainActivity extends ActionBarActivity
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void onStationFragmentInteractionListener(ServiceItem serviceItem) {
+        ServiceFragment serviceFragment = new ServiceFragment();
+        serviceFragment.setService(serviceItem);
+        serviceFragment.setStation(departingStation);
+        mTitle = "Service";
+        restoreActionBar();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, serviceFragment);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void onServiceFragmentInteractionListener(CallingPoint callingPoint) {
+
     }
 
 }

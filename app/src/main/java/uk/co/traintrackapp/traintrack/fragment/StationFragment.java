@@ -1,5 +1,6 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationFragment extends Fragment {
 
+    private OnStationFragmentInteractionListener mListener;
     private Station station;
     private ServiceItemRowAdapter adapter;
     private ArrayList<ServiceItem> serviceItems;
@@ -50,14 +52,36 @@ public class StationFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View view, int index,
                                     long x) {
-                ServiceItem serviceItem = (ServiceItem) adapter.getItem(index);
-                return;
+            ServiceItem serviceItem = (ServiceItem) adapter.getItem(index);
+            if (null != mListener) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListener.onStationFragmentInteractionListener(serviceItem);
+            }
+            return;
             }
         });
 
         new GetBoardRequest().execute(station.crsCode);
 
         return v;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnStationFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     class GetBoardRequest extends AsyncTask<String, String, StationBoard> {
@@ -87,5 +111,10 @@ public class StationFragment extends Fragment {
 
         }
     }
+
+    public interface OnStationFragmentInteractionListener {
+        public void onStationFragmentInteractionListener(ServiceItem serviceItem);
+    }
+
 
 }

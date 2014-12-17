@@ -22,12 +22,12 @@ import uk.co.traintrackapp.traintrack.model.Station;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p/>
- * Activities containing this fragment MUST implement the {@link uk.co.traintrackapp.traintrack.fragment.StationListFragment.OnFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link uk.co.traintrackapp.traintrack.fragment.StationListFragment.OnStationListFragmentInteractionListener}
  * interface.
  */
 public class StationListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    private OnFragmentInteractionListener mListener;
+    private OnStationListFragmentInteractionListener mListener;
 
     /**
      * The fragment's ListView/GridView.
@@ -79,7 +79,7 @@ public class StationListFragment extends Fragment implements AbsListView.OnItemC
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnStationListFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -98,7 +98,7 @@ public class StationListFragment extends Fragment implements AbsListView.OnItemC
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(Station.STATIONS.get(position));
+            mListener.onStationListFragmentInteractionListener(Station.STATIONS.get(position));
         }
     }
 
@@ -125,9 +125,8 @@ public class StationListFragment extends Fragment implements AbsListView.OnItemC
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Station station);
+    public interface OnStationListFragmentInteractionListener {
+        public void onStationListFragmentInteractionListener(Station station);
     }
 
 }

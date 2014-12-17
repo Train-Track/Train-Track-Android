@@ -23,10 +23,12 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.graphics.Color;
 import android.util.Log;
 
 public class Utils {
 
+    public static int BLUE = Color.parseColor("#33b5e5");
     public static boolean DEBUG_MODE = true;
     public static String API_URL = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb5.asmx";
     public static String ACCESS_TOKEN = "";
