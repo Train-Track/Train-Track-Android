@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.R;
@@ -115,6 +114,5 @@ public class StationFragment extends Fragment {
     public interface OnStationFragmentInteractionListener {
         public void onStationFragmentInteractionListener(ServiceItem serviceItem);
     }
-
 
 }

@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import uk.co.traintrackapp.traintrack.api.CallingPoint;
 import uk.co.traintrackapp.traintrack.api.ServiceItem;
+import uk.co.traintrackapp.traintrack.fragment.DashboardFragment;
 import uk.co.traintrackapp.traintrack.fragment.ServiceFragment;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.fragment.NavigationDrawerFragment;
@@ -57,6 +58,10 @@ public class MainActivity extends ActionBarActivity
             mTitle = "Stations";
             fragmentManager.beginTransaction()
                     .replace(R.id.container, StationListFragment.newInstance()).commit();
+        } else if (position == 0) {
+            mTitle = "Dashboard";
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, DashboardFragment.newInstance()).commit();
         }
 
         restoreActionBar();
