@@ -1,38 +1,22 @@
 package uk.co.traintrackapp.traintrack;
 
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 
-import uk.co.traintrackapp.traintrack.api.CallingPoint;
-import uk.co.traintrackapp.traintrack.api.ServiceItem;
 import uk.co.traintrackapp.traintrack.fragment.DashboardFragment;
-import uk.co.traintrackapp.traintrack.fragment.ServiceFragment;
-import uk.co.traintrackapp.traintrack.model.Station;
+
+import uk.co.traintrackapp.traintrack.fragment.StationsFragment;
 import uk.co.traintrackapp.traintrack.fragment.NavigationDrawerFragment;
-import uk.co.traintrackapp.traintrack.fragment.StationFragment;
-import uk.co.traintrackapp.traintrack.fragment.StationListFragment;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        StationListFragment.OnStationListFragmentInteractionListener,
-        StationFragment.OnStationFragmentInteractionListener,
-        ServiceFragment.OnServiceFragmentInteractionListener{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
     private CharSequence mTitle;
-    private Station departingStation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,31 +25,28 @@ public class MainActivity extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                (DrawerLayout) findViewById(R.id.drawer_layout)
+        );
+        mTitle = getString(R.string.app_name);
+        restoreActionBar();
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-
-        if (position == 1) {
-            mTitle = "Stations";
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, StationListFragment.newInstance()).commit();
-        } else if (position == 0) {
-            mTitle = "Dashboard";
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, DashboardFragment.newInstance()).commit();
+        switch (position) {
+            case 0:
+                fragmentManager.beginTransaction()
+                       .replace(R.id.container, DashboardFragment.newInstance()).commit();
+                break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, StationsFragment.newInstance()).commit();
+                break;
         }
-
         restoreActionBar();
-
     }
 
     public void onSectionAttached(int number) {
@@ -74,17 +55,17 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_dashboard_fragment);
                 break;
             case 2:
-                mTitle = getString(R.string.title_station_fragment);
+                mTitle = getString(R.string.title_stations_fragment);
                 break;
             case 3:
-                mTitle = getString(R.string.title_journey_fragment);
+                mTitle = getString(R.string.title_journeys_fragment);
                 break;
         }
+        restoreActionBar();
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(mTitle);
@@ -119,37 +100,5 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
     */
-
-    public void onStationListFragmentInteractionListener(Station station) {
-        departingStation = station;
-        StationFragment stationFragment = new StationFragment();
-        stationFragment.setStation(station);
-        mTitle = station.name;
-        restoreActionBar();
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, stationFragment);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    public void onStationFragmentInteractionListener(ServiceItem serviceItem) {
-        ServiceFragment serviceFragment = new ServiceFragment();
-        serviceFragment.setService(serviceItem);
-        serviceFragment.setStation(departingStation);
-        mTitle = "Service";
-        restoreActionBar();
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, serviceFragment);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    public void onServiceFragmentInteractionListener(CallingPoint callingPoint) {
-
-    }
 
 }

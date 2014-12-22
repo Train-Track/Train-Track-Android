@@ -3,7 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="uk.co.traintrackapp.traintrack.fragment.StationListFragment">
+    tools:context="uk.co.traintrackapp.traintrack.fragment.StationsFragment">
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/find_a_station"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -15,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_az"
-            android:id="@+id/az"
+            android:id="@+id/a_z"
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle" />
 
@@ -44,10 +50,8 @@
             style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
-    <ListView android:id="@android:id/list" android:layout_width="match_parent"
+    <ListView android:id="@+id/list"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <TextView android:id="@android:id/empty" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:gravity="center" />
 
 </LinearLayout>

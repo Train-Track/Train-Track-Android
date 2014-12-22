@@ -3,14 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".StationFragment" >
-<!--
+    tools:context=".StationActivity" >
+
     <com.parse.ParseImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:scaleType="centerCrop" />
--->
 
     <ProgressBar
         android:id="@+id/progress"

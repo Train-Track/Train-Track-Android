@@ -24,7 +24,6 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class ServiceFragment extends Fragment {
 
-    private OnServiceFragmentInteractionListener mListener;
     private ServiceItem serviceItem;
     private Station station;
     private CallingPointRowAdapter adapter;
@@ -44,7 +43,7 @@ public class ServiceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_service, container, false);
+        View v = inflater.inflate(R.layout.activity_service, container, false);
 
         progress = (ProgressBar) v.findViewById(R.id.progress);
         disruptionReason = (TextView) v.findViewById(R.id.disruption_reason);
@@ -55,7 +54,7 @@ public class ServiceFragment extends Fragment {
         toc.setText(serviceItem.getOperatorName());
 
         callingPoints = new ArrayList<CallingPoint>();
-        adapter = new CallingPointRowAdapter(callingPoints, station.crsCode, getActivity());
+        adapter = new CallingPointRowAdapter(callingPoints, station.getCrsCode(), getActivity());
         ListView list = (ListView) v.findViewById(R.id.list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,27 +95,5 @@ public class ServiceFragment extends Fragment {
 
         }
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnServiceFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnServiceFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnServiceFragmentInteractionListener {
-        public void onServiceFragmentInteractionListener(CallingPoint callingPoint);
-    }
-
 
 }
