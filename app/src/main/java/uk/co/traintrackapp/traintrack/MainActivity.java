@@ -1,13 +1,14 @@
 package uk.co.traintrackapp.traintrack;
 
+import android.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 
 import uk.co.traintrackapp.traintrack.fragment.DashboardFragment;
 
+import uk.co.traintrackapp.traintrack.fragment.SettingsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationsFragment;
 import uk.co.traintrackapp.traintrack.fragment.NavigationDrawerFragment;
 
@@ -35,15 +36,23 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
-                       .replace(R.id.container, DashboardFragment.newInstance()).commit();
+                        .replace(R.id.container, DashboardFragment.newInstance()).commit();
                 break;
             case 1:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, StationsFragment.newInstance()).commit();
+                break;
+            case 2:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, StationsFragment.newInstance()).commit();
+                break;
+            case 3:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, SettingsFragment.newInstance()).commit();
                 break;
         }
         restoreActionBar();
@@ -59,6 +68,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_journeys_fragment);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_settings_fragment);
                 break;
         }
         restoreActionBar();

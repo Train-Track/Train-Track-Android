@@ -5,6 +5,7 @@
     <string name="title_dashboard_fragment">Dashboard</string>
     <string name="title_stations_fragment">Stations</string>
     <string name="title_journeys_fragment">Your Journeys</string>
+    <string name="title_settings_fragment">Settings</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_new_journey">New Journey</string>
