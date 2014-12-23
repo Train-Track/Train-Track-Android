@@ -49,7 +49,7 @@ public class StationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stations, container,
                 false);
-        stations = new ArrayList<Station>();
+        stations = new ArrayList<>();
         list = (ListView) rootView.findViewById(R.id.list);
         adapter = new StationRowAdapter(inflater, stations, getActivity());
         list.setAdapter(adapter);
@@ -63,7 +63,6 @@ public class StationsFragment extends Fragment {
                 intent.putExtra("station_crs", station.getCrsCode());
                 intent.putExtra("station_name", station.getName());
                 startActivity(intent);
-                return;
             }
         });
 
@@ -75,6 +74,7 @@ public class StationsFragment extends Fragment {
                     adapter.refresh(stations);
                     list.setSelection(0);
                     Station.pinAllInBackground(results);
+                    Utils.log("Got stations.");
                 } else if (e == null) {
                     ParseQuery<Station> q = ParseQuery.getQuery(Station.class);
                     q.orderByAscending("name");

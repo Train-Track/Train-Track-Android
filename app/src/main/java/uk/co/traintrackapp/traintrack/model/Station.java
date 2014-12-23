@@ -105,7 +105,7 @@ public class Station extends ParseObject {
     }
 
     /**
-     * @param string
+     * @param string the string to look for in the name
      * @return true if string is within name
      */
     public boolean isNameSimilarTo(CharSequence string) {

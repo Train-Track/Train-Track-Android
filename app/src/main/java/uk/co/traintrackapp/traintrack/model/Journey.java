@@ -61,7 +61,7 @@ public class Journey extends ParseObject {
      * @return an array list of legs
      */
     public ArrayList<JourneyLeg> getJourneyLegs() {
-        ArrayList<JourneyLeg> journeyLegs = new ArrayList<JourneyLeg>();
+        ArrayList<JourneyLeg> journeyLegs = new ArrayList<>();
         ParseQuery<JourneyLeg> query = ParseQuery.getQuery(JourneyLeg.class);
         query.whereEqualTo("journey", this);
         query.fromLocalDatastore();
@@ -77,6 +77,13 @@ public class Journey extends ParseObject {
             Utils.log(e.getMessage());
         }
         return journeyLegs;
+    }
+
+    /**
+     * @return a string representation
+     */
+    public String toString() {
+        return getOrigin() + " to " + getDestination();
     }
 
 }

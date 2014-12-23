@@ -3,6 +3,7 @@ package uk.co.traintrackapp.traintrack.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +15,20 @@ import uk.co.traintrackapp.traintrack.model.Journey;
 
 public class JourneyRowAdapter extends BaseAdapter {
 
-    private List<Journey> rowList;
     private LayoutInflater inflater = null;
+    private List<Journey> rowList;
+    private Context context;
 
     /**
      * @param inflater
      * @param journeys
+     * @param context
      */
     public JourneyRowAdapter(LayoutInflater inflater,
-                             ArrayList<Journey> journeys) {
-        this.rowList = journeys;
+                             ArrayList<Journey> journeys, Context context) {
         this.inflater = inflater;
+        this.rowList = journeys;
+        this.context = context;
     }
 
     public int getCount() {
@@ -43,8 +47,7 @@ public class JourneyRowAdapter extends BaseAdapter {
         View v = inflater.inflate(R.layout.row_journey, null);
         Journey journey = rowList.get(position);
         TextView name = (TextView) v.findViewById(R.id.name);
-        name.setText(journey.getOrigin().toString() + " to "
-                + journey.getDestination().toString());
+        name.setText(journey.toString());
         return v;
     }
 
