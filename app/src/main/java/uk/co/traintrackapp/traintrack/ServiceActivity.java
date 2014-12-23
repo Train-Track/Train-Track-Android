@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,8 +53,8 @@ public class ServiceActivity extends ActionBarActivity {
 
         callingPoints = new ArrayList<CallingPoint>();
 
-        final TextView name = (TextView) findViewById(R.id.name);
-        name.setText(originName + " to " + destinationName);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(originName + " to " + destinationName);
         final TextView toc = (TextView) findViewById(R.id.toc);
         toc.setText(operatorName);
 
@@ -86,6 +87,8 @@ public class ServiceActivity extends ActionBarActivity {
                 intent.putExtra("departure_platform", "9");
                 intent.putExtra("arrival_station_crs",
                         callingPoint.getStationCrs());
+                intent.putExtra("arrival_station_name",
+                        callingPoint.getStationName());
                 intent.putExtra("arrival_time", "19:32");
                 intent.putExtra("arrival_platform", "3A");
                 intent.putExtra("operator_code", operatorCode);
