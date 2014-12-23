@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +24,7 @@ import uk.co.traintrackapp.traintrack.model.JourneyLeg;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 
-public class JourneyLegActivity extends Activity {
+public class JourneyLegActivity extends ActionBarActivity {
 
     private JourneyLeg journeyLeg;
     private Journey journey;
@@ -64,6 +65,7 @@ public class JourneyLegActivity extends Activity {
                                 .toString());
                         arrivalTime.setText(journeyLeg.getArrivalTimeAsString());
                         arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
+                        getSupportActionBar().setTitle(journeyLeg.toString());
                     } else {
                         Utils.log(e.getMessage());
                     }
@@ -74,6 +76,7 @@ public class JourneyLegActivity extends Activity {
 
             setContentView(R.layout.activity_journey_leg_form);
             journeyLeg = new JourneyLeg();
+            getSupportActionBar().setTitle(getString(R.string.action_new_journey));
 
             final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
             // final String departureStationId = intent
@@ -193,7 +196,9 @@ public class JourneyLegActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.journey_leg, menu);
+        if (journeyLeg.getObjectId() != null) {
+            getMenuInflater().inflate(R.menu.journey_leg, menu);
+        }
         return true;
     }
 
