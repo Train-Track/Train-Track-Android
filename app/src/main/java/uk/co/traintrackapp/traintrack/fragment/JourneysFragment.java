@@ -40,7 +40,7 @@ public class JourneysFragment extends Fragment {
                 false);
         journeys = new ArrayList<>();
         list = (ListView) rootView.findViewById(R.id.list);
-        adapter = new JourneyRowAdapter(inflater, journeys, getActivity());
+        adapter = new JourneyRowAdapter(journeys, getActivity());
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View view, int index,

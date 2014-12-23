@@ -15,18 +15,14 @@ import uk.co.traintrackapp.traintrack.model.Journey;
 
 public class JourneyRowAdapter extends BaseAdapter {
 
-    private LayoutInflater inflater = null;
     private List<Journey> rowList;
     private Context context;
 
     /**
-     * @param inflater
-     * @param journeys
-     * @param context
+     * @param journeys journey list
+     * @param context the application context
      */
-    public JourneyRowAdapter(LayoutInflater inflater,
-                             ArrayList<Journey> journeys, Context context) {
-        this.inflater = inflater;
+    public JourneyRowAdapter(ArrayList<Journey> journeys, Context context) {
         this.rowList = journeys;
         this.context = context;
     }
@@ -44,16 +40,29 @@ public class JourneyRowAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = inflater.inflate(R.layout.row_journey, null);
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(
+                    R.layout.row_journey, null);
+            holder = new ViewHolder();
+            holder.name = (TextView) convertView
+                    .findViewById(R.id.name);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
         Journey journey = rowList.get(position);
-        TextView name = (TextView) v.findViewById(R.id.name);
-        name.setText(journey.toString());
-        return v;
+        holder.name.setText(journey.toString());
+        return convertView;
     }
 
     public void refresh(ArrayList<Journey> journeys) {
         this.rowList = journeys;
         this.notifyDataSetChanged();
+    }
+
+    static class ViewHolder {
+        TextView name;
     }
 
 }

@@ -22,11 +22,10 @@ public class ServiceItemRowAdapter extends BaseAdapter {
     private Context context;
 
     /**
-     * @param serviceItems
-     * @param station
-     *            the service is being seen from
-     * @param context
-     *            to be displayed in    */
+     * @param serviceItems the services
+     * @param station      the service is being seen from
+     * @param context      to be displayed in
+     */
     public ServiceItemRowAdapter(ArrayList<ServiceItem> serviceItems,
                                  Station station, Context context) {
         this.serviceItems = serviceItems;
