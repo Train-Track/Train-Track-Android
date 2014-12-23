@@ -2,7 +2,6 @@ package uk.co.traintrackapp.traintrack.adapter;
 
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -102,7 +101,7 @@ public class ServiceItemRowAdapter extends BaseAdapter {
         } else {
             holder.origin.setText(serviceItem.getOriginName());
         }
-        holder.origin.setText(holder.origin.getText() + " - "
+        holder.origin.setText("From " + holder.origin.getText() + " - "
                 + serviceItem.getOperatorName());
         holder.platform.setText(serviceItem.getPlatform());
 
