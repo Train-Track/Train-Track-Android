@@ -46,6 +46,8 @@ public class ServiceActivity extends ActionBarActivity {
         final String stationId = intent.getStringExtra("station_id");
         final String stationCrs = intent.getStringExtra("station_crs");
         final String stationName = intent.getStringExtra("station_name");
+        final String platorm = intent.getStringExtra("platform");
+        final String time = intent.getStringExtra("time");
         final String destinationName = intent
                 .getStringExtra("destination_name");
         final String operatorCode = intent.getStringExtra("operator_code");
@@ -83,14 +85,14 @@ public class ServiceActivity extends ActionBarActivity {
                 intent.putExtra("departure_station_id", stationId);
                 intent.putExtra("departure_station_crs", stationCrs);
                 intent.putExtra("departure_station_name", stationName);
-                intent.putExtra("departure_time", "12:00");
-                intent.putExtra("departure_platform", "9");
+                intent.putExtra("departure_time", time);
+                intent.putExtra("departure_platform", platorm);
                 intent.putExtra("arrival_station_crs",
                         callingPoint.getStationCrs());
                 intent.putExtra("arrival_station_name",
                         callingPoint.getStationName());
-                intent.putExtra("arrival_time", "19:32");
-                intent.putExtra("arrival_platform", "3A");
+                intent.putExtra("arrival_time", callingPoint.getTime());
+                intent.putExtra("arrival_platform", "");
                 intent.putExtra("operator_code", operatorCode);
                 intent.putExtra("operator_name", operatorName);
                 startActivityForResult(intent, 1);

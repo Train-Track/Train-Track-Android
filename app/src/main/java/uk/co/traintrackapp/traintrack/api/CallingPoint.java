@@ -6,9 +6,10 @@ import uk.co.traintrackapp.traintrack.R;
 
 public class CallingPoint {
 
-    public static int START = R.drawable.start;
-    public static int STOP = R.drawable.stop;
-    public static int END = R.drawable.end;
+    private static final String ON_TIME = "On time";
+    public static final int START = R.drawable.start;
+    public static final int STOP = R.drawable.stop;
+    public static final int END = R.drawable.end;
 
     private String stationCrs;
     private String stationName;
@@ -25,7 +26,7 @@ public class CallingPoint {
         if (cp.getElementsByTagName("crs").getLength() > 0) {
             setStationCrs(cp.getElementsByTagName("crs").item(0)
                     .getTextContent());
-			/*
+            /*
 			 * setStationByCrs(cp.getElementsByTagName("crs").item(0)
 			 * .getTextContent());
 			 */
@@ -105,6 +106,24 @@ public class CallingPoint {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public boolean isOnTime() {
+        if (getEstimatedTime().equalsIgnoreCase(ON_TIME)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getTime() {
+        if (hasArrived()) {
+            return getActualTime();
+        } else if (isOnTime()) {
+            return getScheduledTime();
+        } else {
+            return getEstimatedTime();
         }
     }
 

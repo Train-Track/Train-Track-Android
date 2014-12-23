@@ -85,6 +85,8 @@ public class StationActivity extends ActionBarActivity {
                 intent.putExtra("destination_name", serviceItem.getDestinationName());
                 intent.putExtra("operator_code", serviceItem.getOperatorCode());
                 intent.putExtra("operator_name", serviceItem.getOperatorName());
+                intent.putExtra("platform", serviceItem.getPlatform());
+                intent.putExtra("time", serviceItem.getTime());
                 startActivityForResult(intent, 1);
                 return;
             }

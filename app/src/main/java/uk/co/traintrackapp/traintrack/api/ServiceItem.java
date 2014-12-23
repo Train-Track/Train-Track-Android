@@ -4,7 +4,8 @@ import org.w3c.dom.Element;
 
 public class ServiceItem {
 
-    private static final String ON_TIME = "On Time";
+    private static final String ON_TIME = "On time";
+    private static final String DELAYED = "Delayed";
     private String originCrs;
     private String originName;
     private String destinationCrs;
@@ -23,24 +24,20 @@ public class ServiceItem {
         if (ts.getElementsByTagName("origin").getLength() > 0) {
             Element orig = (Element) ts.getElementsByTagName("origin").item(0);
             if (orig.getElementsByTagName("crs").getLength() > 0) {
-                String crs = orig.getElementsByTagName("crs").item(0)
+                this.originCrs = orig.getElementsByTagName("crs").item(0)
                         .getTextContent();
-                this.originCrs = crs;
-                String locationName = orig.getElementsByTagName("locationName")
+                this.originName = orig.getElementsByTagName("locationName")
                         .item(0).getTextContent();
-                this.originName = locationName;
             }
         }
         if (ts.getElementsByTagName("destination").getLength() > 0) {
             Element dest = (Element) ts.getElementsByTagName("destination")
                     .item(0);
             if (dest.getElementsByTagName("crs").getLength() > 0) {
-                String crs = dest.getElementsByTagName("crs").item(0)
+                this.destinationCrs = dest.getElementsByTagName("crs").item(0)
                         .getTextContent();
-                this.destinationCrs = crs;
-                String locationName = dest.getElementsByTagName("locationName")
+                this.destinationName = dest.getElementsByTagName("locationName")
                         .item(0).getTextContent();
-                this.destinationName = locationName;
             }
         }
         if (ts.getElementsByTagName("sta").getLength() > 0) {
@@ -179,6 +176,24 @@ public class ServiceItem {
             return getEstimatedTimeArrival();
         } else {
             return getEstimatedTimeDeparture();
+        }
+    }
+
+    public boolean isOnTime() {
+        if (getEstimatedTime().equalsIgnoreCase(ON_TIME)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getTime() {
+        if (isOnTime()) {
+            return getScheduledTime();
+        } else if (getEstimatedTime().equalsIgnoreCase(DELAYED)) {
+            return getScheduledTime();
+        } else {
+            return getEstimatedTime();
         }
     }
 
