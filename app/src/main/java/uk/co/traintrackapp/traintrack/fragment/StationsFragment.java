@@ -51,7 +51,7 @@ public class StationsFragment extends Fragment {
                 false);
         stations = new ArrayList<Station>();
         list = (ListView) rootView.findViewById(R.id.list);
-        adapter = new StationRowAdapter(inflater, stations);
+        adapter = new StationRowAdapter(inflater, stations, getActivity());
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View view, int index,

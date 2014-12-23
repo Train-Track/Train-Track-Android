@@ -4,6 +4,7 @@ package uk.co.traintrackapp.traintrack.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +21,16 @@ import uk.co.traintrackapp.traintrack.model.Station;
 
 public class StationRowAdapter extends BaseAdapter implements Filterable {
 
+    private LayoutInflater inflater;
     private List<Station> rowList;
     private List<Station> origRowList;
-    private LayoutInflater inflater = null;
+    private Context context;
 
     public StationRowAdapter(LayoutInflater inflater,
-                             ArrayList<Station> stations) {
-        this.rowList = stations;
+                             ArrayList<Station> stations, Context context) {
         this.inflater = inflater;
+        this.rowList = stations;
+        this.context = context;
     }
 
     public int getCount() {
@@ -43,23 +46,36 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = inflater.inflate(R.layout.row_station, null);
-        Station station = rowList.get(position);
-        TextView name = (TextView) v.findViewById(R.id.name);
-        name.setText(station.getName());
-        TextView crsCode = (TextView) v.findViewById(R.id.crs_code);
-        crsCode.setText(station.getCrsCode());
-        if (station.getDistance() > 0) {
-            TextView distance = (TextView) v.findViewById(R.id.distance);
-            distance.setText(station.getDistanceText());
+
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(
+                    R.layout.row_station, null);
+            holder = new ViewHolder();
+            holder.crsCode = (TextView) convertView
+                    .findViewById(R.id.crs_code);
+            holder.name = (TextView) convertView
+                    .findViewById(R.id.name);
+            holder.distance = (TextView) convertView
+                    .findViewById(R.id.distance);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
-        return v;
+
+        Station station = rowList.get(position);
+        holder.crsCode.setText(station.getCrsCode());
+        holder.name.setText(station.getName());
+        if (station.getDistance() > 0) {
+            holder.distance.setText(station.getDistanceText());
+        }
+
+        return convertView;
     }
 
     public Filter getFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
 
-            @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint,
                                           FilterResults results) {
@@ -92,14 +108,12 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
                 return results;
             }
         };
-        return filter;
 
     }
 
     public Filter getFavouriteFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
 
-            @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint,
                                           FilterResults results) {
@@ -126,14 +140,12 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
                 return results;
             }
         };
-        return filter;
 
     }
 
     public Filter getNearbyFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
 
-            @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint,
                                           FilterResults results) {
@@ -165,13 +177,18 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
                 return results;
             }
         };
-        return filter;
 
     }
 
     public void refresh(ArrayList<Station> stations) {
         this.rowList = stations;
         this.notifyDataSetChanged();
+    }
+
+    static class ViewHolder {
+        TextView crsCode;
+        TextView name;
+        TextView distance;
     }
 
 }
