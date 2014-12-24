@@ -196,7 +196,7 @@ public class JourneyLegActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (journeyLeg.getObjectId() != null) {
+        if (journeyLeg != null) {
             getMenuInflater().inflate(R.menu.journey_leg, menu);
         }
         return true;
