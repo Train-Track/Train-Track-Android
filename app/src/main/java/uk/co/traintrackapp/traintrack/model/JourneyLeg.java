@@ -116,8 +116,8 @@ public class JourneyLeg extends ParseObject {
      */
     @Override
     public String toString() {
-        return this.getDepartureStation().toString() + " to "
-                + this.getArrivalStation().toString();
+        return this.getDepartureStation() + " to "
+                + this.getArrivalStation();
     }
 
     /**

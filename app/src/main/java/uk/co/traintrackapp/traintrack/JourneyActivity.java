@@ -66,8 +66,7 @@ public class JourneyActivity extends ActionBarActivity {
                     Utils.log(e.getMessage());
                 } else {
                     journey = result;
-                    name.setText(journey.getOrigin().toString() + " to "
-                            + journey.getDestination().toString());
+                    name.setText(journey.toString());
                     journeyLegs.addAll(journey.getJourneyLegs());
                     adapter.notifyDataSetChanged();
                 }
