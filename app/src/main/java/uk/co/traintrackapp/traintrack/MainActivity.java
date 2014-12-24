@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 
+import uk.co.traintrackapp.traintrack.fragment.AccountFragment;
 import uk.co.traintrackapp.traintrack.fragment.DashboardFragment;
 
 import uk.co.traintrackapp.traintrack.fragment.JourneysFragment;
@@ -38,6 +39,10 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
+            case -1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, AccountFragment.newInstance()).commit();
+                break;
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, DashboardFragment.newInstance()).commit();
