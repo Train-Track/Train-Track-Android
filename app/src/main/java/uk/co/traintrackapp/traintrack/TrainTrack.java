@@ -9,6 +9,8 @@ import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
+
 import uk.co.traintrackapp.traintrack.model.Image;
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
@@ -17,6 +19,16 @@ import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class TrainTrack extends Application {
+
+    private ArrayList<Station> stations;
+
+    public ArrayList<Station> getStations() {
+        return stations;
+    }
+
+    public void setStations(ArrayList<Station> stations) {
+        this.stations = stations;
+    }
 
     public void onCreate() {
         super.onCreate();
@@ -39,6 +51,7 @@ public class TrainTrack extends Application {
             }
         });
         ParseUser.enableAutomaticUser();
+        setStations(new ArrayList<Station>());
     }
 
 }
