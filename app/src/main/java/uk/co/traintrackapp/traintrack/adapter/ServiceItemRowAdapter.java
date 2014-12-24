@@ -98,9 +98,9 @@ public class ServiceItemRowAdapter extends BaseAdapter {
         if (serviceItem.startsHere()) {
             holder.origin.setText("Starts Here");
         } else {
-            holder.origin.setText(serviceItem.getOriginName());
+            holder.origin.setText("From " + serviceItem.getOriginName());
         }
-        holder.origin.setText("From " + holder.origin.getText() + " - "
+        holder.origin.setText(holder.origin.getText() + " - "
                 + serviceItem.getOperatorName());
         holder.platform.setText(serviceItem.getPlatform());
 
