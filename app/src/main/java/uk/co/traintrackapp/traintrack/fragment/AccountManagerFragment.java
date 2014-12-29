@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 import uk.co.traintrackapp.traintrack.R;
 
 
-public class AccountFragment extends Fragment {
+public class AccountManagerFragment extends Fragment {
 
-    public static AccountFragment newInstance() {
-        return new AccountFragment();
+    public static AccountManagerFragment newInstance() {
+        return new AccountManagerFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_account, container, false);
+        View v = inflater.inflate(R.layout.fragment_account_manager, container, false);
 
         return v;
     }

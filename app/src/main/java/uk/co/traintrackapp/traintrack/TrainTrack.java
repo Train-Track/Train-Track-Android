@@ -2,6 +2,7 @@ package uk.co.traintrackapp.traintrack;
 
 import android.app.Application;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -21,6 +22,7 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class TrainTrack extends Application {
 
     private ArrayList<Station> stations;
+    public GoogleApiClient googleApiClient;
 
     public ArrayList<Station> getStations() {
         return stations;

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="achievement_first_journey">CgkI3tvxjcUJEAIQAQ</string>
+    <string name="achievement_train_spotter">CgkI3tvxjcUJEAIQAg</string>
+    <string name="achievement_commuter">CgkI3tvxjcUJEAIQAw</string>
+    <string name="achievement_conductor">CgkI3tvxjcUJEAIQBA</string>
+    <string name="achievement_driver">CgkI3tvxjcUJEAIQBQ</string>
+    <string name="leaderboard_score">CgkI3tvxjcUJEAIQBg</string>
+</resources>
