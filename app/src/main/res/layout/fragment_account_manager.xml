@@ -11,10 +11,11 @@
         android:padding="40dp">
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/username"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/name" />
+            android:hint="@string/username"
+            android:inputType="textNoSuggestions" />
 
         <EditText
             android:id="@+id/email"
@@ -33,24 +34,36 @@
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/save"
+            android:id="@+id/update"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Save" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="googleSignIn" />
+            android:text="@string/update"
+            android:visibility="gone" />
 
         <Button
-            android:id="@+id/sign_out_button"
+            android:id="@+id/logout"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Sign Out"
-            android:onClick="googleSignOut" />
+            android:text="@string/logout"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/login"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/signup"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signup"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

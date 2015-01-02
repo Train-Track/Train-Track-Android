@@ -22,21 +22,38 @@ public class Badge extends ParseObject {
     }
 
     /**
+     * @return the image
+     */
+    public Image getImage() {
+        return (Image) getParseObject("image");
+    }
+
+    /**
+     * @return the ID of the badge on Google Play
+     */
+    public String getGoogleAchievementId() {
+        return getString("googleAchievementId");
+    }
+
+    /**
      * @return the title
      */
     public String toString() {
         return getName();
     }
 
-    // adds a badge for current user
+    /**
+     * @param badge           the badge to add
+     * @param googleApiClient the google api to use for games
+     */
     public static void addBadgeForCurrentUser(Badge badge, GoogleApiClient googleApiClient) {
         UserBadge userBadge = new UserBadge();
-        userBadge.put("badge", "I37qAX0WNr");
+        userBadge.put("badge", badge);
         userBadge.setUser(ParseUser.getCurrentUser());
         userBadge.saveEventually();
         if (googleApiClient.isConnected()) {
             Utils.log("Unlocking google achievement");
-            Games.Achievements.unlock(googleApiClient, "CgkI3tvxjcUJEAIQAQ");
+            Games.Achievements.unlock(googleApiClient, badge.getGoogleAchievementId());
         }
     }
 

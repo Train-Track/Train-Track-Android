@@ -35,12 +35,13 @@
     <string name="share_public_summary">Everyone can see your journeys in the app and on the website</string>
     <string name="view_bus_services">View Bus Services</string>
     <string name="view_bus_services_summary">See bus services where available</string>
-    <string name="save">Save</string>
+    <string name="update">Update</string>
     <string name="platform">Platform</string>
     <string name="departure">Departure</string>
     <string name="arrival">Arrival</string>
     <string name="nearby">Nearby</string>
     <string name="refresh">Refresh</string>
+    <string name="save">Save</string>
     <string name="map">Map</string>
     <string name="favourites">Favourites</string>
     <string name="a_z">A-Z</string>
@@ -51,8 +52,11 @@
     <string name="linked_accounts">Linked Accounts</string>
     <string name="disconnect_google">Disconnect Google Account</string>
     <string name="disconnect_fb">Disconnect Facebook Account</string>
-    <string name="name">Full Name</string>
+    <string name="username">Username</string>
     <string name="email">Email Address</string>
     <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="signup">Sign Up</string>
 
 </resources>
