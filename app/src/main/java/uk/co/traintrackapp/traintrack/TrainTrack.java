@@ -12,11 +12,13 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 
+import uk.co.traintrackapp.traintrack.model.Badge;
 import uk.co.traintrackapp.traintrack.model.Image;
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
 import uk.co.traintrackapp.traintrack.model.Operator;
 import uk.co.traintrackapp.traintrack.model.Station;
+import uk.co.traintrackapp.traintrack.model.UserBadge;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class TrainTrack extends Application {
@@ -39,6 +41,8 @@ public class TrainTrack extends Application {
         ParseObject.registerSubclass(Journey.class);
         ParseObject.registerSubclass(JourneyLeg.class);
         ParseObject.registerSubclass(Image.class);
+        ParseObject.registerSubclass(Badge.class);
+        ParseObject.registerSubclass(UserBadge.class);
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "rvI3JMtQbb3saBrKk5blfeTGdc1uCVs3ueVqwGq2",
                 "3uYi6iO1mE1KMfVm6mqXjHq43Ov9iPmi1u9Htk4q");
