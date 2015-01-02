@@ -1,0 +1,139 @@
+package uk.co.traintrackapp.traintrack.model;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
+@ParseClassName("JourneyLeg")
+public class JourneyLeg extends ParseObject {
+
+    public JourneyLeg() {
+    }
+
+    /**
+     * @return the departure station
+     */
+    public Station getDepartureStation() {
+        return (Station) get("departureStation");
+    }
+
+    /**
+     * @param departureStation
+     *            the departure station
+     */
+    public void setDepartureStation(Station departureStation) {
+        put("departureStation", departureStation);
+    }
+
+    /**
+     * @return the departure platform
+     */
+    public String getDeparturePlatform() {
+        return getString("departurePlatform");
+    }
+
+    /**
+     * @param departurePlatform
+     *            the departure platform
+     */
+    public void setDeparturePlatform(String departurePlatform) {
+        put("departurePlatform", departurePlatform);
+    }
+
+    /**
+     * @return the departure time
+     */
+    public Date getDepartureTime() {
+        return getDate("departureTime");
+    }
+
+    /**
+     * @param departureTime
+     *            the departure time
+     */
+    public void setDepartureTime(Date departureTime) {
+        put("departureTime", departureTime);
+    }
+
+    /**
+     * @return the arrival station
+     */
+    public Station getArrivalStation() {
+        return (Station) get("arrivalStation");
+    }
+
+    /**
+     * @param arrivalStation
+     *            the arrival station
+     */
+    public void setArrivalStation(Station arrivalStation) {
+        put("arrivalStation", arrivalStation);
+    }
+
+    /**
+     * @return the arrival platform
+     */
+    public String getArrivalPlatform() {
+        return getString("arrivalPlatform");
+    }
+
+    /**
+     * @param arrivalPlatform
+     *            the departure platform
+     */
+    public void setArrivalPlatform(String arrivalPlatform) {
+        put("arrivalPlatform", arrivalPlatform);
+    }
+
+    /**
+     * @return the arrival time
+     */
+    public Date getArrivalTime() {
+        return getDate("arrivalTime");
+    }
+
+    /**
+     * @param arrivalTime
+     *            the arrival time
+     */
+    public void setArrivalTime(Date arrivalTime) {
+        put("arrivalTime", arrivalTime);
+    }
+
+    /**
+     * @param journey
+     *            the journey this leg is a part of
+     */
+    public void setJourney(Journey journey) {
+        put("journey", journey);
+    }
+
+    /**
+     * @return the name
+     */
+    @Override
+    public String toString() {
+        return this.getDepartureStation() + " to "
+                + this.getArrivalStation();
+    }
+
+    /**
+     * @return the departure time as hh:mm
+     */
+    public String getDepartureTimeAsString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
+        return dateFormat.format(getDepartureTime());
+    }
+
+    /**
+     * @return the arrival time as hh:mm
+     */
+    public String getArrivalTimeAsString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
+        return dateFormat.format(getArrivalTime());
+    }
+
+}

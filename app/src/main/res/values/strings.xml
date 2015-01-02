@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Train Track</string>
+    <string name="title_dashboard_fragment">Dashboard</string>
+    <string name="title_stations_fragment">Stations</string>
+    <string name="title_journeys_fragment">Your Journeys</string>
+    <string name="title_settings_fragment">Settings</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_new_journey">New Journey</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_az">A-Z</string>
+    <string name="button_nearby">Nearby</string>
+    <string name="button_favourites">Favourites</string>
+    <string name="button_map">Map</string>
+    <string name="facebook_app_id">272514462916508</string>
+    <string name="games_app_id">327788817886</string>
+    <string name="maps_api_key">AIzaSyB8SQsCL1wxIFEKATDk37hFb_eKzqLgatQ</string>
+    <string name="delete_journey">Delete Journey</string>
+    <string name="delete_journey_leg">Delete Journey Leg</string>
+    <string name="settings">Settings</string>
+    <string name="title_section1">Stations</string>
+    <string name="title_section2">Journeys</string>
+    <string name="title_section3">Friends</string>
+    <string name="find_a_station">Find a station</string>
+    <string name="find_a_friend">Find a friend</string>
+    <string name="add_journey">+ Add Journey</string>
+    <string name="add_journey_leg">+ Add Journey Leg</string>
+    <string name="favourite">+ Favourite</string>
+    <string name="connect_facebook">Connect to Facebook</string>
+    <string name="share_facebook">Share to Facebook</string>
+    <string name="share_facebook_summary">Automatically post a story on your news feed for your friends</string>
+    <string name="share_public">Share with Public</string>
+    <string name="share_public_summary">Everyone can see your journeys in the app and on the website</string>
+    <string name="view_bus_services">View Bus Services</string>
+    <string name="view_bus_services_summary">See bus services where available</string>
+    <string name="save">Save</string>
+    <string name="platform">Platform</string>
+    <string name="departure">Departure</string>
+    <string name="arrival">Arrival</string>
+    <string name="nearby">Nearby</string>
+    <string name="refresh">Refresh</string>
+    <string name="map">Map</string>
+    <string name="favourites">Favourites</string>
+    <string name="a_z">A-Z</string>
+    <string name="sign_in_failed">Failed to sign in. Please check your network connection and try again.</string>
+    <string name="app_misconfigured">The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.</string>
+    <string name="license_failed">License check failed.</string>
+    <string name="unknown_error">Unknown error.</string>
+    <string name="linked_accounts">Linked Accounts</string>
+    <string name="disconnect_google">Disconnect Google Account</string>
+    <string name="disconnect_fb">Disconnect Facebook Account</string>
+    <string name="name">Full Name</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+
+</resources>

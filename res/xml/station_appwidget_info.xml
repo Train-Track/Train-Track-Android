@@ -1,9 +1,0 @@
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="dyl.anjon.es.traintrack.StationAppWidgetConfigure"
-    android:initialLayout="@layout/appwidget_station"
-    android:minHeight="80dp"
-    android:minWidth="80dp"
-    android:previewImage="@drawable/ic_launcher"
-    android:updatePeriodMillis="86400000" >
-
-</appwidget-provider>
