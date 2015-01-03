@@ -36,7 +36,7 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class StationsFragment extends Fragment {
 
     private Location gps;
-    private FindCallback<Station> findStationCallback;
+    private FindCallback<Station> findStationsCallback;
     private ArrayList<Station> stations;
     private ListView list;
     private StationRowAdapter adapter;
@@ -68,7 +68,7 @@ public class StationsFragment extends Fragment {
             }
         });
 
-        findStationCallback = new FindCallback<Station>() {
+        findStationsCallback = new FindCallback<Station>() {
             @Override
             public void done(List<Station> results, ParseException e) {
                 if ((e == null) && (results.size() > 0)) {
@@ -76,14 +76,14 @@ public class StationsFragment extends Fragment {
                     app.setStations(stations);
                     adapter.refresh(stations);
                     list.setSelection(0);
-                    Station.pinAllInBackground(results);
+                    Station.pinAllInBackground("Stations", results);
                     Utils.log("Got stations.");
                 } else if (e == null) {
                     ParseQuery<Station> q = ParseQuery.getQuery(Station.class);
                     q.orderByAscending("name");
                     q.setLimit(1000);
                     Utils.log("Getting stations from online data store...");
-                    q.findInBackground(findStationCallback);
+                    q.findInBackground(findStationsCallback);
                 } else {
                     Utils.log(e.getMessage());
                 }
@@ -189,7 +189,7 @@ public class StationsFragment extends Fragment {
             q.setLimit(1000);
             q.fromLocalDatastore();
             Utils.log("Getting stations...");
-            q.findInBackground(findStationCallback);
+            q.findInBackground(findStationsCallback);
         } else {
             adapter.refresh(stations);
             list.setSelection(0);

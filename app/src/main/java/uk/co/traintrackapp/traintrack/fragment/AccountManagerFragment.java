@@ -7,11 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.parse.FindCallback;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -19,7 +21,6 @@ import com.parse.SignUpCallback;
 import java.util.List;
 
 import uk.co.traintrackapp.traintrack.R;
-import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.model.Badge;
 import uk.co.traintrackapp.traintrack.model.UserBadge;
 import uk.co.traintrackapp.traintrack.utils.Utils;
@@ -35,7 +36,6 @@ public class AccountManagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_account_manager, container, false);
-        TrainTrack app = (TrainTrack) getActivity().getApplication();
         final ParseUser user = ParseUser.getCurrentUser();
 
         final EditText username = (EditText) v.findViewById(R.id.username);
@@ -66,12 +66,23 @@ public class AccountManagerFragment extends Fragment {
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            Utils.log("USER SIGNED UP SUCCESSFULLY");
+                            Toast.makeText(getActivity(), "Hello!", Toast.LENGTH_LONG).show();
                         } else {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                             Utils.log("User Sign Up: " + e.getMessage());
                         }
                     }
                 });
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                ParseObject.unpinAllInBackground("Journeys");
+                ParseObject.unpinAllInBackground("JourneyLegs");
+                //TODO: Close and reopen the app
             }
         });
 

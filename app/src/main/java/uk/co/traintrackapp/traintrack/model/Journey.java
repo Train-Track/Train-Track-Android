@@ -72,7 +72,7 @@ public class Journey extends ParseObject {
             }
             List<JourneyLeg> results = query.find();
             journeyLegs.addAll(results);
-            JourneyLeg.pinAllInBackground(results);
+            JourneyLeg.pinAllInBackground("JourneyLegs", results);
         } catch (ParseException e) {
             Utils.log(e.getMessage());
         }
