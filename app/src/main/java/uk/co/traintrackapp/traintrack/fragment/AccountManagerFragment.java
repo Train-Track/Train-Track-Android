@@ -18,10 +18,13 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.traintrackapp.traintrack.R;
+import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.model.Badge;
+import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.UserBadge;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
@@ -36,6 +39,7 @@ public class AccountManagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_account_manager, container, false);
+        final TrainTrack app = (TrainTrack) getActivity().getApplication();
         final ParseUser user = ParseUser.getCurrentUser();
 
         final EditText username = (EditText) v.findViewById(R.id.username);
@@ -82,7 +86,8 @@ public class AccountManagerFragment extends Fragment {
                 ParseUser.logOut();
                 ParseObject.unpinAllInBackground("Journeys");
                 ParseObject.unpinAllInBackground("JourneyLegs");
-                //TODO: Close and reopen the app
+                app.setJourneys(new ArrayList<Journey>());
+                //TODO: Close and reopen the app?
             }
         });
 

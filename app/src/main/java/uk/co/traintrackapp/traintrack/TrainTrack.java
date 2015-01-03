@@ -24,14 +24,21 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class TrainTrack extends Application {
 
     private ArrayList<Station> stations;
+    private ArrayList<Journey> journeys;
     public GoogleApiClient googleApiClient;
 
-    public ArrayList<Station> getStations() {
-        return stations;
-    }
+    public ArrayList<Station> getStations() {  return stations; }
 
     public void setStations(ArrayList<Station> stations) {
         this.stations = stations;
+    }
+
+    public ArrayList<Journey> getJourneys() {
+        return journeys;
+    }
+
+    public void setJourneys(ArrayList<Journey> journeys) {
+        this.journeys = journeys;
     }
 
     public void onCreate() {
@@ -58,6 +65,7 @@ public class TrainTrack extends Application {
         });
         ParseUser.enableAutomaticUser();
         setStations(new ArrayList<Station>());
+        setJourneys(new ArrayList<Journey>());
     }
 
 }

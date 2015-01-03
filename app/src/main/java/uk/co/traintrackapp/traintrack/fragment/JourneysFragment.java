@@ -18,6 +18,7 @@ import java.util.List;
 
 import uk.co.traintrackapp.traintrack.JourneyActivity;
 import uk.co.traintrackapp.traintrack.R;
+import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.adapter.JourneyRowAdapter;
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.utils.Utils;
@@ -38,7 +39,8 @@ public class JourneysFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_journeys, container,
                 false);
-        journeys = new ArrayList<>();
+        final TrainTrack app = (TrainTrack) getActivity().getApplication();
+        journeys = app.getJourneys();
         list = (ListView) rootView.findViewById(R.id.list);
         adapter = new JourneyRowAdapter(journeys, getActivity());
         list.setAdapter(adapter);
@@ -58,6 +60,7 @@ public class JourneysFragment extends Fragment {
             public void done(List<Journey> results, ParseException e) {
                 if ((e == null) && (results.size() > 0)) {
                     journeys.addAll(results);
+                    app.setJourneys(journeys);
                     adapter.refresh(journeys);
                     list.setSelection(0);
                     Journey.pinAllInBackground("Journeys", results);
