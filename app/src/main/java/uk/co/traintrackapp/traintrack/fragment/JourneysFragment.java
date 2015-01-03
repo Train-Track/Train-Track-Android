@@ -24,7 +24,7 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class JourneysFragment extends Fragment {
 
-    private FindCallback<Journey> findJourneyCallback;
+    private FindCallback<Journey> findJourneysCallback;
     private ArrayList<Journey> journeys;
     private ListView list;
     private JourneyRowAdapter adapter;
@@ -53,20 +53,20 @@ public class JourneysFragment extends Fragment {
             }
         });
 
-        findJourneyCallback = new FindCallback<Journey>() {
+        findJourneysCallback = new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> results, ParseException e) {
                 if ((e == null) && (results.size() > 0)) {
                     journeys.addAll(results);
                     adapter.refresh(journeys);
                     list.setSelection(0);
-                    Journey.pinAllInBackground(results);
+                    Journey.pinAllInBackground("Journeys", results);
                     Utils.log("Got journeys.");
                 } else if (e == null) {
                     ParseQuery<Journey> q = ParseQuery.getQuery(Journey.class);
                     q.setLimit(1000);
                     Utils.log("Getting journeys from online data store...");
-                    q.findInBackground(findJourneyCallback);
+                    q.findInBackground(findJourneysCallback);
                 } else {
                     Utils.log(e.getMessage());
                 }
@@ -84,7 +84,7 @@ public class JourneysFragment extends Fragment {
             q.setLimit(1000);
             q.fromLocalDatastore();
             Utils.log("Getting journeys...");
-            q.findInBackground(findJourneyCallback);
+            q.findInBackground(findJourneysCallback);
         } else {
             adapter.refresh(journeys);
             list.setSelection(0);
