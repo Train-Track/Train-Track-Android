@@ -1,6 +1,7 @@
 package uk.co.traintrackapp.traintrack;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -19,15 +20,13 @@ import uk.co.traintrackapp.traintrack.fragment.StationsFragment;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    private CharSequence mTitle;
-    private TrainTrack app;
+    private CharSequence title;
+    private Fragment newFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        app = (TrainTrack) getApplication();
 
         NavigationDrawerFragment navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -35,43 +34,48 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout)
         );
-        mTitle = getString(R.string.app_name);
+        title = getString(R.string.app_name);
+        newFragment = DashboardFragment.newInstance();
         restoreActionBar();
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
             case -1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, AccountManagerFragment.newInstance()).commit();
+                newFragment = AccountManagerFragment.newInstance();
                 break;
             case 0:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, DashboardFragment.newInstance()).commit();
+                newFragment = DashboardFragment.newInstance();
                 break;
             case 1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, StationsFragment.newInstance()).commit();
+                newFragment = StationsFragment.newInstance();
                 break;
             case 2:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, JourneysFragment.newInstance()).commit();
+                newFragment = JourneysFragment.newInstance();
                 break;
             case 3:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, SettingsFragment.newInstance()).commit();
+                newFragment = SettingsFragment.newInstance();
                 break;
         }
         restoreActionBar();
+    }
+
+    @Override
+    public void onNavigationDrawerClosed() {
+        if (newFragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, newFragment).commit();
+           newFragment = null;
+        }
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(mTitle);
+        actionBar.setTitle(title);
     }
 
     @Override
