@@ -70,11 +70,18 @@ public class CallingPointRowAdapter extends BaseAdapter {
         if (callingPoint.getStationCrs().equals(this.stationCrs)) {
             holder.station.setTextColor(Utils.BLUE);
             convertView.setEnabled(false);
+        } else if (callingPoint.hasArrived()) {
+            holder.station.setTextColor(Color.GRAY);
+            convertView.setEnabled(false);
         } else {
             holder.station.setTextColor(Color.BLACK);
             convertView.setEnabled(true);
         }
-        holder.time.setText(callingPoint.getEstimatedTime());
+        if (callingPoint.hasArrived()) {
+            holder.time.setText(callingPoint.getActualTime());
+        } else {
+            holder.time.setText(callingPoint.getEstimatedTime());
+        }
 
         return convertView;
     }
