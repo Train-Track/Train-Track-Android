@@ -34,29 +34,21 @@ public class Operator extends ParseObject {
         return getString("delay_repay_url");
     }
 
+
+    /**
+     * @return the twitter handle
+     */
+    public String getTwitter() {
+        return getString("twitter");
+    }
+
+
     /**
      * @return the name
      */
     @Override
     public String toString() {
         return this.getName();
-    }
-
-    /**
-     * @param code the 2 letter operator code
-     * @return the operator selected
-     */
-    public static Operator getByCode(String code) {
-        ParseQuery<Operator> query = ParseQuery.getQuery(Operator.class);
-        query.fromLocalDatastore();
-        query.whereEqualTo("code", code);
-        Operator operator = null;
-        try {
-            operator = query.getFirst();
-        } catch (ParseException e) {
-            Utils.log(e.getMessage());
-        }
-        return operator;
     }
 
 }
