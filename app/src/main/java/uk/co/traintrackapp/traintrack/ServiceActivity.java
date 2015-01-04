@@ -17,9 +17,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
 import uk.co.traintrackapp.traintrack.adapter.CallingPointRowAdapter;
 import uk.co.traintrackapp.traintrack.api.CallingPoint;
 import uk.co.traintrackapp.traintrack.api.Service;
+import uk.co.traintrackapp.traintrack.model.Operator;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 
@@ -99,6 +104,20 @@ public class ServiceActivity extends ActionBarActivity {
                 return;
             }
 
+        });
+
+        ParseQuery<Operator> query = ParseQuery.getQuery(Operator.class);
+//        query.fromLocalDatastore();
+        query.whereEqualTo("code", operatorCode);
+        query.getFirstInBackground(new GetCallback<Operator>() {
+            @Override
+            public void done(Operator operator, ParseException e) {
+                if (e == null) {
+                    Utils.log(operator.getName());
+                } else {
+                    Utils.log("Getting operator: " + e.getMessage());
+                }
+            }
         });
 
     }
