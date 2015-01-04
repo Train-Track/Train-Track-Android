@@ -58,20 +58,19 @@ public class JourneysFragment extends Fragment {
         findJourneysCallback = new FindCallback<Journey>() {
             @Override
             public void done(List<Journey> results, ParseException e) {
-                if ((e == null) && (results.size() > 0)) {
+                if (e == null) {
                     journeys.addAll(results);
                     app.setJourneys(journeys);
                     adapter.refresh(journeys);
                     list.setSelection(0);
                     Journey.pinAllInBackground("Journeys", results);
                     Utils.log("Got journeys.");
-                } else if (e == null) {
-                    ParseQuery<Journey> q = ParseQuery.getQuery(Journey.class);
-                    q.setLimit(1000);
-                    Utils.log("Getting journeys from online data store...");
-                    q.findInBackground(findJourneysCallback);
+                    //ParseQuery<Journey> q = ParseQuery.getQuery(Journey.class);
+                    //q.setLimit(1000);
+                    //Utils.log("Getting journeys from online data store...");
+                    //q.findInBackground(findJourneysCallback);
                 } else {
-                    Utils.log(e.getMessage());
+                    Utils.log("Getting journeys: " + e.getMessage());
                 }
             }
         };
