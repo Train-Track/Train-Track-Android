@@ -56,4 +56,15 @@ public class StationBoard {
         return trainServices.toString();
     }
 
+    public static StationBoard getByCrs(String crs) {
+        JSONObject json = new JSONObject();
+        String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/stations/" + crs + "/departures");
+        try {
+            json = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+        return new StationBoard(json);
+    }
+
 }

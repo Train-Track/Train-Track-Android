@@ -15,11 +15,13 @@ public class Station {
     private double lat;
     private double lng;
     private double distance;
+    private boolean isFavourite;
 
     public Station() {
     }
 
     public Station(JSONObject json) {
+        this.isFavourite = false;
         try {
             this.id = json.getInt("id");
             this.name = json.getString("name");
@@ -71,15 +73,14 @@ public class Station {
      * @return true if favourite
      */
     public boolean isFavourite() {
-        // TODO Auto-generated method stub
-        return false;
+        return isFavourite || crs.equals("LLO");
     }
 
     /**
-     * @param favourite
+     * @param favourite true or false
      */
     public void setFavourite(boolean favourite) {
-        // TODO Auto-generated method stub
+        this.isFavourite = favourite;
     }
 
     /**

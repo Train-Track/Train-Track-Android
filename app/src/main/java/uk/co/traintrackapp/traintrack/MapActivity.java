@@ -84,7 +84,6 @@ public class MapActivity extends Activity {
             if (s == null) {
                 return;
             }
-            TrainTrack app = (TrainTrack) getApplication();
             ArrayList<CallingPoint> callingPoints = s.getCallingPoints();
             LatLng[] points = new LatLng[callingPoints.size()];
             LatLngBounds.Builder builder = new LatLngBounds.Builder();

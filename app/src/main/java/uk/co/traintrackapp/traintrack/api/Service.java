@@ -1,5 +1,6 @@
 package uk.co.traintrackapp.traintrack.api;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,9 +31,9 @@ public class Service {
     private ArrayList<CallingPoint> callingPoints;
 
     private Service(JSONObject json) {
-        previousCallingPoints = new ArrayList<CallingPoint>();
-        subsequentCallingPoints = new ArrayList<CallingPoint>();
-        callingPoints = new ArrayList<CallingPoint>();
+        previousCallingPoints = new ArrayList<>();
+        subsequentCallingPoints = new ArrayList<>();
+        callingPoints = new ArrayList<>();
 
         try {
             serviceId = json.getString("id");
@@ -49,6 +50,26 @@ public class Service {
             scheduledTimeDeparture = json.getString("std");
             estimatedTimeDeparture = json.getString("etd");
             actualTimeDeparture = json.getString("atd");
+            JSONArray prevArray = json.getJSONArray("previous_calling_points");
+            for (int i = 0; i < prevArray.length(); i++) {
+                CallingPoint cp = new CallingPoint(prevArray.getJSONObject(i));
+                if (i == 0) {
+                    cp.setIcon(CallingPoint.START);
+                } else {
+                    cp.setIcon(CallingPoint.STOP);
+                }
+                previousCallingPoints.add(cp);
+            }
+            JSONArray subsArray = json.getJSONArray("subsequent_calling_points");
+            for (int i = 0; i < subsArray.length(); i++) {
+                CallingPoint cp = new CallingPoint(subsArray.getJSONObject(i));
+                if (i == subsArray.length() -1) {
+                    cp.setIcon(CallingPoint.END);
+                } else {
+                    cp.setIcon(CallingPoint.STOP);
+                }
+                subsequentCallingPoints.add(cp);
+            }
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
@@ -152,4 +173,14 @@ public class Service {
         return callingPoints.toString();
     }
 
+    public static Service getByServiceId(String serviceId) {
+        JSONObject json = new JSONObject();
+        String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/services/" + serviceId);
+        try {
+            json = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+        return new Service(json);
+    }
 }

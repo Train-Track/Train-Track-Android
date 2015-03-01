@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import uk.co.traintrackapp.traintrack.adapter.CallingPointRowAdapter;
 import uk.co.traintrackapp.traintrack.api.CallingPoint;
 import uk.co.traintrackapp.traintrack.api.Service;
-import uk.co.traintrackapp.traintrack.model.Operator;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class ServiceActivity extends ActionBarActivity {
@@ -30,50 +29,32 @@ public class ServiceActivity extends ActionBarActivity {
     private ProgressBar progress;
     private ArrayList<CallingPoint> callingPoints;
     private TextView disruptionReason;
+    private TextView toc;
     private String serviceId;
+    private Service service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
 
-        final TrainTrack app = (TrainTrack) getApplication();
-
         final Intent intent = getIntent();
         serviceId = intent.getStringExtra("service_id");
         new GetServiceRequest().execute(serviceId);
 
         final String journeyId = intent.getStringExtra("journey_id");
-        final String originName = intent.getStringExtra("origin_name");
-        final String stationId = intent.getStringExtra("station_id");
         final String stationCrs = intent.getStringExtra("station_crs");
-        final String stationName = intent.getStringExtra("station_name");
-        final String platform = intent.getStringExtra("platform");
-        final String time = intent.getStringExtra("time");
+        final String originName = intent.getStringExtra("origin_name");
         final String destinationName = intent
                 .getStringExtra("destination_name");
-        final String operatorCode = intent.getStringExtra("operator_code");
-        final String operatorName = intent.getStringExtra("operator_name");
-
-        callingPoints = new ArrayList<>();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(originName + " to " + destinationName);
-        final TextView toc = (TextView) findViewById(R.id.toc);
-        final Operator operator = app.getOperator(operatorCode);
-        toc.setText(operator.getName() + " - @" + operator.getTwitter());
-        toc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tweetUrl = "https://twitter.com/intent/tweet?text=@" + operator.getTwitter();
-                Intent tweet = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
-                startActivity(tweet);
-            }
-        });
 
+        callingPoints = new ArrayList<>();
         progress = (ProgressBar) findViewById(R.id.progress);
         disruptionReason = (TextView) findViewById(R.id.disruption_reason);
-
+        toc = (TextView) findViewById(R.id.toc);
         adapter = new CallingPointRowAdapter(callingPoints, stationCrs, this);
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
@@ -91,20 +72,16 @@ public class ServiceActivity extends ActionBarActivity {
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
                 intent.putExtra("journey_id", journeyId);
-                intent.putExtra("service_id", serviceId);
-                intent.putExtra("departure_station_id", stationId);
-                intent.putExtra("departure_station_crs", stationCrs);
-                intent.putExtra("departure_station_name", stationName);
-                intent.putExtra("departure_time", time);
-                intent.putExtra("departure_platform", platform);
+                intent.putExtra("service_id", service.getServiceId());
+                intent.putExtra("operator_code", service.getOperator().getCode());
+                intent.putExtra("departure_station_crs", service.getStation().getCrsCode());
+                intent.putExtra("departure_platform", service.getPlatform());
                 intent.putExtra("arrival_station_crs",
                         callingPoint.getStation().getCrsCode());
                 intent.putExtra("arrival_station_name",
                         callingPoint.getStation().getName());
                 intent.putExtra("arrival_time", callingPoint.getTime());
                 intent.putExtra("arrival_platform", "");
-                intent.putExtra("operator_code", operatorCode);
-                intent.putExtra("operator_name", operatorName);
                 startActivityForResult(intent, 1);
             }
 
@@ -152,28 +129,31 @@ public class ServiceActivity extends ActionBarActivity {
         @Override
         protected Service doInBackground(String... service) {
             Utils.log("Getting service...");
-            //TODO get service
-            return null;
-            //return Service.getByServiceId(service[0]);
+            return Service.getByServiceId(service[0]);
         }
 
         @Override
         protected void onPostExecute(Service s) {
             super.onPostExecute(s);
-            if (s == null) {
-                return;
-            }
             Utils.log("Got service.");
+            service = s;
             progress.setVisibility(View.GONE);
             callingPoints.clear();
             callingPoints.addAll(s.getCallingPoints());
             adapter.notifyDataSetChanged();
-
+            toc.setText(service.getOperator() + " - @" + service.getOperator().getTwitter());
+            toc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String tweetUrl = "https://twitter.com/intent/tweet?text=@" + service.getOperator().getTwitter();
+                    Intent tweet = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+                    startActivity(tweet);
+                }
+            });
             if (s.getDisruptionReason() != null) {
                 disruptionReason.setText(s.getDisruptionReason());
                 disruptionReason.setVisibility(View.VISIBLE);
             }
-
         }
     }
 

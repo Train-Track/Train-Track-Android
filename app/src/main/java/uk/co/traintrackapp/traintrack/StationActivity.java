@@ -26,7 +26,6 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationActivity extends ActionBarActivity {
 
-    private String stationId;
     private Station station;
     private ServiceItemRowAdapter adapter;
     private ArrayList<ServiceItem> serviceItems;
@@ -58,7 +57,7 @@ public class StationActivity extends ActionBarActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View view, int index,
                                     long x) {
-                ServiceItem serviceItem = (ServiceItem) adapter.getItem(index);
+                ServiceItem serviceItem = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         ServiceActivity.class);
                 intent.putExtra("journey_id", journeyId);
@@ -73,7 +72,6 @@ public class StationActivity extends ActionBarActivity {
                 intent.putExtra("platform", serviceItem.getPlatform());
                 intent.putExtra("time", serviceItem.getTime());
                 startActivityForResult(intent, 1);
-                return;
             }
 
         });
@@ -203,17 +201,12 @@ public class StationActivity extends ActionBarActivity {
         @Override
         protected StationBoard doInBackground(String... crs) {
             Utils.log("Getting station board...");
-            //TODO get board
-            return null;
-            //return StationBoard.getByCrs(crs[0]);
+            return StationBoard.getByCrs(crs[0]);
         }
 
         @Override
         protected void onPostExecute(StationBoard board) {
             super.onPostExecute(board);
-            if (board == null) {
-                return;
-            }
             Utils.log("Got station board.");
             progress.setVisibility(View.GONE);
             serviceItems.clear();
@@ -223,7 +216,7 @@ public class StationActivity extends ActionBarActivity {
             ArrayList<String> nrccMessages = board.getNrccMessages();
             if (nrccMessages.size() > 0) {
                 nrccMessage.setVisibility(View.VISIBLE);
-                nrccMessage.setText(nrccMessages.get(0).toString());
+                nrccMessage.setText(nrccMessages.get(0));
             }
 
         }
