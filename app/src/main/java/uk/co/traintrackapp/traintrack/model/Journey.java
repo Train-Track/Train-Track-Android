@@ -1,43 +1,48 @@
 package uk.co.traintrackapp.traintrack.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.parse.ParseClassName;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
+public class Journey {
 
-@ParseClassName("Journey")
-public class Journey extends ParseObject {
+    private int id;
+    private ArrayList<JourneyLeg> journeyLegs;
 
     public Journey() {
+        id = 0;
+        journeyLegs = new ArrayList<>();
+    }
+
+    public Journey (JSONObject json) {
+        journeyLegs = new ArrayList<>();
+        try {
+            id = json.getInt("id");
+            JSONArray legs = json.getJSONArray("journey_legs");
+            for (int i = 0; i < legs.length(); i++) {
+                journeyLegs.add(new JourneyLeg(legs.getJSONObject(i)));
+            }
+        }
+        catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
     }
 
     /**
-     * @return the user
+     * @return the id
      */
-    public ParseUser getUser() {
-        return getParseUser("user");
-    }
-
-    /**
-     * @param user
-     *            the person who did the journey
-     */
-    public void setUser(ParseUser user) {
-        put("user", user);
+    public int getId() {
+        return id;
     }
 
     /**
      * @return the origin
      */
     public Station getOrigin() {
-        ArrayList<JourneyLeg> journeyLegs = getJourneyLegs();
         if (journeyLegs.size() > 0) {
             return journeyLegs.get(0).getDepartureStation();
         } else {
@@ -49,7 +54,6 @@ public class Journey extends ParseObject {
      * @return the destination
      */
     public Station getDestination() {
-        ArrayList<JourneyLeg> journeyLegs = getJourneyLegs();
         if (journeyLegs.size() > 0) {
             return journeyLegs.get(journeyLegs.size() - 1).getArrivalStation();
         } else {
@@ -61,22 +65,14 @@ public class Journey extends ParseObject {
      * @return an array list of legs
      */
     public ArrayList<JourneyLeg> getJourneyLegs() {
-        ArrayList<JourneyLeg> journeyLegs = new ArrayList<>();
-        ParseQuery<JourneyLeg> query = ParseQuery.getQuery(JourneyLeg.class);
-        query.whereEqualTo("journey", this);
-        query.fromLocalDatastore();
-        try {
-            if (query.count() == 0) {
-                query = ParseQuery.getQuery(JourneyLeg.class);
-                query.whereEqualTo("journey", this);
-            }
-            List<JourneyLeg> results = query.find();
-            journeyLegs.addAll(results);
-            JourneyLeg.pinAllInBackground("JourneyLegs", results);
-        } catch (ParseException e) {
-            Utils.log(e.getMessage());
-        }
         return journeyLegs;
+    }
+
+    /**
+     * @param journeyLeg the leg to add to the journey
+     */
+    public void addJourneyLeg(JourneyLeg journeyLeg) {
+        journeyLegs.add(journeyLeg);
     }
 
     /**

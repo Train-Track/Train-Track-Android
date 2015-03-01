@@ -28,10 +28,10 @@ import android.util.Log;
 
 public class Utils {
 
+    public static boolean DEBUG_MODE = false;
     public static int BLUE = Color.parseColor("#33b5e5");
-    public static boolean DEBUG_MODE = true;
     public static String API_URL = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb5.asmx";
-    public static String ACCESS_TOKEN = "";
+    public static String ACCESS_TOKEN = "6f7fb689-d471-49e4-9978-128c5f9ed887";
     public static String SOAP_START = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:com=\"http://thalesgroup.com/RTTI/2010-11-01/ldb/commontypes\" xmlns:typ=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\">";
     public static String SOAP_HEADER = "<soapenv:Header><com:AccessToken><com:TokenValue>"
             + ACCESS_TOKEN

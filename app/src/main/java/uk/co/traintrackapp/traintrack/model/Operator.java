@@ -1,54 +1,76 @@
 package uk.co.traintrackapp.traintrack.model;
 
-import com.parse.ParseClassName;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-@ParseClassName("Operator")
-public class Operator extends ParseObject {
+public class Operator {
+
+    private int id;
+    private String name;
+    private String code;
+    private String twitter;
+    private String delayRepayUrl;
+    private String numericCode;
 
     public Operator() {
     }
 
-    /**
-     * @return the code
-     */
-    public String getCode() {
-        return getString("code");
+    public Operator(JSONObject json) {
+        try {
+            this.id = json.getInt("id");
+            this.name = json.getString("name");
+            this.code = json.getString("code");
+            this.twitter = json.getString("twitter");
+            this.delayRepayUrl = json.getString("delay_repay_url");
+            this.numericCode = json.getString("numeric_code");
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
     }
 
     /**
      * @return the name
      */
     public String getName() {
-        return getString("name");
+        return name;
+    }
+
+    /**
+     * @return the code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * @return the twitter handle
+     */
+    public String getTwitter() {
+        return twitter;
     }
 
     /**
      * @return the delayRepayUrl
      */
     public String getDelayRepayUrl() {
-        return getString("delay_repay_url");
+        return delayRepayUrl;
     }
-
 
     /**
-     * @return the twitter handle
+     * @return the nmeric code
      */
-    public String getTwitter() {
-        return getString("twitter");
+    public String getNumericCode() {
+        return numericCode;
     }
-
 
     /**
      * @return the name
      */
     @Override
     public String toString() {
-        return this.getName();
+        return getName();
     }
 
 }

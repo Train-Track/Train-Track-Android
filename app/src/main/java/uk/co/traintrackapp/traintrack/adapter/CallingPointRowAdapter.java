@@ -66,8 +66,8 @@ public class CallingPointRowAdapter extends BaseAdapter {
         holder.icon.setBackgroundDrawable(context.getResources().getDrawable(
                 callingPoint.getIcon()));
         holder.scheduledTime.setText(callingPoint.getScheduledTime());
-        holder.station.setText(callingPoint.getStationName());
-        if (callingPoint.getStationCrs().equals(this.stationCrs)) {
+        holder.station.setText(callingPoint.getStation().toString());
+        if (callingPoint.getStation().getCrsCode().equals(this.stationCrs)) {
             holder.station.setTextColor(Utils.BLUE);
             convertView.setEnabled(false);
         } else if (callingPoint.hasArrived()) {

@@ -1,23 +1,66 @@
 package uk.co.traintrackapp.traintrack.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
-@ParseClassName("JourneyLeg")
-public class JourneyLeg extends ParseObject {
+public class JourneyLeg {
+
+    private int id;
+    private int journeyId;
+    private Date scheduledDeparture;
+    private Date scheduledArrival;
+    private Date actualDeparture;
+    private Date actualArrival;
+    private String departurePlatform;
+    private String arrivalPlatform;
+    private Operator operator;
+    private Station origin;
+    private Station destination;
 
     public JourneyLeg() {
+        id = 0;
+    }
+
+    public JourneyLeg(JSONObject json) {
+        try {
+            id = json.getInt("id");
+            journeyId = json.getInt("journey_id");
+            //TODO format dates
+            String schDep = json.getString("scheduled_departure");
+            String schArr = json.getString("scheduled_arrival");
+            String actualDep = json.getString("actual_departure");
+            String actualArr = json.getString("actual_arrival");
+            String departurePlatform = json.getString("departure_platform");
+            String arrivalPlatform = json.getString("arrival_platform");
+            operator = new Operator(json.getJSONObject("operator"));
+            origin = new Station(json.getJSONObject("origin"));
+            destination = new Station(json.getJSONObject("destination"));
+
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Operator getOperator() {
+        return operator;
     }
 
     /**
      * @return the departure station
      */
     public Station getDepartureStation() {
-        return (Station) get("departureStation");
+        return origin;
     }
 
     /**
@@ -25,14 +68,14 @@ public class JourneyLeg extends ParseObject {
      *            the departure station
      */
     public void setDepartureStation(Station departureStation) {
-        put("departureStation", departureStation);
+        this.origin =  departureStation;
     }
 
     /**
      * @return the departure platform
      */
     public String getDeparturePlatform() {
-        return getString("departurePlatform");
+        return departurePlatform;
     }
 
     /**
@@ -40,14 +83,14 @@ public class JourneyLeg extends ParseObject {
      *            the departure platform
      */
     public void setDeparturePlatform(String departurePlatform) {
-        put("departurePlatform", departurePlatform);
+        this.departurePlatform = departurePlatform;
     }
 
     /**
      * @return the departure time
      */
     public Date getDepartureTime() {
-        return getDate("departureTime");
+        return scheduledDeparture;
     }
 
     /**
@@ -55,14 +98,14 @@ public class JourneyLeg extends ParseObject {
      *            the departure time
      */
     public void setDepartureTime(Date departureTime) {
-        put("departureTime", departureTime);
+        this.scheduledDeparture = departureTime;
     }
 
     /**
      * @return the arrival station
      */
     public Station getArrivalStation() {
-        return (Station) get("arrivalStation");
+        return destination;
     }
 
     /**
@@ -70,14 +113,14 @@ public class JourneyLeg extends ParseObject {
      *            the arrival station
      */
     public void setArrivalStation(Station arrivalStation) {
-        put("arrivalStation", arrivalStation);
+        this.destination = arrivalStation;
     }
 
     /**
      * @return the arrival platform
      */
     public String getArrivalPlatform() {
-        return getString("arrivalPlatform");
+        return arrivalPlatform;
     }
 
     /**
@@ -85,14 +128,14 @@ public class JourneyLeg extends ParseObject {
      *            the departure platform
      */
     public void setArrivalPlatform(String arrivalPlatform) {
-        put("arrivalPlatform", arrivalPlatform);
+        this.arrivalPlatform = arrivalPlatform;
     }
 
     /**
      * @return the arrival time
      */
     public Date getArrivalTime() {
-        return getDate("arrivalTime");
+        return scheduledArrival;
     }
 
     /**
@@ -100,15 +143,7 @@ public class JourneyLeg extends ParseObject {
      *            the arrival time
      */
     public void setArrivalTime(Date arrivalTime) {
-        put("arrivalTime", arrivalTime);
-    }
-
-    /**
-     * @param journey
-     *            the journey this leg is a part of
-     */
-    public void setJourney(Journey journey) {
-        put("journey", journey);
+        this.scheduledArrival = arrivalTime;
     }
 
     /**

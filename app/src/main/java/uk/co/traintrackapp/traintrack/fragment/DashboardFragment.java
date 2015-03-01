@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import uk.co.traintrackapp.traintrack.R;
+import uk.co.traintrackapp.traintrack.TrainTrack;
 
 
 public class DashboardFragment extends Fragment {
@@ -19,6 +20,7 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        final TrainTrack app = (TrainTrack) getActivity().getApplication();
 
         return v;
     }

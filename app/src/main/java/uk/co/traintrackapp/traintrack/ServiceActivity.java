@@ -1,9 +1,8 @@
 package uk.co.traintrackapp.traintrack;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -17,9 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
+import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.adapter.CallingPointRowAdapter;
 import uk.co.traintrackapp.traintrack.api.CallingPoint;
@@ -27,20 +24,20 @@ import uk.co.traintrackapp.traintrack.api.Service;
 import uk.co.traintrackapp.traintrack.model.Operator;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-
 public class ServiceActivity extends ActionBarActivity {
 
     private CallingPointRowAdapter adapter;
     private ProgressBar progress;
     private ArrayList<CallingPoint> callingPoints;
     private TextView disruptionReason;
-    private TextView generatedAt;
     private String serviceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
+
+        final TrainTrack app = (TrainTrack) getApplication();
 
         final Intent intent = getIntent();
         serviceId = intent.getStringExtra("service_id");
@@ -51,23 +48,31 @@ public class ServiceActivity extends ActionBarActivity {
         final String stationId = intent.getStringExtra("station_id");
         final String stationCrs = intent.getStringExtra("station_crs");
         final String stationName = intent.getStringExtra("station_name");
-        final String platorm = intent.getStringExtra("platform");
+        final String platform = intent.getStringExtra("platform");
         final String time = intent.getStringExtra("time");
         final String destinationName = intent
                 .getStringExtra("destination_name");
         final String operatorCode = intent.getStringExtra("operator_code");
         final String operatorName = intent.getStringExtra("operator_name");
 
-        callingPoints = new ArrayList<CallingPoint>();
+        callingPoints = new ArrayList<>();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(originName + " to " + destinationName);
         final TextView toc = (TextView) findViewById(R.id.toc);
-        toc.setText(operatorName);
+        final Operator operator = app.getOperator(operatorCode);
+        toc.setText(operator.getName() + " - @" + operator.getTwitter());
+        toc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tweetUrl = "https://twitter.com/intent/tweet?text=@" + operator.getTwitter();
+                Intent tweet = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+                startActivity(tweet);
+            }
+        });
 
         progress = (ProgressBar) findViewById(R.id.progress);
         disruptionReason = (TextView) findViewById(R.id.disruption_reason);
-        generatedAt = (TextView) findViewById(R.id.generated_at);
 
         adapter = new CallingPointRowAdapter(callingPoints, stationCrs, this);
         ListView list = (ListView) findViewById(R.id.list);
@@ -80,7 +85,7 @@ public class ServiceActivity extends ActionBarActivity {
                     return;
                 }
 
-                CallingPoint callingPoint = (CallingPoint) adapter
+                CallingPoint callingPoint = adapter
                         .getItem(index);
 
                 Intent intent = new Intent().setClass(getApplicationContext(),
@@ -91,33 +96,18 @@ public class ServiceActivity extends ActionBarActivity {
                 intent.putExtra("departure_station_crs", stationCrs);
                 intent.putExtra("departure_station_name", stationName);
                 intent.putExtra("departure_time", time);
-                intent.putExtra("departure_platform", platorm);
+                intent.putExtra("departure_platform", platform);
                 intent.putExtra("arrival_station_crs",
-                        callingPoint.getStationCrs());
+                        callingPoint.getStation().getCrsCode());
                 intent.putExtra("arrival_station_name",
-                        callingPoint.getStationName());
+                        callingPoint.getStation().getName());
                 intent.putExtra("arrival_time", callingPoint.getTime());
                 intent.putExtra("arrival_platform", "");
                 intent.putExtra("operator_code", operatorCode);
                 intent.putExtra("operator_name", operatorName);
                 startActivityForResult(intent, 1);
-                return;
             }
 
-        });
-
-        ParseQuery<Operator> query = ParseQuery.getQuery(Operator.class);
-//        query.fromLocalDatastore();
-        query.whereEqualTo("code", operatorCode);
-        query.getFirstInBackground(new GetCallback<Operator>() {
-            @Override
-            public void done(Operator operator, ParseException e) {
-                if (e == null) {
-                    Utils.log(operator.getName());
-                } else {
-                    Utils.log("Getting operator: " + e.getMessage());
-                }
-            }
         });
 
     }
@@ -162,12 +152,17 @@ public class ServiceActivity extends ActionBarActivity {
         @Override
         protected Service doInBackground(String... service) {
             Utils.log("Getting service...");
-            return Service.getByServiceId(service[0]);
+            //TODO get service
+            return null;
+            //return Service.getByServiceId(service[0]);
         }
 
         @Override
         protected void onPostExecute(Service s) {
             super.onPostExecute(s);
+            if (s == null) {
+                return;
+            }
             Utils.log("Got service.");
             progress.setVisibility(View.GONE);
             callingPoints.clear();
@@ -178,8 +173,6 @@ public class ServiceActivity extends ActionBarActivity {
                 disruptionReason.setText(s.getDisruptionReason());
                 disruptionReason.setVisibility(View.VISIBLE);
             }
-
-            generatedAt.setText(s.getGeneratedAtString());
 
         }
     }

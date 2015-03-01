@@ -14,15 +14,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
+import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
-
 
 public class JourneyLegActivity extends ActionBarActivity {
 
@@ -33,6 +28,7 @@ public class JourneyLegActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final TrainTrack app = (TrainTrack) getApplication();
         final Intent intent = getIntent();
         final String journeyLegId = intent.getStringExtra("journey_leg_id");
         final String journeyId = intent.getStringExtra("journey_id");
@@ -47,30 +43,21 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView arrivalTime = (TextView) findViewById(R.id.arrival_time);
             final TextView arrivalPlatform = (TextView) findViewById(R.id.arrival_platform);
 
-            ParseQuery<JourneyLeg> query = ParseQuery
-                    .getQuery(JourneyLeg.class);
-            query.fromLocalDatastore();
-            query.getInBackground(journeyLegId, new GetCallback<JourneyLeg>() {
-                @Override
-                public void done(JourneyLeg result, ParseException e) {
-                    if (e == null) {
-                        journeyLeg = result;
-                        departureStation.setText(journeyLeg
-                                .getDepartureStation().toString());
-                        departureTime.setText(journeyLeg
-                                .getDepartureTimeAsString());
-                        departurePlatform.setText(journeyLeg
-                                .getDeparturePlatform());
-                        arrivalStation.setText(journeyLeg.getArrivalStation()
-                                .toString());
-                        arrivalTime.setText(journeyLeg.getArrivalTimeAsString());
-                        arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
-                        getSupportActionBar().setTitle(journeyLeg.toString());
-                    } else {
-                        Utils.log(e.getMessage());
-                    }
-                }
-            });
+            //TODO get journey leg
+            /*
+                journeyLeg = result;
+                departureStation.setText(journeyLeg
+                        .getDepartureStation().toString());
+                departureTime.setText(journeyLeg
+                        .getDepartureTimeAsString());
+                departurePlatform.setText(journeyLeg
+                        .getDeparturePlatform());
+                arrivalStation.setText(journeyLeg.getArrivalStation()
+                        .toString());
+                arrivalTime.setText(journeyLeg.getArrivalTimeAsString());
+                arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
+                getSupportActionBar().setTitle(journeyLeg.toString());
+             */
 
         } else {
 
@@ -79,14 +66,11 @@ public class JourneyLegActivity extends ActionBarActivity {
             getSupportActionBar().setTitle(getString(R.string.action_new_journey));
 
             final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
-            // final String departureStationId = intent
-            // .getStringExtra("departure_station_id");
-            // final String departureStationCrs = intent
-            // .getStringExtra("departure_station_crs");
+             final String departureStationCrs = intent
+             .getStringExtra("departure_station_crs");
             final String departureStationName = intent
                     .getStringExtra("departure_station_name");
-            // final Station departureStation = Station
-            // .getById(departureStationId);
+            final Station departureStation = app.getStation(departureStationCrs);
             departureStationTv.setText(departureStationName);
 
             final TextView departurePlatformTv = (TextView) findViewById(R.id.departure_platform);
@@ -121,12 +105,11 @@ public class JourneyLegActivity extends ActionBarActivity {
             });
 
             final TextView arrivalStationTv = (TextView) findViewById(R.id.arrival_station);
-            // final String arrivalStationCrs = intent
-            // .getStringExtra("arrival_station_crs");
+             final String arrivalStationCrs = intent
+             .getStringExtra("arrival_station_crs");
             final String arrivalStationName = intent
                     .getStringExtra("arrival_station_name");
-            // final Station arrivalStation =
-            // Station.getByCrs(arrivalStationCrs);
+            final Station arrivalStation = app.getStation(arrivalStationCrs);
             arrivalStationTv.setText(arrivalStationName);
 
             final TextView arrivalPlatformTv = (TextView) findViewById(R.id.arrival_platform);
@@ -164,22 +147,21 @@ public class JourneyLegActivity extends ActionBarActivity {
                 @Override
                 public void onClick(View view) {
 
+                    journeyLeg.setDepartureStation(departureStation);
+                    journeyLeg.setDeparturePlatform(departurePlatformTv
+                            .getText().toString());
+                    journeyLeg.setArrivalStation(arrivalStation);
+                    journeyLeg.setArrivalPlatform(arrivalPlatformTv.getText()
+                            .toString());
                     if (journeyId == null) {
                         Utils.log("Creating new Journey");
                         journey = new Journey();
-                        journey.setUser(ParseUser.getCurrentUser());
-                        journey.saveEventually();
+                        //journey.setUser(app.getUser());
+                    } else {
+                        journey = app.getJourney(journeyId);
                     }
-
-                    journeyLeg.setJourney(journey);
-                    // journeyLeg.setDepartureStation(departureStation);
-                    journeyLeg.setDeparturePlatform(departurePlatformTv
-                            .getText().toString());
-                    // journeyLeg.setArrivalStation(arrivalStation);
-                    journeyLeg.setArrivalPlatform(arrivalPlatformTv.getText()
-                            .toString());
-                    journeyLeg.saveEventually();
-                    journeyLeg.pinInBackground();
+                    journey.addJourneyLeg(journeyLeg);
+                    //journey.saveEventually();
 
                     if (getParent() == null) {
                         setResult(Activity.RESULT_OK);
@@ -206,11 +188,11 @@ public class JourneyLegActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_journey_leg:
-                journeyLeg.deleteEventually();
+                //journeyLeg.deleteEventually();
                 Toast.makeText(getApplicationContext(), "Journey leg was deleted",
                         Toast.LENGTH_SHORT).show();
                 if (journey.getJourneyLegs().size() == 0) {
-                    journey.deleteEventually();
+                    //journey.deleteEventually();
                 }
                 finish();
         }

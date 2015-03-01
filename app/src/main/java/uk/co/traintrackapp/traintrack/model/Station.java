@@ -1,64 +1,70 @@
 package uk.co.traintrackapp.traintrack.model;
 
-import java.util.ArrayList;
-import java.util.Locale;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.parse.ParseClassName;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import java.util.Locale;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-@ParseClassName("Station")
-public class Station extends ParseObject {
+public class Station {
 
+    private int id;
+    private String name;
+    private String crs;
+    private double lat;
+    private double lng;
     private double distance;
 
     public Station() {
     }
 
-    /*
-     * @return the crsCode
+    public Station(JSONObject json) {
+        try {
+            this.id = json.getInt("id");
+            this.name = json.getString("name");
+            this.crs = json.getString("crs");
+            this.lat = json.getDouble("lat");
+            this.lng = json.getDouble("lng");
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @return the id
      */
-    public String getCrsCode() {
-        return getString("crs");
+    public int getId() {
+        return id;
     }
 
     /**
      * @return the name
      */
     public String getName() {
-        return getString("name");
+        return name;
     }
 
-    /**
-     * @return the image
+    /*
+     * @return the crsCode
      */
-    public Image getImage() {
-        return (Image) getParseObject("image");
-    }
-
-    /**
-     * @return the location
-     */
-    public ParseGeoPoint getLocation() {
-        return getParseGeoPoint("location");
+    public String getCrsCode() {
+        return crs;
     }
 
     /**
      * @return the latitude
      */
     public double getLatitude() {
-        return getLocation().getLatitude();
+        return lat;
     }
 
     /**
      * @return the longitude
      */
     public double getLongitude() {
-        return getLocation().getLongitude();
+        return lng;
     }
 
     /**
@@ -87,7 +93,7 @@ public class Station extends ParseObject {
      * @return distance (km)
      */
     public double getDistance() {
-        return this.distance;
+        return distance;
     }
 
     /**
@@ -118,55 +124,6 @@ public class Station extends ParseObject {
      */
     public String toString() {
         return getName();
-    }
-
-    /**
-     * @param crs CRS Code
-     * @return the station
-     */
-    public static Station getByCrs(String crs) {
-        ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-        query.fromLocalDatastore();
-        query.whereEqualTo("crs", crs);
-        Station station = null;
-        try {
-            station = query.getFirst();
-        } catch (ParseException e) {
-            Utils.log(e.getMessage());
-        }
-        return station;
-    }
-
-    /**
-     * @param id station ID
-     * @return the station
-     */
-    public static Station getById(String id) {
-        ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-        query.fromLocalDatastore();
-        Station station = null;
-        try {
-            station = query.get(id);
-        } catch (ParseException e) {
-            Utils.log(e.getMessage());
-        }
-        return station;
-    }
-
-    /**
-     * @return all the stations
-     */
-    public static ArrayList<Station> getAll() {
-        ArrayList<Station> stations = new ArrayList<Station>();
-        ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-        query.fromLocalDatastore();
-        query.orderByAscending("name");
-        try {
-            stations.addAll(query.find());
-        } catch (ParseException e) {
-            Utils.log(e.getMessage());
-        }
-        return stations;
     }
 
 }

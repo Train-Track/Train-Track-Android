@@ -12,16 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.adapter.JourneyLegRowAdapter;
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
-import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class JourneyActivity extends ActionBarActivity {
 
@@ -38,7 +33,7 @@ public class JourneyActivity extends ActionBarActivity {
         journeyId = intent.getStringExtra("journey_id");
 
         final TextView name = (TextView) findViewById(R.id.name);
-        final ArrayList<JourneyLeg> journeyLegs = new ArrayList<JourneyLeg>();
+        final ArrayList<JourneyLeg> journeyLegs = new ArrayList<>();
         adapter = new JourneyLegRowAdapter(LayoutInflater.from(this),
                 journeyLegs);
         final ListView list = (ListView) findViewById(R.id.list);
@@ -46,32 +41,14 @@ public class JourneyActivity extends ActionBarActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View view, int index,
                                     long x) {
-                JourneyLeg journeyLeg = (JourneyLeg) adapter.getItem(index);
+                JourneyLeg journeyLeg = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
-                intent.putExtra("journey_leg_id", journeyLeg.getObjectId());
+                intent.putExtra("journey_leg_id", journeyLeg.getId());
                 intent.putExtra("journey_id", journeyId);
                 startActivity(intent);
-                return;
             }
 
-        });
-
-        ParseQuery<Journey> query = ParseQuery.getQuery(Journey.class);
-        query.fromLocalDatastore();
-        query.getInBackground(journeyId, new GetCallback<Journey>() {
-            @Override
-            public void done(Journey result, ParseException e) {
-                if (e != null) {
-                    Utils.log(e.getMessage());
-                } else {
-                    journey = result;
-                    name.setText(journey.toString());
-                    journeyLegs.addAll(journey.getJourneyLegs());
-                    adapter.notifyDataSetChanged();
-                }
-
-            }
         });
 
     }
@@ -91,13 +68,13 @@ public class JourneyActivity extends ActionBarActivity {
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         StationActivity.class);
                 intent.putExtra("station_id", journey.getDestination()
-                        .getObjectId());
+                        .getId());
                 intent.putExtra("journey_id", journeyId);
                 startActivity(intent);
                 finish();
                 return true;
             case R.id.delete_journey:
-                journey.deleteEventually();
+                //journey.deleteEventually();
                 Toast.makeText(getApplicationContext(), "Journey was deleted",
                         Toast.LENGTH_SHORT).show();
                 finish();
@@ -109,13 +86,13 @@ public class JourneyActivity extends ActionBarActivity {
 
     public void onResume() {
         super.onResume();
-		/*
+
 		ArrayList<JourneyLeg> journeyLegs = journey.getJourneyLegs();
 		if (journeyLegs.size() == 0) {
 			finish();
 		}
 		adapter.refresh(journeyLegs);
-		*/
+
     }
 
 }
