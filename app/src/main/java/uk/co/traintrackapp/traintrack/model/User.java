@@ -35,6 +35,7 @@ public class User {
      * @param json json
      */
     public User(JSONObject json) {
+        super();
         try {
             this.id = json.getInt("id");
             this.username = json.getString("username");

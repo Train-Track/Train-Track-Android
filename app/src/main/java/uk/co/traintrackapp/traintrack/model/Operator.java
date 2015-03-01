@@ -15,9 +15,16 @@ public class Operator {
     private String numericCode;
 
     public Operator() {
+        id = 0;
+        name = "Unknown";
+        code = "";
+        twitter = "";
+        delayRepayUrl = "";
+        numericCode = "";
     }
 
     public Operator(JSONObject json) {
+        super();
         try {
             this.id = json.getInt("id");
             this.name = json.getString("name");
@@ -28,6 +35,13 @@ public class Operator {
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
     }
 
     /**
@@ -71,6 +85,25 @@ public class Operator {
     @Override
     public String toString() {
         return getName();
+    }
+
+    /**
+     *
+     * @return JSON Object
+     */
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("id", getId());
+            json.put("name", getName());
+            json.put("code", getCode());
+            json.put("twitter", getTwitter());
+            json.put("delay_repay_url", getDelayRepayUrl());
+            json.put("numeric_code", getNumericCode());
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+        return json;
     }
 
 }

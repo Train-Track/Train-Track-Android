@@ -28,7 +28,7 @@ public class AccountManagerFragment extends Fragment {
 
         final EditText username = (EditText) v.findViewById(R.id.username);
         final EditText email = (EditText) v.findViewById(R.id.email);
-        final EditText password = (EditText) v.findViewById(R.id.password);
+        //final EditText password = (EditText) v.findViewById(R.id.password);
         Button update = (Button) v.findViewById(R.id.update);
         Button logout = (Button) v.findViewById(R.id.logout);
         Button login = (Button) v.findViewById(R.id.login);

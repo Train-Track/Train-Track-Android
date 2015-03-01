@@ -1,9 +1,11 @@
 package uk.co.traintrackapp.traintrack;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +14,7 @@ import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.Operator;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.model.User;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class TrainTrack extends Application {
 
@@ -55,6 +58,12 @@ public class TrainTrack extends Application {
         for (Journey j: journeys) {
             this.journeys.put(String.valueOf(j.getId()), j);
         }
+    }
+
+    public void addJourney(Journey journey) {
+        ArrayList<Journey> journeys = getJourneys();
+        journeys.add(journey);
+        setJourneys(journeys);
     }
 
     public ArrayList<Journey> getJourneys() {

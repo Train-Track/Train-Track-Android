@@ -75,12 +75,11 @@ public class ServiceActivity extends ActionBarActivity {
                 intent.putExtra("service_id", service.getServiceId());
                 intent.putExtra("operator_code", service.getOperator().getCode());
                 intent.putExtra("departure_station_crs", service.getStation().getCrsCode());
+                intent.putExtra("departure_time", service.getScheduledTimeDeparture());
                 intent.putExtra("departure_platform", service.getPlatform());
                 intent.putExtra("arrival_station_crs",
                         callingPoint.getStation().getCrsCode());
-                intent.putExtra("arrival_station_name",
-                        callingPoint.getStation().getName());
-                intent.putExtra("arrival_time", callingPoint.getTime());
+                intent.putExtra("arrival_time", callingPoint.getScheduledTime());
                 intent.putExtra("arrival_platform", "");
                 startActivityForResult(intent, 1);
             }

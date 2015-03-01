@@ -23,11 +23,21 @@ public class Badge {
     private int points;
     private String googleAchievementId;
 
+    public Badge() {
+        id = 0;
+        name = "Unknown";
+        description = "";
+        imageUrl = "";
+        points = 0;
+        googleAchievementId = "";
+    }
+
     /**
      * Converts JSON object to badge
      * @param json
      */
     public Badge(JSONObject json) {
+        super();
         try {
             this.id = json.getInt("id");
             this.name = json.getString("name");

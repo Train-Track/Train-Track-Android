@@ -1,10 +1,12 @@
 package uk.co.traintrackapp.traintrack.utils;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,11 +26,16 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 
+import uk.co.traintrackapp.traintrack.model.Journey;
+
 public class Utils {
 
+    public static int ASSETS = 1;
+    public static int FILESYSTEM = 2;
     public static int BLUE = Color.parseColor("#33b5e5");
     public static String API_BASE_URL = "http://192.168.1.73:3000";
 
@@ -145,9 +152,34 @@ public class Utils {
      * @return date object
      */
     public static Date getDateWithTime(String time) {
+        if (time.split(":").length != 2) {
+            return null;
+        }
         int hourOfDay = Integer.valueOf(time.split(":")[0]);
         int minute = Integer.valueOf(time.split(":")[1]);
         return getDateWithTime(hourOfDay, minute);
+    }
+
+    /**
+     * Get string from file
+     * @param filename file to open
+     * @param context the context in which we are opening it
+     */
+    public static String openFile(String filename, Context context) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            FileInputStream in = context.openFileInput(filename);
+            InputStreamReader inputStreamReader = new InputStreamReader(in);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            inputStreamReader.close();
+        } catch (IOException e) {
+            Utils.log(e.getMessage());
+        }
+        return sb.toString();
     }
 
 }

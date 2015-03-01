@@ -76,11 +76,11 @@ public class CallingPoint {
     }
 
     public String toString() {
-        return getStation() + "\n";
+        return getScheduledTime() + " " + getStation() + " " + getTime() + "\n";
     }
 
     public boolean hasArrived() {
-        return getActualTime() != null;
+        return !getActualTime().isEmpty();
     }
 
     public boolean isOnTime() {

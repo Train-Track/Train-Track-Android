@@ -74,8 +74,7 @@ public class MapActivity extends Activity {
 
         @Override
         protected Service doInBackground(String... service) {
-            //TODO get service
-            return null; //Service.getByServiceId(service[0]);
+            return Service.getByServiceId(service[0]);
         }
 
         @Override

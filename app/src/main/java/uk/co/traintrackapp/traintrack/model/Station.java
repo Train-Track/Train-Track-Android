@@ -9,6 +9,7 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class Station {
 
+    public static final String FILENAME = "stations.json";
     private int id;
     private String name;
     private String crs;
@@ -18,9 +19,17 @@ public class Station {
     private boolean isFavourite;
 
     public Station() {
+        id = 0;
+        name = "Unknown";
+        crs = "";
+        lat = 0;
+        lng = 0;
+        distance = 0;
+        isFavourite = false;
     }
 
     public Station(JSONObject json) {
+        super();
         this.isFavourite = false;
         try {
             this.id = json.getInt("id");
@@ -72,8 +81,9 @@ public class Station {
     /**
      * @return true if favourite
      */
+    //TODO remove the bpw test case
     public boolean isFavourite() {
-        return isFavourite || crs.equals("LLO");
+        return isFavourite || crs.equals("BPW");
     }
 
     /**
@@ -127,4 +137,21 @@ public class Station {
         return getName();
     }
 
+    /**
+     *
+     * @return JSON Object
+     */
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("id", getId());
+            json.put("name", getName());
+            json.put("crs", getCrsCode());
+            json.put("lat", getLatitude());
+            json.put("lng", getLongitude());
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+        return json;
+    }
 }

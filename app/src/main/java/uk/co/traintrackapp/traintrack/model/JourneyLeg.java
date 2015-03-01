@@ -1,5 +1,6 @@
 package uk.co.traintrackapp.traintrack.model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +29,7 @@ public class JourneyLeg {
     }
 
     public JourneyLeg(JSONObject json) {
+        super();
         try {
             id = json.getInt("id");
             journeyId = json.getInt("journey_id");
@@ -50,6 +52,10 @@ public class JourneyLeg {
 
     public int getId() {
         return id;
+    }
+
+    public int getJourneyId() {
+        return journeyId;
     }
 
     public Operator getOperator() {
@@ -146,6 +152,15 @@ public class JourneyLeg {
         this.scheduledArrival = arrivalTime;
     }
 
+
+    /**
+     *
+     * @param operator the operator
+     */
+    public void setOperator(Operator operator) {
+        this.operator = operator;
+    }
+
     /**
      * @return the name
      */
@@ -169,6 +184,31 @@ public class JourneyLeg {
     public String getArrivalTimeAsString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
         return dateFormat.format(getArrivalTime());
+    }
+
+    /**
+     *
+     * @return jsonObject the representation of the journey leg as JSON
+     */
+    public JSONObject toJson() {
+        //TODO get the real times
+        JSONObject json = new JSONObject();
+        try {
+            json.put("id", getId());
+            json.put("journey_id", getJourneyId());
+            json.put("scheduled_departure", "");
+            json.put("scheduled_arrival", "");
+            json.put("actual_departure", "");
+            json.put("actual_arrival", "");
+            json.put("departure_platform", getDeparturePlatform());
+            json.put("arrival_platform", getArrivalPlatform());
+            json.put("operator", getOperator().toJson());
+            json.put("origin", getDepartureStation().toJson());
+            json.put("destination", getArrivalStation().toJson());
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+        return json;
     }
 
 }

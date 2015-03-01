@@ -2,6 +2,7 @@ package uk.co.traintrackapp.traintrack;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,8 +15,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
+import uk.co.traintrackapp.traintrack.model.Operator;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
@@ -35,6 +40,8 @@ public class JourneyLegActivity extends ActionBarActivity {
 
         if (journeyLegId != null) {
 
+            //TODO get journey leg
+            /*
             setContentView(R.layout.activity_journey_leg);
             final TextView departureStation = (TextView) findViewById(R.id.departure_station);
             final TextView departureTime = (TextView) findViewById(R.id.departure_time);
@@ -43,8 +50,7 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView arrivalTime = (TextView) findViewById(R.id.arrival_time);
             final TextView arrivalPlatform = (TextView) findViewById(R.id.arrival_platform);
 
-            //TODO get journey leg
-            /*
+
                 journeyLeg = result;
                 departureStation.setText(journeyLeg
                         .getDepartureStation().toString());
@@ -68,10 +74,8 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
              final String departureStationCrs = intent
              .getStringExtra("departure_station_crs");
-            final String departureStationName = intent
-                    .getStringExtra("departure_station_name");
             final Station departureStation = app.getStation(departureStationCrs);
-            departureStationTv.setText(departureStationName);
+            departureStationTv.setText(departureStation.getName());
 
             final TextView departurePlatformTv = (TextView) findViewById(R.id.departure_platform);
             String departurePlatform = intent
@@ -107,10 +111,8 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView arrivalStationTv = (TextView) findViewById(R.id.arrival_station);
              final String arrivalStationCrs = intent
              .getStringExtra("arrival_station_crs");
-            final String arrivalStationName = intent
-                    .getStringExtra("arrival_station_name");
             final Station arrivalStation = app.getStation(arrivalStationCrs);
-            arrivalStationTv.setText(arrivalStationName);
+            arrivalStationTv.setText(arrivalStation.getName());
 
             final TextView arrivalPlatformTv = (TextView) findViewById(R.id.arrival_platform);
             String arrivalPlatform = intent.getStringExtra("arrival_platform");
@@ -153,15 +155,16 @@ public class JourneyLegActivity extends ActionBarActivity {
                     journeyLeg.setArrivalStation(arrivalStation);
                     journeyLeg.setArrivalPlatform(arrivalPlatformTv.getText()
                             .toString());
+                    journeyLeg.setOperator(new Operator());
                     if (journeyId == null) {
                         Utils.log("Creating new Journey");
                         journey = new Journey();
-                        //journey.setUser(app.getUser());
                     } else {
                         journey = app.getJourney(journeyId);
                     }
                     journey.addJourneyLeg(journeyLeg);
-                    //journey.saveEventually();
+                    app.addJourney(journey);
+                    Journey.saveAll(app.getJourneys(), getApplicationContext());
 
                     if (getParent() == null) {
                         setResult(Activity.RESULT_OK);

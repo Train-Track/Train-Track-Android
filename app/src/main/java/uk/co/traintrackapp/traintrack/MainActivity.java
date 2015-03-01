@@ -13,8 +13,10 @@ import android.support.v7.app.ActionBarActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.fragment.AccountManagerFragment;
@@ -23,6 +25,7 @@ import uk.co.traintrackapp.traintrack.fragment.JourneysFragment;
 import uk.co.traintrackapp.traintrack.fragment.NavigationDrawerFragment;
 import uk.co.traintrackapp.traintrack.fragment.SettingsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationsFragment;
+import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
@@ -109,16 +112,31 @@ public class MainActivity extends ActionBarActivity
         actionBar.setTitle(title);
     }
 
-    private JSONArray loadJSONFromAsset(String asset) {
+    /**
+     * Load the JSONArray from a file
+     * @param filename the file to open
+     * @param from either assets folder or the file system
+     * @return JSON Array
+     */
+    private JSONArray loadJSON(String filename, int from) {
         JSONArray json = new JSONArray();
         try {
-            InputStream is = getAssets().open(asset);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String jsonString = new String(buffer, "UTF-8");
-            json = new JSONArray(jsonString);
+            StringBuilder sb = new StringBuilder();
+            InputStream is;
+            if (from == Utils.ASSETS) {
+                is = getAssets().open(filename);
+            } else if (from == Utils.FILESYSTEM) {
+                is = openFileInput(filename);
+            } else {
+                return json;
+            }
+            InputStreamReader inputStreamReader = new InputStreamReader(is);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            json = new JSONArray(sb.toString());
         } catch (IOException | JSONException e) {
             Utils.log(e.getMessage());
         }
@@ -129,19 +147,31 @@ public class MainActivity extends ActionBarActivity
 
         @Override
         protected String doInBackground(String... asset) {
-
             TrainTrack app = (TrainTrack) getApplication();
+
             ArrayList<Station> stations = new ArrayList<>();
-            JSONArray jsonStations = loadJSONFromAsset("stations.json");
+            JSONArray jsonStations = loadJSON(Station.FILENAME, Utils.ASSETS);
             try {
                 for (int i = 0; i < jsonStations.length(); i++) {
                     Station station = new Station(jsonStations.getJSONObject(i));
                     stations.add(station);
                 }
                 app.setStations(stations);
-                Utils.log(stations.toString());
             } catch (JSONException e) {
                Utils.log(e.getMessage());
+            }
+
+            ArrayList<Journey> journeys = new ArrayList<>();
+            JSONArray jsonJourneys = loadJSON(Journey.FILENAME, Utils.FILESYSTEM);
+            try {
+                for (int i = 0; i < jsonJourneys.length(); i++) {
+                    Journey journey = new Journey(jsonJourneys.getJSONObject(i));
+                    journeys.add(journey);
+                }
+                app.setJourneys(journeys);
+                Utils.log(journeys.toString());
+            } catch (JSONException e) {
+                Utils.log(e.getMessage());
             }
 
             return "Everything is loaded";
