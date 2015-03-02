@@ -56,10 +56,12 @@ public class JourneyRowAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /*
     public void refresh(ArrayList<Journey> journeys) {
         this.rowList = journeys;
         this.notifyDataSetChanged();
     }
+    */
 
     static class ViewHolder {
         TextView name;

@@ -1,6 +1,5 @@
 package uk.co.traintrackapp.traintrack.model;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,17 +36,19 @@ public class JourneyLeg {
             id = json.getInt("id");
             journeyId = json.getInt("journey_id");
             uuid = json.getString("uuid");
-            //TODO format dates
             String schDep = json.getString("scheduled_departure");
+            scheduledDeparture = Utils.getDateFromString(schDep);
             String schArr = json.getString("scheduled_arrival");
+            scheduledArrival = Utils.getDateFromString(schArr);
             String actualDep = json.getString("actual_departure");
+            actualDeparture = Utils.getDateFromString(actualDep);
             String actualArr = json.getString("actual_arrival");
-            String departurePlatform = json.getString("departure_platform");
-            String arrivalPlatform = json.getString("arrival_platform");
+            actualArrival = Utils.getDateFromString(actualArr);
+            departurePlatform = json.getString("departure_platform");
+            arrivalPlatform = json.getString("arrival_platform");
             operator = new Operator(json.getJSONObject("operator"));
             origin = new Station(json.getJSONObject("origin"));
             destination = new Station(json.getJSONObject("destination"));
-
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
@@ -64,6 +65,38 @@ public class JourneyLeg {
 
     public int getJourneyId() {
         return journeyId;
+    }
+
+    public Date getScheduledDeparture() {
+        return scheduledDeparture;
+    }
+
+    public void setScheduledDeparture(Date scheduledDeparture) {
+        this.scheduledDeparture = scheduledDeparture;
+    }
+
+    public Date getScheduledArrival() {
+        return scheduledArrival;
+    }
+
+    public void setScheduledArrival(Date scheduledArrival) {
+        this.scheduledArrival = scheduledArrival;
+    }
+
+    public Date getActualDeparture() {
+        return actualDeparture;
+    }
+
+    public void setActualDeparture(Date actualDeparture) {
+        this.actualDeparture = actualDeparture;
+    }
+
+    public Date getActualArrival() {
+        return actualArrival;
+    }
+
+    public void setActualArrival(Date actualArrival) {
+        this.actualArrival = actualArrival;
     }
 
     public Operator getOperator() {
@@ -101,21 +134,6 @@ public class JourneyLeg {
     }
 
     /**
-     * @return the departure time
-     */
-    public Date getDepartureTime() {
-        return scheduledDeparture;
-    }
-
-    /**
-     * @param departureTime
-     *            the departure time
-     */
-    public void setDepartureTime(Date departureTime) {
-        this.scheduledDeparture = departureTime;
-    }
-
-    /**
      * @return the arrival station
      */
     public Station getArrivalStation() {
@@ -146,22 +164,6 @@ public class JourneyLeg {
     }
 
     /**
-     * @return the arrival time
-     */
-    public Date getArrivalTime() {
-        return scheduledArrival;
-    }
-
-    /**
-     * @param arrivalTime
-     *            the arrival time
-     */
-    public void setArrivalTime(Date arrivalTime) {
-        this.scheduledArrival = arrivalTime;
-    }
-
-
-    /**
      *
      * @param operator the operator
      */
@@ -183,7 +185,7 @@ public class JourneyLeg {
      */
     public String getDepartureTimeAsString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
-        return dateFormat.format(getDepartureTime());
+        return dateFormat.format(getScheduledDeparture());
     }
 
     /**
@@ -191,7 +193,7 @@ public class JourneyLeg {
      */
     public String getArrivalTimeAsString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
-        return dateFormat.format(getArrivalTime());
+        return dateFormat.format(getScheduledArrival());
     }
 
     /**
@@ -205,10 +207,10 @@ public class JourneyLeg {
             json.put("id", getId());
             json.put("uuid", getUuid());
             json.put("journey_id", getJourneyId());
-            json.put("scheduled_departure", "");
-            json.put("scheduled_arrival", "");
-            json.put("actual_departure", "");
-            json.put("actual_arrival", "");
+            json.put("scheduled_departure", Utils.getStringFromDate(getScheduledDeparture()));
+            json.put("scheduled_arrival", Utils.getStringFromDate(getScheduledArrival()));
+            json.put("actual_departure", Utils.getStringFromDate(getActualDeparture()));
+            json.put("actual_arrival", Utils.getStringFromDate(getActualArrival()));
             json.put("departure_platform", getDeparturePlatform());
             json.put("arrival_platform", getArrivalPlatform());
             json.put("operator", getOperator().toJson());

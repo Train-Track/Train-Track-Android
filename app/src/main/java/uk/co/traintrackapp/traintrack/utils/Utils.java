@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,10 +36,11 @@ import uk.co.traintrackapp.traintrack.model.Journey;
 
 public class Utils {
 
-    public static int ASSETS = 1;
-    public static int FILESYSTEM = 2;
-    public static int BLUE = Color.parseColor("#33b5e5");
-    public static String API_BASE_URL = "http://192.168.1.73:3000";
+    public static final int ASSETS = 1;
+    public static final int FILESYSTEM = 2;
+    public static final int BLUE = Color.parseColor("#33b5e5");
+    public static final String API_BASE_URL = "http://192.168.1.73:3000";
+    private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
     /**
      * @param message
@@ -161,25 +164,28 @@ public class Utils {
     }
 
     /**
-     * Get string from file
-     * @param filename file to open
-     * @param context the context in which we are opening it
+     * Convert date to a date object
+     * @param date as a string 2015-03-02T09:07:00.000Z
+     * @return date
      */
-    public static String openFile(String filename, Context context) {
-        StringBuilder sb = new StringBuilder();
+    public static Date getDateFromString(String date) {
+        SimpleDateFormat formatter = new SimpleDateFormat(JSON_DATE_FORMAT);
         try {
-            FileInputStream in = context.openFileInput(filename);
-            InputStreamReader inputStreamReader = new InputStreamReader(in);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
-            }
-            inputStreamReader.close();
-        } catch (IOException e) {
+            return formatter.parse(date);
+        } catch (ParseException e) {
             Utils.log(e.getMessage());
+            return null;
         }
-        return sb.toString();
+    }
+
+    /**
+     * Convert date to a string format
+     * @param date to a string 2015-03-02T09:07:00.000Z
+     * @return date
+     */
+    public static String getStringFromDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat(JSON_DATE_FORMAT);
+        return formatter.format(date);
     }
 
 }

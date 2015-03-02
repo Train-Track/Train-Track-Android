@@ -183,4 +183,5 @@ public class MainActivity extends ActionBarActivity
             Utils.log(message);
         }
     }
+
 }

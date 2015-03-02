@@ -2,7 +2,6 @@ package uk.co.traintrackapp.traintrack;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,9 +13,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
@@ -35,14 +31,16 @@ public class JourneyLegActivity extends ActionBarActivity {
 
         final TrainTrack app = (TrainTrack) getApplication();
         final Intent intent = getIntent();
-        final String journeyLegId = intent.getStringExtra("journey_leg_id");
-        final String journeyId = intent.getStringExtra("journey_id");
+        final String journeyLegUuid = intent.getStringExtra("journey_leg_uuid");
+        final String journeyUuid = intent.getStringExtra("journey_uuid");
 
-        if (journeyLegId != null) {
+        if (journeyLegUuid != null) {
 
-            //TODO get journey leg
-            /*
             setContentView(R.layout.activity_journey_leg);
+            journey = app.getJourney(journeyUuid);
+            journeyLeg = journey.getJourneyLegByUuid(journeyLegUuid);
+            getSupportActionBar().setTitle(journeyLeg.toString());
+
             final TextView departureStation = (TextView) findViewById(R.id.departure_station);
             final TextView departureTime = (TextView) findViewById(R.id.departure_time);
             final TextView departurePlatform = (TextView) findViewById(R.id.departure_platform);
@@ -50,20 +48,16 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView arrivalTime = (TextView) findViewById(R.id.arrival_time);
             final TextView arrivalPlatform = (TextView) findViewById(R.id.arrival_platform);
 
-
-                journeyLeg = result;
-                departureStation.setText(journeyLeg
-                        .getDepartureStation().toString());
-                departureTime.setText(journeyLeg
-                        .getDepartureTimeAsString());
-                departurePlatform.setText(journeyLeg
-                        .getDeparturePlatform());
-                arrivalStation.setText(journeyLeg.getArrivalStation()
-                        .toString());
-                arrivalTime.setText(journeyLeg.getArrivalTimeAsString());
-                arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
-                getSupportActionBar().setTitle(journeyLeg.toString());
-             */
+            departureStation.setText(journeyLeg
+                    .getDepartureStation().toString());
+            departureTime.setText(journeyLeg
+                    .getDepartureTimeAsString());
+            departurePlatform.setText(journeyLeg
+                    .getDeparturePlatform());
+            arrivalStation.setText(journeyLeg.getArrivalStation()
+                    .toString());
+            arrivalTime.setText(journeyLeg.getArrivalTimeAsString());
+            arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
 
         } else {
 
@@ -72,8 +66,8 @@ public class JourneyLegActivity extends ActionBarActivity {
             getSupportActionBar().setTitle(getString(R.string.action_new_journey));
 
             final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
-             final String departureStationCrs = intent
-             .getStringExtra("departure_station_crs");
+            final String departureStationCrs = intent
+                    .getStringExtra("departure_station_crs");
             final Station departureStation = app.getStation(departureStationCrs);
             departureStationTv.setText(departureStation.getName());
 
@@ -85,7 +79,8 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView departureTimeTv = (TextView) findViewById(R.id.departure_time);
             String departureTime = intent.getStringExtra("departure_time");
             departureTimeTv.setText(departureTime);
-            journeyLeg.setDepartureTime(Utils.getDateWithTime(departureTime));
+            journeyLeg.setScheduledDeparture(Utils.getDateWithTime(departureTime));
+            journeyLeg.setActualDeparture(Utils.getDateWithTime(departureTime));
 
             int departureHour = Integer.valueOf(departureTime.split(":")[0]);
             int departureMinute = Integer.valueOf(departureTime.split(":")[1]);
@@ -96,7 +91,7 @@ public class JourneyLegActivity extends ActionBarActivity {
                                       int minute) {
                     departureTimeTv.setText(Utils.zeroPadTime(
                             hourOfDay, minute));
-                    journeyLeg.setDepartureTime(Utils.getDateWithTime(
+                    journeyLeg.setScheduledDeparture(Utils.getDateWithTime(
                             hourOfDay, minute));
                 }
             }, departureHour, departureMinute, true);
@@ -109,8 +104,8 @@ public class JourneyLegActivity extends ActionBarActivity {
             });
 
             final TextView arrivalStationTv = (TextView) findViewById(R.id.arrival_station);
-             final String arrivalStationCrs = intent
-             .getStringExtra("arrival_station_crs");
+            final String arrivalStationCrs = intent
+                    .getStringExtra("arrival_station_crs");
             final Station arrivalStation = app.getStation(arrivalStationCrs);
             arrivalStationTv.setText(arrivalStation.getName());
 
@@ -121,7 +116,8 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView arrivalTimeTv = (TextView) findViewById(R.id.arrival_time);
             String arrivalTime = intent.getStringExtra("arrival_time");
             arrivalTimeTv.setText(arrivalTime);
-            journeyLeg.setArrivalTime(Utils.getDateWithTime(arrivalTime));
+            journeyLeg.setScheduledArrival(Utils.getDateWithTime(arrivalTime));
+            journeyLeg.setActualArrival(Utils.getDateWithTime(arrivalTime));
 
             int arrivalHour = Integer.valueOf(arrivalTime.split(":")[0]);
             int arrivalMinute = Integer.valueOf(arrivalTime.split(":")[1]);
@@ -132,7 +128,7 @@ public class JourneyLegActivity extends ActionBarActivity {
                                       int minute) {
                     arrivalTimeTv.setText(Utils.zeroPadTime(hourOfDay,
                             minute));
-                    journeyLeg.setArrivalTime(Utils.getDateWithTime(
+                    journeyLeg.setScheduledArrival(Utils.getDateWithTime(
                             hourOfDay, minute));
                 }
             }, arrivalHour, arrivalMinute, true);
@@ -156,11 +152,11 @@ public class JourneyLegActivity extends ActionBarActivity {
                     journeyLeg.setArrivalPlatform(arrivalPlatformTv.getText()
                             .toString());
                     journeyLeg.setOperator(new Operator());
-                    if (journeyId == null) {
+                    if (journeyUuid == null) {
                         Utils.log("Creating new Journey");
                         journey = new Journey();
                     } else {
-                        journey = app.getJourney(journeyId);
+                        journey = app.getJourney(journeyUuid);
                     }
                     journey.addJourneyLeg(journeyLeg);
                     app.addJourney(journey);
@@ -191,10 +187,12 @@ public class JourneyLegActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_journey_leg:
+                //TODO delete journey leg
                 //journeyLeg.deleteEventually();
                 Toast.makeText(getApplicationContext(), "Journey leg was deleted",
                         Toast.LENGTH_SHORT).show();
                 if (journey.getJourneyLegs().size() == 0) {
+                    //TODO delete journey
                     //journey.deleteEventually();
                 }
                 finish();

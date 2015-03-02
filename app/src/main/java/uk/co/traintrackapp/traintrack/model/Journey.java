@@ -90,6 +90,20 @@ public class Journey {
     }
 
     /**
+     * return the journey leg
+     * @param uuid of the journey
+     * @return the journey
+     */
+    public JourneyLeg getJourneyLegByUuid(String uuid) {
+         for (JourneyLeg leg : getJourneyLegs()) {
+             if (leg.getUuid().equals(uuid)) {
+                 return leg;
+             }
+         }
+        return null;
+    }
+
+    /**
      * @param journeyLeg the leg to add to the journey
      */
     public void addJourneyLeg(JourneyLeg journeyLeg) {

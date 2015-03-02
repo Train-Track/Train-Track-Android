@@ -12,15 +12,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import uk.co.traintrackapp.traintrack.adapter.JourneyLegRowAdapter;
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
 
 public class JourneyActivity extends ActionBarActivity {
 
-    private String journeyId = "";
     private Journey journey;
     private JourneyLegRowAdapter adapter;
 
@@ -28,14 +25,19 @@ public class JourneyActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journey);
+        TrainTrack app = (TrainTrack) getApplication();
 
         final Intent intent = getIntent();
-        journeyId = intent.getStringExtra("journey_id");
+        final String journeyUuid = intent.getStringExtra("journey_uuid");
+        journey = app.getJourney(journeyUuid);
 
         final TextView name = (TextView) findViewById(R.id.name);
-        final ArrayList<JourneyLeg> journeyLegs = new ArrayList<>();
+        name.setText(journey.toString());
+        final TextView date = (TextView) findViewById(R.id.date);
+        //TODO change to journey date
+        date.setText(journey.getOrigin().getCrsCode());
         adapter = new JourneyLegRowAdapter(LayoutInflater.from(this),
-                journeyLegs);
+                journey.getJourneyLegs());
         final ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -44,8 +46,8 @@ public class JourneyActivity extends ActionBarActivity {
                 JourneyLeg journeyLeg = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
-                intent.putExtra("journey_leg_id", journeyLeg.getId());
-                intent.putExtra("journey_id", journeyId);
+                intent.putExtra("journey_leg_uuid", journeyLeg.getUuid());
+                intent.putExtra("journey_uuid", journeyUuid);
                 startActivity(intent);
             }
 
@@ -63,18 +65,18 @@ public class JourneyActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_journey_leg:
-                Toast.makeText(getApplicationContext(), "Add journey leg",
+                Toast.makeText(getApplicationContext(), "Add Journey Leg",
                         Toast.LENGTH_LONG).show();
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         StationActivity.class);
-                intent.putExtra("station_id", journey.getDestination()
-                        .getId());
-                intent.putExtra("journey_id", journeyId);
+                intent.putExtra("station_crs", journey.getDestination()
+                        .getCrsCode());
+                intent.putExtra("journey_uuid", journey.getUuid());
                 startActivity(intent);
                 finish();
                 return true;
             case R.id.delete_journey:
-                //journey.deleteEventually();
+                //TODO Delete this journey
                 Toast.makeText(getApplicationContext(), "Journey was deleted",
                         Toast.LENGTH_SHORT).show();
                 finish();
@@ -82,17 +84,6 @@ public class JourneyActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void onResume() {
-        super.onResume();
-
-		ArrayList<JourneyLeg> journeyLegs = journey.getJourneyLegs();
-		if (journeyLegs.size() == 0) {
-			finish();
-		}
-		adapter.refresh(journeyLegs);
-
     }
 
 }
