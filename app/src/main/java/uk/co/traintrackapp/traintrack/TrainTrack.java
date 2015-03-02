@@ -56,7 +56,7 @@ public class TrainTrack extends Application {
         }
         this.journeys.clear();
         for (Journey j: journeys) {
-            this.journeys.put(String.valueOf(j.getId()), j);
+            this.journeys.put(String.valueOf(j.getUuid()), j);
         }
     }
 
@@ -70,8 +70,8 @@ public class TrainTrack extends Application {
         return new ArrayList<>(journeys.values());
     }
 
-    public Journey getJourney(String objectId) {
-        return this.journeys.get(objectId);
+    public Journey getJourney(String uuid) {
+        return this.journeys.get(uuid);
     }
 
     public Operator getOperator(String operatorCode) {

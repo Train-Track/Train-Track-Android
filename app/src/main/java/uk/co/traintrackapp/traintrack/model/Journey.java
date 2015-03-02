@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
@@ -20,10 +21,12 @@ public class Journey {
 
     public static final String FILENAME = "journeys.json";
     private int id;
+    private String uuid;
     private ArrayList<JourneyLeg> journeyLegs;
 
     public Journey() {
         id = 0;
+        uuid = UUID.randomUUID().toString();
         journeyLegs = new ArrayList<>();
     }
 
@@ -32,6 +35,7 @@ public class Journey {
         journeyLegs = new ArrayList<>();
         try {
             id = json.getInt("id");
+            uuid = json.getString("uuid");
             JSONArray legs = json.getJSONArray("journey_legs");
             for (int i = 0; i < legs.length(); i++) {
                 journeyLegs.add(new JourneyLeg(legs.getJSONObject(i)));
@@ -47,6 +51,13 @@ public class Journey {
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * @return the uuid
+     */
+    public String getUuid() {
+        return uuid;
     }
 
     /**
@@ -100,6 +111,7 @@ public class Journey {
         JSONObject json = new JSONObject();
         try {
             json.put("id", getId());
+            json.put("uuid", getUuid());
             JSONArray jsonArray = new JSONArray();
             for (JourneyLeg journeyLeg : getJourneyLegs()) {
                 jsonArray.put(journeyLeg.toJson());

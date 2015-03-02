@@ -7,12 +7,14 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class JourneyLeg {
 
     private int id;
+    private String uuid;
     private int journeyId;
     private Date scheduledDeparture;
     private Date scheduledArrival;
@@ -26,6 +28,7 @@ public class JourneyLeg {
 
     public JourneyLeg() {
         id = 0;
+        uuid = UUID.randomUUID().toString();
     }
 
     public JourneyLeg(JSONObject json) {
@@ -33,6 +36,7 @@ public class JourneyLeg {
         try {
             id = json.getInt("id");
             journeyId = json.getInt("journey_id");
+            uuid = json.getString("uuid");
             //TODO format dates
             String schDep = json.getString("scheduled_departure");
             String schArr = json.getString("scheduled_arrival");
@@ -52,6 +56,10 @@ public class JourneyLeg {
 
     public int getId() {
         return id;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public int getJourneyId() {
@@ -195,6 +203,7 @@ public class JourneyLeg {
         JSONObject json = new JSONObject();
         try {
             json.put("id", getId());
+            json.put("uuid", getUuid());
             json.put("journey_id", getJourneyId());
             json.put("scheduled_departure", "");
             json.put("scheduled_arrival", "");

@@ -11,12 +11,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.UUID;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class User {
 
     private int id;
+    private String uuid;
     private String email;
     private String username;
     private int points;
@@ -24,6 +26,7 @@ public class User {
 
     public User() {
         id = 0;
+        uuid = UUID.randomUUID().toString();
         email = "";
         username = "";
         points = 0;
@@ -38,6 +41,7 @@ public class User {
         super();
         try {
             this.id = json.getInt("id");
+            this.uuid = json.getString("uuid");
             this.username = json.getString("username");
             this.email = json.getString("email");
             this.points = json.getInt("points");
@@ -49,6 +53,10 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public String getEmail() {

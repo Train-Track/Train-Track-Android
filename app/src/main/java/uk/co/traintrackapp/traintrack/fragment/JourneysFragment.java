@@ -39,7 +39,7 @@ public class JourneysFragment extends Fragment {
                 Journey journey = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getActivity(),
                         JourneyActivity.class);
-                intent.putExtra("journey_id", journey.getId());
+                intent.putExtra("journey_uuid", journey.getUuid());
                 startActivity(intent);
             }
         });
