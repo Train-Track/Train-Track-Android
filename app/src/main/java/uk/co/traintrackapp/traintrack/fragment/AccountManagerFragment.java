@@ -7,23 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-
-import com.parse.FindCallback;
-import com.parse.ParseAnonymousUtils;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
-
-import java.util.List;
 
 import uk.co.traintrackapp.traintrack.R;
-import uk.co.traintrackapp.traintrack.model.Badge;
-import uk.co.traintrackapp.traintrack.model.UserBadge;
-import uk.co.traintrackapp.traintrack.utils.Utils;
+import uk.co.traintrackapp.traintrack.TrainTrack;
+import uk.co.traintrackapp.traintrack.model.User;
 
 
 public class AccountManagerFragment extends Fragment {
@@ -36,17 +23,18 @@ public class AccountManagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_account_manager, container, false);
-        final ParseUser user = ParseUser.getCurrentUser();
+        final TrainTrack app = (TrainTrack) getActivity().getApplication();
+        final User user = app.getUser();
 
         final EditText username = (EditText) v.findViewById(R.id.username);
         final EditText email = (EditText) v.findViewById(R.id.email);
-        final EditText password = (EditText) v.findViewById(R.id.password);
+        //final EditText password = (EditText) v.findViewById(R.id.password);
         Button update = (Button) v.findViewById(R.id.update);
         Button logout = (Button) v.findViewById(R.id.logout);
         Button login = (Button) v.findViewById(R.id.login);
         Button signup = (Button) v.findViewById(R.id.signup);
 
-        if (ParseAnonymousUtils.isLinked(user)) {
+        if (user.getId() == 0) {
             signup.setVisibility(View.VISIBLE);
             login.setVisibility(View.VISIBLE);
         } else {
@@ -59,43 +47,16 @@ public class AccountManagerFragment extends Fragment {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Some error checking is required
+                //TODO: Send to server
                 user.setUsername(username.getText().toString());
                 user.setEmail(email.getText().toString());
-                user.setPassword(password.getText().toString());
-                user.signUpInBackground(new SignUpCallback() {
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Toast.makeText(getActivity(), "Hello!", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            Utils.log("User Sign Up: " + e.getMessage());
-                        }
-                    }
-                });
             }
         });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseUser.logOut();
-                ParseObject.unpinAllInBackground("Journeys");
-                ParseObject.unpinAllInBackground("JourneyLegs");
-                //TODO: Close and reopen the app
-            }
-        });
-
-        ParseQuery<UserBadge> query = ParseQuery.getQuery(UserBadge.class);
-        query.orderByDescending("createdAt");
-        query.include("badge");
-        query.include("badge.image");
-        query.findInBackground(new FindCallback<UserBadge>() {
-            public void done(List<UserBadge> badgeList, ParseException e) {
-                for (UserBadge userBadge : badgeList) {
-                    Badge badge = userBadge.getBadge();
-                    Utils.log("I have found the badge: " + badge.toString());
-                }
+                //TODO: Set user to nobody and clear the app cache
             }
         });
 

@@ -1,79 +1,95 @@
 package uk.co.traintrackapp.traintrack.model;
 
-import java.util.ArrayList;
-import java.util.Locale;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.parse.ParseClassName;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import java.util.Locale;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-@ParseClassName("Station")
-public class Station extends ParseObject {
+public class Station {
 
+    public static final String FILENAME = "stations.json";
+    private int id;
+    private String name;
+    private String crs;
+    private double lat;
+    private double lng;
     private double distance;
+    private boolean isFavourite;
 
     public Station() {
+        id = 0;
+        name = "Unknown";
+        crs = "";
+        lat = 0;
+        lng = 0;
+        distance = 0;
+        isFavourite = false;
     }
 
-    /*
-     * @return the crsCode
+    public Station(JSONObject json) {
+        this();
+        try {
+            this.id = json.getInt("id");
+            this.name = json.getString("name");
+            this.crs = json.getString("crs");
+            this.lat = json.getDouble("lat");
+            this.lng = json.getDouble("lng");
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @return the id
      */
-    public String getCrsCode() {
-        return getString("crs");
+    public int getId() {
+        return id;
     }
 
     /**
      * @return the name
      */
     public String getName() {
-        return getString("name");
+        return name;
     }
 
-    /**
-     * @return the image
+    /*
+     * @return the crsCode
      */
-    public Image getImage() {
-        return (Image) getParseObject("image");
-    }
-
-    /**
-     * @return the location
-     */
-    public ParseGeoPoint getLocation() {
-        return getParseGeoPoint("location");
+    public String getCrsCode() {
+        return crs;
     }
 
     /**
      * @return the latitude
      */
     public double getLatitude() {
-        return getLocation().getLatitude();
+        return lat;
     }
 
     /**
      * @return the longitude
      */
     public double getLongitude() {
-        return getLocation().getLongitude();
+        return lng;
     }
 
     /**
      * @return true if favourite
      */
+    //TODO remove the bpw test case
     public boolean isFavourite() {
-        // TODO Auto-generated method stub
-        return false;
+        return isFavourite || crs.equals("BPW");
     }
 
     /**
-     * @param favourite
+     * @param favourite true or false
      */
     public void setFavourite(boolean favourite) {
-        // TODO Auto-generated method stub
+        this.isFavourite = favourite;
     }
 
     /**
@@ -87,7 +103,7 @@ public class Station extends ParseObject {
      * @return distance (km)
      */
     public double getDistance() {
-        return this.distance;
+        return distance;
     }
 
     /**
@@ -121,52 +137,20 @@ public class Station extends ParseObject {
     }
 
     /**
-     * @param crs CRS Code
-     * @return the station
+     *
+     * @return JSON Object
      */
-    public static Station getByCrs(String crs) {
-        ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-        query.fromLocalDatastore();
-        query.whereEqualTo("crs", crs);
-        Station station = null;
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
         try {
-            station = query.getFirst();
-        } catch (ParseException e) {
+            json.put("id", getId());
+            json.put("name", getName());
+            json.put("crs", getCrsCode());
+            json.put("lat", getLatitude());
+            json.put("lng", getLongitude());
+        } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
-        return station;
+        return json;
     }
-
-    /**
-     * @param id station ID
-     * @return the station
-     */
-    public static Station getById(String id) {
-        ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-        query.fromLocalDatastore();
-        Station station = null;
-        try {
-            station = query.get(id);
-        } catch (ParseException e) {
-            Utils.log(e.getMessage());
-        }
-        return station;
-    }
-
-    /**
-     * @return all the stations
-     */
-    public static ArrayList<Station> getAll() {
-        ArrayList<Station> stations = new ArrayList<Station>();
-        ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-        query.fromLocalDatastore();
-        query.orderByAscending("name");
-        try {
-            stations.addAll(query.find());
-        } catch (ParseException e) {
-            Utils.log(e.getMessage());
-        }
-        return stations;
-    }
-
 }

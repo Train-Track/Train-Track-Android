@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
@@ -16,37 +15,22 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseImageView;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.adapter.ServiceItemRowAdapter;
 import uk.co.traintrackapp.traintrack.api.ServiceItem;
 import uk.co.traintrackapp.traintrack.api.StationBoard;
-import uk.co.traintrackapp.traintrack.model.Image;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationActivity extends ActionBarActivity {
 
-    private String stationId;
     private Station station;
     private ServiceItemRowAdapter adapter;
     private ArrayList<ServiceItem> serviceItems;
     private ProgressBar progress;
     private TextView nrccMessage;
-    private TextView generatedAt;
-    private SaveCallback savedFileCallback;
-    private SaveCallback savedImageCallback;
-    private ParseFile imageFile;
-    private Image newImage;
     static final int TAKE_PHOTO = 12;
 
     @Override
@@ -55,17 +39,17 @@ public class StationActivity extends ActionBarActivity {
         setContentView(R.layout.activity_station);
 
         final Intent intent = getIntent();
-        stationId = intent.getStringExtra("station_id");
-        final String stationName = intent.getStringExtra("station_name");
         final String stationCrs = intent.getStringExtra("station_crs");
         final String journeyId = intent.getStringExtra("journey_id");
+        TrainTrack app = (TrainTrack) getApplication();
+        station = app.getStation(stationCrs);
+
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(stationName);
+        actionBar.setTitle(station.getName());
 
         progress = (ProgressBar) findViewById(R.id.progress);
-        generatedAt = (TextView) findViewById(R.id.generated_at);
         nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
-        serviceItems = new ArrayList<ServiceItem>();
+        serviceItems = new ArrayList<>();
         adapter = new ServiceItemRowAdapter(serviceItems, station, this);
 
         final ListView list = (ListView) findViewById(R.id.list);
@@ -73,26 +57,27 @@ public class StationActivity extends ActionBarActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View view, int index,
                                     long x) {
-                ServiceItem serviceItem = (ServiceItem) adapter.getItem(index);
+                ServiceItem serviceItem = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         ServiceActivity.class);
                 intent.putExtra("journey_id", journeyId);
                 intent.putExtra("service_id", serviceItem.getServiceId());
-                intent.putExtra("origin_name", serviceItem.getOriginName());
-                intent.putExtra("station_id", stationId);
-                intent.putExtra("station_crs", stationCrs);
-                intent.putExtra("station_name", stationName);
-                intent.putExtra("destination_name", serviceItem.getDestinationName());
-                intent.putExtra("operator_code", serviceItem.getOperatorCode());
-                intent.putExtra("operator_name", serviceItem.getOperatorName());
+                intent.putExtra("origin_name", serviceItem.getOrigin().getName());
+                intent.putExtra("station_id", station.getId());
+                intent.putExtra("station_crs", station.getCrsCode());
+                intent.putExtra("station_name", station.getName());
+                intent.putExtra("destination_name", serviceItem.getDestination().getName());
+                intent.putExtra("operator_code", serviceItem.getOperator().getCode());
+                intent.putExtra("operator_name", serviceItem.getOperator().getName());
                 intent.putExtra("platform", serviceItem.getPlatform());
                 intent.putExtra("time", serviceItem.getTime());
                 startActivityForResult(intent, 1);
-                return;
             }
 
         });
 
+        //TODO do some cool image stuff
+        /*
         final ParseImageView image = (ParseImageView) findViewById(R.id.image);
         image.setPlaceholder(getResources().getDrawable(R.drawable.platform));
         image.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +90,11 @@ public class StationActivity extends ActionBarActivity {
                 }
             }
         });
+        */
 
-        final GetCallback<Image> imageCallback = new GetCallback<Image>() {
+        //TODO some fancy image thing
+        /*
+        GetCallback<Image> imageCallback = new GetCallback<Image>() {
             @Override
             public void done(Image stationImage, ParseException e) {
                 if ((e == null) && (stationImage != null)) {
@@ -143,25 +131,12 @@ public class StationActivity extends ActionBarActivity {
             }
         };
 
-        ParseQuery<Station> query = ParseQuery.getQuery(Station.class);
-        query.getInBackground(stationId, new GetCallback<Station>() {
-            @Override
-            public void done(Station result, ParseException e) {
-                if (e == null) {
-                    station = result;
-                    if (station.getImage() != null) {
-                        station.getImage().fetchInBackground(imageCallback);
-                    } else {
-                        Utils.log("No image for " + station);
-                    }
-                    result.pinInBackground();
-                } else {
-                    Utils.log("Getting station: " + e.getMessage());
-                }
-            }
-        });
+        if (station.getImage() != null) {
+            station.getImage().fetchInBackground(imageCallback);
+        }
+        */
 
-        new GetBoardRequest().execute(stationCrs);
+        new GetBoardRequest().execute(station.getCrsCode());
 
     }
 
@@ -193,7 +168,7 @@ public class StationActivity extends ActionBarActivity {
                 return true;
             case R.id.map:
                 Intent intent = new Intent().setClass(this, MapActivity.class);
-                intent.putExtra("station_id", stationId);
+                intent.putExtra("station_crs", station.getCrsCode());
                 startActivity(intent);
                 return true;
             default:
@@ -210,8 +185,7 @@ public class StationActivity extends ActionBarActivity {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
-            imageFile = new ParseFile(station.getCrsCode() + ".png", byteArray);
-            imageFile.saveInBackground(savedFileCallback);
+            //TODO do something with the bytes
         } else if (resultCode == Activity.RESULT_OK) {
             if (getParent() == null) {
                 setResult(Activity.RESULT_OK);
@@ -242,10 +216,8 @@ public class StationActivity extends ActionBarActivity {
             ArrayList<String> nrccMessages = board.getNrccMessages();
             if (nrccMessages.size() > 0) {
                 nrccMessage.setVisibility(View.VISIBLE);
-                nrccMessage.setText(nrccMessages.get(0).toString());
+                nrccMessage.setText(nrccMessages.get(0));
             }
-
-            generatedAt.setText(board.getGeneratedAtString());
 
         }
     }

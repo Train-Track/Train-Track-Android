@@ -1,6 +1,5 @@
 package uk.co.traintrackapp.traintrack;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,7 +26,6 @@ import uk.co.traintrackapp.traintrack.api.CallingPoint;
 import uk.co.traintrackapp.traintrack.api.Service;
 import uk.co.traintrackapp.traintrack.model.Station;
 
-
 public class MapActivity extends Activity {
 
     private GoogleMap map;
@@ -38,7 +36,7 @@ public class MapActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        hashmap = new HashMap<Marker, Station>();
+        hashmap = new HashMap<>();
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
@@ -63,7 +61,7 @@ public class MapActivity extends Activity {
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         StationActivity.class);
                 Station station = hashmap.get(marker);
-                intent.putExtra("station_id", station.getObjectId());
+                intent.putExtra("station_id", station.getId());
                 intent.putExtra("station_name", station.getName());
                 intent.putExtra("station_crs", station.getCrsCode());
                 startActivity(intent);
@@ -82,27 +80,30 @@ public class MapActivity extends Activity {
         @Override
         protected void onPostExecute(Service s) {
             super.onPostExecute(s);
+            if (s == null) {
+                return;
+            }
             ArrayList<CallingPoint> callingPoints = s.getCallingPoints();
             LatLng[] points = new LatLng[callingPoints.size()];
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (int i = 0; i < callingPoints.size(); i++) {
                 CallingPoint callingPoint = callingPoints.get(i);
-                //TODO: Get the station location from crsCode
-                /*
                 Station station = callingPoint.getStation();
-                LatLng pos = new LatLng(station.getLatitude(),
-                        station.getLongitude());
-                points[i] = pos;
-                builder.include(pos);
+                if (station != null) {
+                    points[i] = new LatLng(station.getLatitude(),
+                            station.getLongitude());
+                } else {
+                    points[i] = new LatLng(0, 0);
+                }
+                builder.include(points[i]);
                 Marker m = map.addMarker(new MarkerOptions()
-                        .position(pos)
-                        .title(station.getName())
+                        .position(points[i])
+                        .title(callingPoint.getStation().toString())
                         .snippet(callingPoint.getScheduledTime())
                         .icon(BitmapDescriptorFactory
                                 .fromResource(R.drawable.ic_launcher))
                         .visible(true));
                 hashmap.put(m, station);
-                */
             }
             map.addPolyline(new PolylineOptions().add(points).width(12)
                     .color(Color.RED));
@@ -115,15 +116,17 @@ public class MapActivity extends Activity {
 
         @Override
         protected ArrayList<Station> doInBackground(String... service) {
-            ArrayList<Station> stations = new ArrayList<Station>();
-            String stationId = getIntent().getStringExtra("station_id");
-            if (stationId != null) {
-                stations.add(Station.getById(stationId));
+            TrainTrack app = (TrainTrack) getApplication();
+            ArrayList<Station> stations = new ArrayList<>();
+
+            String stationCrs = getIntent().getStringExtra("station_crs");
+            if (stationCrs != null) {
+                stations.add(app.getStation(stationCrs));
             }
-            boolean allStations = getIntent().getBooleanExtra("all_stations",
-                    false);
-            if (allStations) {
-                stations.addAll(Station.getAll());
+
+            boolean all = getIntent().getBooleanExtra("all_stations", false);
+            if (all) {
+                stations = app.getStations();
             }
             return stations;
         }

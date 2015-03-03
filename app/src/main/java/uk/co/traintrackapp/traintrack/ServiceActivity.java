@@ -1,9 +1,8 @@
 package uk.co.traintrackapp.traintrack;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -17,11 +16,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import uk.co.traintrackapp.traintrack.adapter.CallingPointRowAdapter;
 import uk.co.traintrackapp.traintrack.api.CallingPoint;
 import uk.co.traintrackapp.traintrack.api.Service;
 import uk.co.traintrackapp.traintrack.utils.Utils;
-
 
 public class ServiceActivity extends ActionBarActivity {
 
@@ -29,8 +29,9 @@ public class ServiceActivity extends ActionBarActivity {
     private ProgressBar progress;
     private ArrayList<CallingPoint> callingPoints;
     private TextView disruptionReason;
-    private TextView generatedAt;
+    private TextView toc;
     private String serviceId;
+    private Service service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,28 +43,18 @@ public class ServiceActivity extends ActionBarActivity {
         new GetServiceRequest().execute(serviceId);
 
         final String journeyId = intent.getStringExtra("journey_id");
-        final String originName = intent.getStringExtra("origin_name");
-        final String stationId = intent.getStringExtra("station_id");
         final String stationCrs = intent.getStringExtra("station_crs");
-        final String stationName = intent.getStringExtra("station_name");
-        final String platorm = intent.getStringExtra("platform");
-        final String time = intent.getStringExtra("time");
+        final String originName = intent.getStringExtra("origin_name");
         final String destinationName = intent
                 .getStringExtra("destination_name");
-        final String operatorCode = intent.getStringExtra("operator_code");
-        final String operatorName = intent.getStringExtra("operator_name");
-
-        callingPoints = new ArrayList<CallingPoint>();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(originName + " to " + destinationName);
-        final TextView toc = (TextView) findViewById(R.id.toc);
-        toc.setText(operatorName);
 
+        callingPoints = new ArrayList<>();
         progress = (ProgressBar) findViewById(R.id.progress);
         disruptionReason = (TextView) findViewById(R.id.disruption_reason);
-        generatedAt = (TextView) findViewById(R.id.generated_at);
-
+        toc = (TextView) findViewById(R.id.toc);
         adapter = new CallingPointRowAdapter(callingPoints, stationCrs, this);
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
@@ -75,28 +66,22 @@ public class ServiceActivity extends ActionBarActivity {
                     return;
                 }
 
-                CallingPoint callingPoint = (CallingPoint) adapter
+                CallingPoint callingPoint = adapter
                         .getItem(index);
 
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
                 intent.putExtra("journey_id", journeyId);
-                intent.putExtra("service_id", serviceId);
-                intent.putExtra("departure_station_id", stationId);
-                intent.putExtra("departure_station_crs", stationCrs);
-                intent.putExtra("departure_station_name", stationName);
-                intent.putExtra("departure_time", time);
-                intent.putExtra("departure_platform", platorm);
+                intent.putExtra("service_id", service.getServiceId());
+                intent.putExtra("operator_code", service.getOperator().getCode());
+                intent.putExtra("departure_station_crs", service.getStation().getCrsCode());
+                intent.putExtra("departure_time", service.getScheduledTimeDeparture());
+                intent.putExtra("departure_platform", service.getPlatform());
                 intent.putExtra("arrival_station_crs",
-                        callingPoint.getStationCrs());
-                intent.putExtra("arrival_station_name",
-                        callingPoint.getStationName());
-                intent.putExtra("arrival_time", callingPoint.getTime());
+                        callingPoint.getStation().getCrsCode());
+                intent.putExtra("arrival_time", callingPoint.getScheduledTime());
                 intent.putExtra("arrival_platform", "");
-                intent.putExtra("operator_code", operatorCode);
-                intent.putExtra("operator_name", operatorName);
                 startActivityForResult(intent, 1);
-                return;
             }
 
         });
@@ -150,18 +135,24 @@ public class ServiceActivity extends ActionBarActivity {
         protected void onPostExecute(Service s) {
             super.onPostExecute(s);
             Utils.log("Got service.");
+            service = s;
             progress.setVisibility(View.GONE);
             callingPoints.clear();
             callingPoints.addAll(s.getCallingPoints());
             adapter.notifyDataSetChanged();
-
+            toc.setText(service.getOperator() + " - @" + service.getOperator().getTwitter());
+            toc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String tweetUrl = "https://twitter.com/intent/tweet?text=@" + service.getOperator().getTwitter();
+                    Intent tweet = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+                    startActivity(tweet);
+                }
+            });
             if (s.getDisruptionReason() != null) {
                 disruptionReason.setText(s.getDisruptionReason());
                 disruptionReason.setVisibility(View.VISIBLE);
             }
-
-            generatedAt.setText(s.getGeneratedAtString());
-
         }
     }
 

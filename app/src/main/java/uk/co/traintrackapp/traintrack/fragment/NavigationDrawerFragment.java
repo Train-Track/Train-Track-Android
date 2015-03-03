@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import uk.co.traintrackapp.traintrack.R;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -155,6 +156,9 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                if (mCallbacks != null) {
+                    mCallbacks.onNavigationDrawerClosed();
+                }
                 if (!isAdded()) {
                     return;
                 }
@@ -287,6 +291,7 @@ public class NavigationDrawerFragment extends Fragment {
         /**
          * Called when an item in the navigation drawer is selected.
          */
+        void onNavigationDrawerClosed();
         void onNavigationDrawerItemSelected(int position);
     }
 }

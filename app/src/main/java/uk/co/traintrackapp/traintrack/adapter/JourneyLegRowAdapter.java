@@ -18,8 +18,8 @@ public class JourneyLegRowAdapter extends BaseAdapter {
     private LayoutInflater inflater = null;
 
     /**
-     * @param inflater
-     * @param journeyLegs
+     * @param inflater layout this is going in
+     * @param journeyLegs list of journey legs to show
      */
     public JourneyLegRowAdapter(LayoutInflater inflater,
                                 ArrayList<JourneyLeg> journeyLegs) {
@@ -40,16 +40,25 @@ public class JourneyLegRowAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = inflater.inflate(R.layout.row_journey_leg, null);
+
+        ViewHolder holder;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = inflater.inflate(R.layout.row_journey_leg, null);
+            holder.name = (TextView) convertView.findViewById(R.id.name);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
         JourneyLeg journeyLeg = rowList.get(position);
-        TextView name = (TextView) v.findViewById(R.id.name);
-        name.setText(journeyLeg.toString());
-        return v;
+        holder.name.setText(journeyLeg.toString());
+
+        return convertView;
     }
 
-    public void refresh(ArrayList<JourneyLeg> journeyLegs) {
-        this.rowList = journeyLegs;
-        this.notifyDataSetChanged();
+    static class ViewHolder {
+        TextView name;
     }
 
 }

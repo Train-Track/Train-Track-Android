@@ -14,15 +14,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
+import uk.co.traintrackapp.traintrack.model.Operator;
+import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
-
 
 public class JourneyLegActivity extends ActionBarActivity {
 
@@ -33,13 +29,18 @@ public class JourneyLegActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final TrainTrack app = (TrainTrack) getApplication();
         final Intent intent = getIntent();
-        final String journeyLegId = intent.getStringExtra("journey_leg_id");
-        final String journeyId = intent.getStringExtra("journey_id");
+        final String journeyLegUuid = intent.getStringExtra("journey_leg_uuid");
+        final String journeyUuid = intent.getStringExtra("journey_uuid");
 
-        if (journeyLegId != null) {
+        if (journeyLegUuid != null) {
 
             setContentView(R.layout.activity_journey_leg);
+            journey = app.getJourney(journeyUuid);
+            journeyLeg = journey.getJourneyLegByUuid(journeyLegUuid);
+            getSupportActionBar().setTitle(journeyLeg.toString());
+
             final TextView departureStation = (TextView) findViewById(R.id.departure_station);
             final TextView departureTime = (TextView) findViewById(R.id.departure_time);
             final TextView departurePlatform = (TextView) findViewById(R.id.departure_platform);
@@ -47,30 +48,16 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView arrivalTime = (TextView) findViewById(R.id.arrival_time);
             final TextView arrivalPlatform = (TextView) findViewById(R.id.arrival_platform);
 
-            ParseQuery<JourneyLeg> query = ParseQuery
-                    .getQuery(JourneyLeg.class);
-            query.fromLocalDatastore();
-            query.getInBackground(journeyLegId, new GetCallback<JourneyLeg>() {
-                @Override
-                public void done(JourneyLeg result, ParseException e) {
-                    if (e == null) {
-                        journeyLeg = result;
-                        departureStation.setText(journeyLeg
-                                .getDepartureStation().toString());
-                        departureTime.setText(journeyLeg
-                                .getDepartureTimeAsString());
-                        departurePlatform.setText(journeyLeg
-                                .getDeparturePlatform());
-                        arrivalStation.setText(journeyLeg.getArrivalStation()
-                                .toString());
-                        arrivalTime.setText(journeyLeg.getArrivalTimeAsString());
-                        arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
-                        getSupportActionBar().setTitle(journeyLeg.toString());
-                    } else {
-                        Utils.log(e.getMessage());
-                    }
-                }
-            });
+            departureStation.setText(journeyLeg
+                    .getDepartureStation().toString());
+            departureTime.setText(journeyLeg
+                    .getDepartureTimeAsString());
+            departurePlatform.setText(journeyLeg
+                    .getDeparturePlatform());
+            arrivalStation.setText(journeyLeg.getArrivalStation()
+                    .toString());
+            arrivalTime.setText(journeyLeg.getArrivalTimeAsString());
+            arrivalPlatform.setText(journeyLeg.getArrivalPlatform());
 
         } else {
 
@@ -79,15 +66,10 @@ public class JourneyLegActivity extends ActionBarActivity {
             getSupportActionBar().setTitle(getString(R.string.action_new_journey));
 
             final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
-            // final String departureStationId = intent
-            // .getStringExtra("departure_station_id");
-            // final String departureStationCrs = intent
-            // .getStringExtra("departure_station_crs");
-            final String departureStationName = intent
-                    .getStringExtra("departure_station_name");
-            // final Station departureStation = Station
-            // .getById(departureStationId);
-            departureStationTv.setText(departureStationName);
+            final String departureStationCrs = intent
+                    .getStringExtra("departure_station_crs");
+            final Station departureStation = app.getStation(departureStationCrs);
+            departureStationTv.setText(departureStation.getName());
 
             final TextView departurePlatformTv = (TextView) findViewById(R.id.departure_platform);
             String departurePlatform = intent
@@ -97,7 +79,8 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView departureTimeTv = (TextView) findViewById(R.id.departure_time);
             String departureTime = intent.getStringExtra("departure_time");
             departureTimeTv.setText(departureTime);
-            journeyLeg.setDepartureTime(Utils.getDateWithTime(departureTime));
+            journeyLeg.setScheduledDeparture(Utils.getDateWithTime(departureTime));
+            journeyLeg.setActualDeparture(Utils.getDateWithTime(departureTime));
 
             int departureHour = Integer.valueOf(departureTime.split(":")[0]);
             int departureMinute = Integer.valueOf(departureTime.split(":")[1]);
@@ -108,7 +91,7 @@ public class JourneyLegActivity extends ActionBarActivity {
                                       int minute) {
                     departureTimeTv.setText(Utils.zeroPadTime(
                             hourOfDay, minute));
-                    journeyLeg.setDepartureTime(Utils.getDateWithTime(
+                    journeyLeg.setScheduledDeparture(Utils.getDateWithTime(
                             hourOfDay, minute));
                 }
             }, departureHour, departureMinute, true);
@@ -121,13 +104,10 @@ public class JourneyLegActivity extends ActionBarActivity {
             });
 
             final TextView arrivalStationTv = (TextView) findViewById(R.id.arrival_station);
-            // final String arrivalStationCrs = intent
-            // .getStringExtra("arrival_station_crs");
-            final String arrivalStationName = intent
-                    .getStringExtra("arrival_station_name");
-            // final Station arrivalStation =
-            // Station.getByCrs(arrivalStationCrs);
-            arrivalStationTv.setText(arrivalStationName);
+            final String arrivalStationCrs = intent
+                    .getStringExtra("arrival_station_crs");
+            final Station arrivalStation = app.getStation(arrivalStationCrs);
+            arrivalStationTv.setText(arrivalStation.getName());
 
             final TextView arrivalPlatformTv = (TextView) findViewById(R.id.arrival_platform);
             String arrivalPlatform = intent.getStringExtra("arrival_platform");
@@ -136,7 +116,8 @@ public class JourneyLegActivity extends ActionBarActivity {
             final TextView arrivalTimeTv = (TextView) findViewById(R.id.arrival_time);
             String arrivalTime = intent.getStringExtra("arrival_time");
             arrivalTimeTv.setText(arrivalTime);
-            journeyLeg.setArrivalTime(Utils.getDateWithTime(arrivalTime));
+            journeyLeg.setScheduledArrival(Utils.getDateWithTime(arrivalTime));
+            journeyLeg.setActualArrival(Utils.getDateWithTime(arrivalTime));
 
             int arrivalHour = Integer.valueOf(arrivalTime.split(":")[0]);
             int arrivalMinute = Integer.valueOf(arrivalTime.split(":")[1]);
@@ -147,7 +128,7 @@ public class JourneyLegActivity extends ActionBarActivity {
                                       int minute) {
                     arrivalTimeTv.setText(Utils.zeroPadTime(hourOfDay,
                             minute));
-                    journeyLeg.setArrivalTime(Utils.getDateWithTime(
+                    journeyLeg.setScheduledArrival(Utils.getDateWithTime(
                             hourOfDay, minute));
                 }
             }, arrivalHour, arrivalMinute, true);
@@ -164,22 +145,22 @@ public class JourneyLegActivity extends ActionBarActivity {
                 @Override
                 public void onClick(View view) {
 
-                    if (journeyId == null) {
-                        Utils.log("Creating new Journey");
-                        journey = new Journey();
-                        journey.setUser(ParseUser.getCurrentUser());
-                        journey.saveEventually();
-                    }
-
-                    journeyLeg.setJourney(journey);
-                    // journeyLeg.setDepartureStation(departureStation);
+                    journeyLeg.setDepartureStation(departureStation);
                     journeyLeg.setDeparturePlatform(departurePlatformTv
                             .getText().toString());
-                    // journeyLeg.setArrivalStation(arrivalStation);
+                    journeyLeg.setArrivalStation(arrivalStation);
                     journeyLeg.setArrivalPlatform(arrivalPlatformTv.getText()
                             .toString());
-                    journeyLeg.saveEventually();
-                    journeyLeg.pinInBackground();
+                    journeyLeg.setOperator(new Operator());
+                    if (journeyUuid == null) {
+                        Utils.log("Creating new Journey");
+                        journey = new Journey();
+                        app.getUser().getJourneys().add(journey);
+                    } else {
+                        journey = app.getJourney(journeyUuid);
+                    }
+                    journey.addJourneyLeg(journeyLeg);
+                    app.getUser().save(getApplicationContext());
 
                     if (getParent() == null) {
                         setResult(Activity.RESULT_OK);
@@ -204,14 +185,18 @@ public class JourneyLegActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        final TrainTrack app = (TrainTrack) getApplication();
         switch (item.getItemId()) {
             case R.id.delete_journey_leg:
-                journeyLeg.deleteEventually();
+                //remove journey leg from journey and from app
+                journey.removeJourneyLeg(journeyLeg);
                 Toast.makeText(getApplicationContext(), "Journey leg was deleted",
                         Toast.LENGTH_SHORT).show();
+                //remove journey if no legs left
                 if (journey.getJourneyLegs().size() == 0) {
-                    journey.deleteEventually();
+                    app.getUser().getJourneys().remove(journey);
                 }
+                app.getUser().save(getApplicationContext());
                 finish();
         }
         return true;

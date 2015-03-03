@@ -1,9 +1,6 @@
 package uk.co.traintrackapp.traintrack.adapter;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +10,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.parse.ParseGeoPoint;
+import java.util.ArrayList;
+import java.util.List;
 
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.model.Station;
@@ -86,10 +84,10 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
-                List<Station> list = new ArrayList<Station>();
+                List<Station> list = new ArrayList<>();
 
                 if (origRowList == null) {
-                    origRowList = new ArrayList<Station>(rowList);
+                    origRowList = new ArrayList<>(rowList);
                 }
 
                 if (constraint == null || constraint.length() == 0) {
@@ -124,10 +122,10 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
-                List<Station> list = new ArrayList<Station>();
+                List<Station> list = new ArrayList<>();
 
                 if (origRowList == null) {
-                    origRowList = new ArrayList<Station>(rowList);
+                    origRowList = new ArrayList<>(rowList);
                 }
 
                 for (Station station : origRowList) {
@@ -156,18 +154,15 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
             @Override
             protected FilterResults performFiltering(CharSequence gps) {
                 FilterResults results = new FilterResults();
-                List<Station> list = new ArrayList<Station>();
+                List<Station> list = new ArrayList<>();
                 String[] geo = gps.toString().split(",");
-                ParseGeoPoint location = new ParseGeoPoint(
-                        Double.valueOf(geo[0]), Double.valueOf(geo[1]));
 
                 if (origRowList == null) {
-                    origRowList = new ArrayList<Station>(rowList);
+                    origRowList = new ArrayList<>(rowList);
                 }
 
                 for (Station station : origRowList) {
-                    double distance = station.getLocation()
-                            .distanceInKilometersTo(location);
+                    double distance = 0;
                     station.setDistance(distance);
                     list.add(station);
                 }

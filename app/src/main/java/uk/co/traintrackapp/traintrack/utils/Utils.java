@@ -1,10 +1,14 @@
 package uk.co.traintrackapp.traintrack.utils;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,6 +20,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -23,20 +28,19 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 
+import uk.co.traintrackapp.traintrack.model.Journey;
+
 public class Utils {
 
-    public static int BLUE = Color.parseColor("#33b5e5");
-    public static boolean DEBUG_MODE = true;
-    public static String API_URL = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb5.asmx";
-    public static String ACCESS_TOKEN = "";
-    public static String SOAP_START = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:com=\"http://thalesgroup.com/RTTI/2010-11-01/ldb/commontypes\" xmlns:typ=\"http://thalesgroup.com/RTTI/2012-01-13/ldb/types\">";
-    public static String SOAP_HEADER = "<soapenv:Header><com:AccessToken><com:TokenValue>"
-            + ACCESS_TOKEN
-            + "</com:TokenValue></com:AccessToken></soapenv:Header>";
-    public static String SOAP_END = "</soapenv:Envelope>";
+    public static final int ASSETS = 1;
+    public static final int FILESYSTEM = 2;
+    public static final int BLUE = Color.parseColor("#33b5e5");
+    public static final String API_BASE_URL = "http://192.168.1.73:3000";
+    private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
     /**
      * @param message
@@ -87,35 +91,46 @@ public class Utils {
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
             }
-        } catch (ClientProtocolException e) {
-            Utils.log(e.getMessage());
         } catch (IOException e) {
             Utils.log(e.getMessage());
         }
         return builder.toString();
     }
 
+
     /**
-     * @param xml
-     *            the xml to parse
-     * @return doc the parsed XML document. If unable to parse, returns null
+     * @param url
+     *            the URL to get from
      */
-    public static Document parseXml(String xml) {
-        Document doc = null;
+    public static String httpGet(String url) {
+        return httpGet(url, "");
+    }
+
+    /**
+     * @param url
+     *            the URL to get from
+     * @param getData
+     *            the raw string to send as the payload
+     */
+    public static String httpGet(String url, String getData) {
+        StringBuilder builder = new StringBuilder();
         try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory
-                    .newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            InputSource is = new InputSource(new StringReader(xml));
-            doc = builder.parse(is);
-        } catch (SAXException e) {
-            Utils.log(e.getMessage());
+            HttpClient client = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url + "?" + getData);
+            httpGet.setHeader("Accept", "application/json");
+            HttpResponse response = client.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            InputStream content = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    content));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
         } catch (IOException e) {
             Utils.log(e.getMessage());
-        } catch (ParserConfigurationException e) {
-            Utils.log(e.getMessage());
         }
-        return doc;
+        return builder.toString();
     }
 
     /**
@@ -140,8 +155,37 @@ public class Utils {
      * @return date object
      */
     public static Date getDateWithTime(String time) {
+        if (time.split(":").length != 2) {
+            return null;
+        }
         int hourOfDay = Integer.valueOf(time.split(":")[0]);
         int minute = Integer.valueOf(time.split(":")[1]);
         return getDateWithTime(hourOfDay, minute);
     }
+
+    /**
+     * Convert date to a date object
+     * @param date as a string 2015-03-02T09:07:00.000Z
+     * @return date
+     */
+    public static Date getDateFromString(String date) {
+        SimpleDateFormat formatter = new SimpleDateFormat(JSON_DATE_FORMAT);
+        try {
+            return formatter.parse(date);
+        } catch (ParseException e) {
+            Utils.log(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Convert date to a string format
+     * @param date to a string 2015-03-02T09:07:00.000Z
+     * @return date
+     */
+    public static String getStringFromDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat(JSON_DATE_FORMAT);
+        return formatter.format(date);
+    }
+
 }
