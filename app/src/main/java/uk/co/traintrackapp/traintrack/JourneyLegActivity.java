@@ -185,16 +185,19 @@ public class JourneyLegActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        final TrainTrack app = (TrainTrack) getApplication();
         switch (item.getItemId()) {
             case R.id.delete_journey_leg:
-                //TODO delete journey leg
-                //journeyLeg.deleteEventually();
+                //remove journey leg from journey and from app
+                app.removeJourney(journey);
+                journey.removeJourneyLeg(journeyLeg);
                 Toast.makeText(getApplicationContext(), "Journey leg was deleted",
                         Toast.LENGTH_SHORT).show();
-                if (journey.getJourneyLegs().size() == 0) {
-                    //TODO delete journey
-                    //journey.deleteEventually();
+                //only add it back to be saved if there is something to save
+                if (journey.getJourneyLegs().size() > 0) {
+                    app.addJourney(journey);
                 }
+                Journey.saveAll(app.getJourneys(), getApplicationContext());
                 finish();
         }
         return true;

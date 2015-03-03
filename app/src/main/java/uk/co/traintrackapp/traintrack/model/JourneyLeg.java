@@ -181,6 +181,21 @@ public class JourneyLeg {
     }
 
     /**
+     *
+     * @param obj object to check
+     * @return true if UUIDs are the same
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof JourneyLeg) {
+            JourneyLeg journeyLeg = (JourneyLeg) obj;
+            return this.getUuid().equals((journeyLeg.getUuid()));
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @return the departure time as hh:mm
      */
     public String getDepartureTimeAsString() {

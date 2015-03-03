@@ -111,6 +111,13 @@ public class Journey {
     }
 
     /**
+     * @param journeyLeg the leg to remove from the journey
+     */
+    public void removeJourneyLeg(JourneyLeg journeyLeg) {
+        journeyLegs.remove(journeyLeg);
+    }
+
+    /**
      * @return a string representation
      */
     public String toString() {
@@ -135,6 +142,21 @@ public class Journey {
             Utils.log(e.getMessage());
         }
         return json;
+    }
+
+    /**
+     *
+     * @param obj object to check
+     * @return true if UUIDs are the same
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Journey) {
+            Journey journey = (Journey) obj;
+            return this.getUuid().equals((journey.getUuid()));
+        } else {
+            return false;
+        }
     }
 
     /**

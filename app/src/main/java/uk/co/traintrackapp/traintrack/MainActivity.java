@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import uk.co.traintrackapp.traintrack.fragment.SettingsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationsFragment;
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.Station;
+import uk.co.traintrackapp.traintrack.model.User;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class MainActivity extends ActionBarActivity
@@ -113,13 +115,13 @@ public class MainActivity extends ActionBarActivity
     }
 
     /**
-     * Load the JSONArray from a file
+     * Load the JSON from a file
      * @param filename the file to open
      * @param from either assets folder or the file system
-     * @return JSON Array
+     * @return JSON String
      */
-    private JSONArray loadJSON(String filename, int from) {
-        JSONArray json = new JSONArray();
+    private String loadJSON(String filename, int from) {
+        String jsonString = "";
         try {
             StringBuilder sb = new StringBuilder();
             InputStream is;
@@ -128,7 +130,7 @@ public class MainActivity extends ActionBarActivity
             } else if (from == Utils.FILESYSTEM) {
                 is = openFileInput(filename);
             } else {
-                return json;
+                return jsonString;
             }
             InputStreamReader inputStreamReader = new InputStreamReader(is);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -136,11 +138,11 @@ public class MainActivity extends ActionBarActivity
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
-            json = new JSONArray(sb.toString());
-        } catch (IOException | JSONException e) {
+            jsonString = sb.toString();
+        } catch (IOException e) {
             Utils.log(e.getMessage());
         }
-        return json;
+        return jsonString;
     }
 
     class LoadAssets extends AsyncTask<String, String, String> {
@@ -150,29 +152,37 @@ public class MainActivity extends ActionBarActivity
             TrainTrack app = (TrainTrack) getApplication();
 
             ArrayList<Station> stations = new ArrayList<>();
-            JSONArray jsonStations = loadJSON(Station.FILENAME, Utils.ASSETS);
             try {
+                JSONArray jsonStations = new JSONArray(loadJSON(Station.FILENAME, Utils.ASSETS));
                 for (int i = 0; i < jsonStations.length(); i++) {
                     Station station = new Station(jsonStations.getJSONObject(i));
                     stations.add(station);
                 }
-                app.setStations(stations);
             } catch (JSONException e) {
                Utils.log(e.getMessage());
             }
+            app.setStations(stations);
 
             ArrayList<Journey> journeys = new ArrayList<>();
-            JSONArray jsonJourneys = loadJSON(Journey.FILENAME, Utils.FILESYSTEM);
             try {
+                JSONArray jsonJourneys = new JSONArray(loadJSON(Journey.FILENAME, Utils.FILESYSTEM));
                 for (int i = 0; i < jsonJourneys.length(); i++) {
                     Journey journey = new Journey(jsonJourneys.getJSONObject(i));
                     journeys.add(journey);
                 }
-                app.setJourneys(journeys);
-                Utils.log(journeys.toString());
             } catch (JSONException e) {
                 Utils.log(e.getMessage());
             }
+            app.setJourneys(journeys);
+
+            User user = new User();
+            try {
+                JSONObject jsonUser = new JSONObject(loadJSON(User.FILENAME, Utils.FILESYSTEM));
+                user = new User(jsonUser);
+            } catch (JSONException e) {
+                Utils.log(e.getMessage());
+            }
+            app.setUser(user);
 
             return "Everything is loaded";
         }

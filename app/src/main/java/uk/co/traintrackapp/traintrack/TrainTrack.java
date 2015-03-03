@@ -66,6 +66,12 @@ public class TrainTrack extends Application {
         setJourneys(journeys);
     }
 
+    public void removeJourney(Journey journey) {
+        ArrayList<Journey> journeys = getJourneys();
+        journeys.remove(journey);
+        setJourneys(journeys);
+    }
+
     public ArrayList<Journey> getJourneys() {
         return new ArrayList<>(journeys.values());
     }
