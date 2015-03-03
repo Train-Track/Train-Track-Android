@@ -26,7 +26,6 @@ import uk.co.traintrackapp.traintrack.fragment.JourneysFragment;
 import uk.co.traintrackapp.traintrack.fragment.NavigationDrawerFragment;
 import uk.co.traintrackapp.traintrack.fragment.SettingsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationsFragment;
-import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.model.User;
 import uk.co.traintrackapp.traintrack.utils.Utils;
@@ -142,6 +141,7 @@ public class MainActivity extends ActionBarActivity
         } catch (IOException e) {
             Utils.log(e.getMessage());
         }
+        Utils.log("OPENED: " + jsonString);
         return jsonString;
     }
 
@@ -162,18 +162,6 @@ public class MainActivity extends ActionBarActivity
                Utils.log(e.getMessage());
             }
             app.setStations(stations);
-
-            ArrayList<Journey> journeys = new ArrayList<>();
-            try {
-                JSONArray jsonJourneys = new JSONArray(loadJSON(Journey.FILENAME, Utils.FILESYSTEM));
-                for (int i = 0; i < jsonJourneys.length(); i++) {
-                    Journey journey = new Journey(jsonJourneys.getJSONObject(i));
-                    journeys.add(journey);
-                }
-            } catch (JSONException e) {
-                Utils.log(e.getMessage());
-            }
-            app.setJourneys(journeys);
 
             User user = new User();
             try {

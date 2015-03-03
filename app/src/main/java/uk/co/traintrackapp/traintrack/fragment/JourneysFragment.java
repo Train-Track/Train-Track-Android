@@ -29,7 +29,7 @@ public class JourneysFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_journeys, container,
                 false);
         final TrainTrack app = (TrainTrack) getActivity().getApplication();
-        final ArrayList<Journey> journeys = app.getJourneys();
+        final ArrayList<Journey> journeys = app.getUser().getJourneys();
         final ListView list = (ListView) v.findViewById(R.id.list);
         final JourneyRowAdapter adapter = new JourneyRowAdapter(journeys, getActivity());
         list.setAdapter(adapter);

@@ -1,17 +1,9 @@
 package uk.co.traintrackapp.traintrack.model;
 
-import android.content.Context;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -19,7 +11,6 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class Journey {
 
-    public static final String FILENAME = "journeys.json";
     private int id;
     private String uuid;
     private ArrayList<JourneyLeg> journeyLegs;
@@ -31,8 +22,7 @@ public class Journey {
     }
 
     public Journey (JSONObject json) {
-        super();
-        journeyLegs = new ArrayList<>();
+        this();
         try {
             id = json.getInt("id");
             uuid = json.getString("uuid");
@@ -157,27 +147,6 @@ public class Journey {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Saves list of journeys file
-     * @param journeys the list of journeys to save
-     * @param context the context in which we are saving them
-     */
-    public static void saveAll(ArrayList<Journey> journeys, Context context) {
-        JSONArray jsonArray = new JSONArray();
-        for (Journey journey : journeys) {
-            jsonArray.put(journey.toJson());
-        }
-        Utils.log("SAVING: " + jsonArray.toString());
-        try {
-            FileOutputStream outputStream = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            outputStream.write(jsonArray.toString().getBytes());
-            outputStream.close();
-        } catch (IOException e) {
-            Utils.log(e.getMessage());
-        }
-
     }
 
 }

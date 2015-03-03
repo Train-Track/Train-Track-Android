@@ -24,7 +24,7 @@ public class Operator {
     }
 
     public Operator(JSONObject json) {
-        super();
+        this();
         try {
             this.id = json.getInt("id");
             this.name = json.getString("name");
@@ -73,7 +73,7 @@ public class Operator {
     }
 
     /**
-     * @return the nmeric code
+     * @return the numeric code
      */
     public String getNumericCode() {
         return numericCode;

@@ -155,12 +155,12 @@ public class JourneyLegActivity extends ActionBarActivity {
                     if (journeyUuid == null) {
                         Utils.log("Creating new Journey");
                         journey = new Journey();
+                        app.getUser().getJourneys().add(journey);
                     } else {
                         journey = app.getJourney(journeyUuid);
                     }
                     journey.addJourneyLeg(journeyLeg);
-                    app.addJourney(journey);
-                    Journey.saveAll(app.getJourneys(), getApplicationContext());
+                    app.getUser().save(getApplicationContext());
 
                     if (getParent() == null) {
                         setResult(Activity.RESULT_OK);
@@ -189,15 +189,14 @@ public class JourneyLegActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.delete_journey_leg:
                 //remove journey leg from journey and from app
-                app.removeJourney(journey);
                 journey.removeJourneyLeg(journeyLeg);
                 Toast.makeText(getApplicationContext(), "Journey leg was deleted",
                         Toast.LENGTH_SHORT).show();
-                //only add it back to be saved if there is something to save
-                if (journey.getJourneyLegs().size() > 0) {
-                    app.addJourney(journey);
+                //remove journey if no legs left
+                if (journey.getJourneyLegs().size() == 0) {
+                    app.getUser().getJourneys().remove(journey);
                 }
-                Journey.saveAll(app.getJourneys(), getApplicationContext());
+                app.getUser().save(getApplicationContext());
                 finish();
         }
         return true;

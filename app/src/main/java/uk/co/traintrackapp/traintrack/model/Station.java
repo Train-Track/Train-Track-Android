@@ -29,8 +29,7 @@ public class Station {
     }
 
     public Station(JSONObject json) {
-        super();
-        this.isFavourite = false;
+        this();
         try {
             this.id = json.getInt("id");
             this.name = json.getString("name");

@@ -37,7 +37,7 @@ public class Badge {
      * @param json
      */
     public Badge(JSONObject json) {
-        super();
+        this();
         try {
             this.id = json.getInt("id");
             this.name = json.getString("name");

@@ -45,7 +45,7 @@ public class User {
      * @param json json
      */
     public User(JSONObject json) {
-        super();
+        this();
         try {
             this.id = json.getInt("id");
             this.uuid = json.getString("uuid");
@@ -152,14 +152,15 @@ public class User {
     }
 
     /**
-     * Saves list of journeys file
-     * @param context the context in which we are saving them
+     * Saves user to file
+     * @param context the context in which we are saving
      */
     public void save(Context context) {
-        Utils.log("SAVING: " + this.toString());
+        String output = this.toJson().toString();
+        Utils.log("SAVING: " + output);
         try {
             FileOutputStream outputStream = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            outputStream.write(this.toJson().toString().getBytes());
+            outputStream.write(output.getBytes());
             outputStream.close();
         } catch (IOException e) {
             Utils.log(e.getMessage());

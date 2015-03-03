@@ -31,7 +31,7 @@ public class JourneyLeg {
     }
 
     public JourneyLeg(JSONObject json) {
-        super();
+        this();
         try {
             id = json.getInt("id");
             journeyId = json.getInt("journey_id");

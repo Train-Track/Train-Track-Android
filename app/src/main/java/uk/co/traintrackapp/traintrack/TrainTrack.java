@@ -20,8 +20,6 @@ public class TrainTrack extends Application {
 
     private User user;
     private LinkedHashMap<String, Station> stations;
-    private LinkedHashMap<String, Journey> journeys;
-    private LinkedHashMap<String, Operator> operators;
     public GoogleApiClient googleApiClient;
 
     public User getUser() {
@@ -47,58 +45,22 @@ public class TrainTrack extends Application {
     }
 
     public Station getStation(String crsCode) {
-        return this.stations.get(crsCode);
-    }
-
-    public void setJourneys(List<Journey> journeys) {
-        if (this.journeys == null) {
-            this.journeys = new LinkedHashMap<>();
-        }
-        this.journeys.clear();
-        for (Journey j: journeys) {
-            this.journeys.put(String.valueOf(j.getUuid()), j);
-        }
-    }
-
-    public void addJourney(Journey journey) {
-        ArrayList<Journey> journeys = getJourneys();
-        journeys.add(journey);
-        setJourneys(journeys);
-    }
-
-    public void removeJourney(Journey journey) {
-        ArrayList<Journey> journeys = getJourneys();
-        journeys.remove(journey);
-        setJourneys(journeys);
-    }
-
-    public ArrayList<Journey> getJourneys() {
-        return new ArrayList<>(journeys.values());
+        return stations.get(crsCode);
     }
 
     public Journey getJourney(String uuid) {
-        return this.journeys.get(uuid);
-    }
-
-    public Operator getOperator(String operatorCode) {
-        return this.operators.get(operatorCode);
-    }
-
-    public void setOperators(List<Operator> operators) {
-        if (this.operators == null) {
-            this.operators = new LinkedHashMap<>();
+        for (Journey journey : user.getJourneys()) {
+            if (journey.getUuid().equals(uuid)) {
+                return journey;
+            }
         }
-        this.operators.clear();
-        for (Operator o: operators) {
-            this.operators.put(o.getCode(), o);
-        }
+        return null;
     }
 
     public void onCreate() {
         super.onCreate();
         setStations(new ArrayList<Station>());
-        setJourneys(new ArrayList<Journey>());
-        setOperators(new ArrayList<Operator>());
+        setUser(new User());
     }
 
 }
