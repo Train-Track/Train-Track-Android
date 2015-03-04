@@ -29,6 +29,9 @@ public class User {
     private int points;
     private String imageUrl;
     private ArrayList<Journey> journeys;
+    private Station homeStation;
+    private Station workStation;
+    private ArrayList<Station> favouriteStations;
 
     public User() {
         id = 0;
@@ -38,6 +41,9 @@ public class User {
         points = 0;
         imageUrl = "";
         journeys = new ArrayList<>();
+        homeStation = new Station();
+        workStation = new Station();
+        favouriteStations = new ArrayList<>();
     }
 
     /**
@@ -56,6 +62,12 @@ public class User {
             JSONArray journeys = json.getJSONArray("journeys");
             for (int i = 0; i < journeys.length(); i++) {
                 this.journeys.add(new Journey(journeys.getJSONObject(i)));
+            }
+            this.homeStation = new Station(json.getJSONObject("home_station"));
+            this.workStation = new Station(json.getJSONObject("work_station"));
+            JSONArray favouriteStations = json.getJSONArray("favourite_stations");
+            for (int i = 0; i < favouriteStations.length(); i++) {
+                this.favouriteStations.add(new Station(favouriteStations.getJSONObject(i)));
             }
         } catch (JSONException e) {
             Utils.log(e.getMessage());
@@ -106,6 +118,30 @@ public class User {
         this.journeys = journeys;
     }
 
+    public Station getHomeStation() {
+        return homeStation;
+    }
+
+    public void setHomeStation(Station homeStation) {
+        this.homeStation = homeStation;
+    }
+
+    public Station getWorkStation() {
+        return workStation;
+    }
+
+    public void setWorkStation(Station workStation) {
+        this.workStation = workStation;
+    }
+
+    public ArrayList<Station> getFavouriteStations() {
+        return favouriteStations;
+    }
+
+    public void setFavouriteStations(ArrayList<Station> favouriteStations) {
+        this.favouriteStations = favouriteStations;
+    }
+
     /**
      * @return the image
      */
@@ -145,6 +181,13 @@ public class User {
                 journeys.put(journey.toJson());
             }
             json.put("journeys", journeys);
+            json.put("home_station", getHomeStation().toJson());
+            json.put("work_station", getWorkStation().toJson());
+            JSONArray favouriteStations = new JSONArray();
+            for (Station station : getFavouriteStations()) {
+                favouriteStations.put(station.toJson());
+            }
+            json.put("favourite_stations", favouriteStations);
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
