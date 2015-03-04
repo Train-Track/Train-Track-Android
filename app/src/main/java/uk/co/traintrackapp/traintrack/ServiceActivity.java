@@ -42,7 +42,7 @@ public class ServiceActivity extends ActionBarActivity {
         serviceId = intent.getStringExtra("service_id");
         new GetServiceRequest().execute(serviceId);
 
-        final String journeyId = intent.getStringExtra("journey_id");
+        final String journeyUuid = intent.getStringExtra("journey_uuid");
         final String stationCrs = intent.getStringExtra("station_crs");
         final String originName = intent.getStringExtra("origin_name");
         final String destinationName = intent
@@ -71,7 +71,7 @@ public class ServiceActivity extends ActionBarActivity {
 
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
-                intent.putExtra("journey_id", journeyId);
+                intent.putExtra("journey_uuid", journeyUuid);
                 intent.putExtra("service_id", service.getServiceId());
                 intent.putExtra("operator_code", service.getOperator().getCode());
                 intent.putExtra("departure_station_crs", service.getStation().getCrsCode());

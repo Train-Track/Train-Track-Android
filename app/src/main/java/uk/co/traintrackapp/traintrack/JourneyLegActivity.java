@@ -31,14 +31,14 @@ public class JourneyLegActivity extends ActionBarActivity {
 
         final TrainTrack app = (TrainTrack) getApplication();
         final Intent intent = getIntent();
-        final String journeyLegUuid = intent.getStringExtra("journey_leg_uuid");
         final String journeyUuid = intent.getStringExtra("journey_uuid");
+        final String journeyLegUuid = intent.getStringExtra("journey_leg_uuid");
 
         if (journeyLegUuid != null) {
 
             setContentView(R.layout.activity_journey_leg);
             journey = app.getJourney(journeyUuid);
-            journeyLeg = journey.getJourneyLegByUuid(journeyLegUuid);
+            journeyLeg = journey.getJourneyLeg(journeyLegUuid);
             getSupportActionBar().setTitle(journeyLeg.toString());
 
             final TextView departureStation = (TextView) findViewById(R.id.departure_station);
