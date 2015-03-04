@@ -21,10 +21,14 @@ public class CallingPoint {
     private int icon;
 
     public CallingPoint() {
-
+        this.station = new Station();
+        this.scheduledTime = "";
+        this.estimatedTime = "";
+        this.actualTime = "";
     }
 
     public CallingPoint(JSONObject json) {
+        this();
         try {
             this.station = new Station(json.getJSONObject("station"));
             this.scheduledTime = json.getString("st");

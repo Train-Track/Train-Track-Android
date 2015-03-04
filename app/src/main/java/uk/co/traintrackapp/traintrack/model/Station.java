@@ -80,9 +80,9 @@ public class Station {
     /**
      * @return true if favourite
      */
-    //TODO remove the bpw test case
+    //TODO remove the test case
     public boolean isFavourite() {
-        return isFavourite || crs.equals("BPW");
+        return isFavourite || crs.equals("SBJ");
     }
 
     /**
