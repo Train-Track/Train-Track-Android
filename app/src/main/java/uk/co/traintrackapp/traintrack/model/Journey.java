@@ -84,7 +84,7 @@ public class Journey {
      * @param uuid of the journey
      * @return the journey
      */
-    public JourneyLeg getJourneyLegByUuid(String uuid) {
+    public JourneyLeg getJourneyLeg(String uuid) {
          for (JourneyLeg leg : getJourneyLegs()) {
              if (leg.getUuid().equals(uuid)) {
                  return leg;

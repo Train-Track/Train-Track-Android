@@ -39,8 +39,8 @@ public class StationActivity extends ActionBarActivity {
         setContentView(R.layout.activity_station);
 
         final Intent intent = getIntent();
+        final String journeyUuid = intent.getStringExtra("journey_uuid");
         final String stationCrs = intent.getStringExtra("station_crs");
-        final String journeyId = intent.getStringExtra("journey_id");
         TrainTrack app = (TrainTrack) getApplication();
         station = app.getStation(stationCrs);
 
@@ -60,7 +60,7 @@ public class StationActivity extends ActionBarActivity {
                 ServiceItem serviceItem = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         ServiceActivity.class);
-                intent.putExtra("journey_id", journeyId);
+                intent.putExtra("journey_uuid", journeyUuid);
                 intent.putExtra("service_id", serviceItem.getServiceId());
                 intent.putExtra("origin_name", serviceItem.getOrigin().getName());
                 intent.putExtra("station_id", station.getId());
