@@ -46,7 +46,7 @@ public class StationsFragment extends Fragment {
         final TrainTrack app = (TrainTrack) getActivity().getApplication();
         stations = app.getStations();
         list = (ListView) rootView.findViewById(R.id.list);
-        adapter = new StationRowAdapter(inflater, stations, getActivity());
+        adapter = new StationRowAdapter(stations, getActivity());
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View view, int index,
@@ -104,7 +104,7 @@ public class StationsFragment extends Fragment {
         favourites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.getFavouriteFilter().filter(null);
+                adapter.getFavouriteFilter().filter(app.getUser().toJson().toString());
                 list.setSelection(0);
             }
         });

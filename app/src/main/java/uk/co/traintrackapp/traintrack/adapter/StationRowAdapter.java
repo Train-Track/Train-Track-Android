@@ -10,23 +10,25 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.model.Station;
+import uk.co.traintrackapp.traintrack.model.User;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
 
 public class StationRowAdapter extends BaseAdapter implements Filterable {
 
-    private LayoutInflater inflater;
     private List<Station> rowList;
     private List<Station> origRowList;
     private Context context;
 
-    public StationRowAdapter(LayoutInflater inflater,
-                             ArrayList<Station> stations, Context context) {
-        this.inflater = inflater;
+    public StationRowAdapter(ArrayList<Station> stations, Context context) {
         this.rowList = stations;
         this.context = context;
     }
@@ -122,19 +124,16 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
-                List<Station> list = new ArrayList<>();
-
-                if (origRowList == null) {
-                    origRowList = new ArrayList<>(rowList);
+                User user = new User();
+                try {
+                    JSONObject jsonUser = new JSONObject(constraint.toString());
+                    user = new User(jsonUser);
+                } catch (JSONException e) {
+                    Utils.log(e.getMessage());
                 }
 
-                for (Station station : origRowList) {
-                    if (station.isFavourite()) {
-                        list.add(station);
-                    }
-                }
-                results.count = list.size();
-                results.values = list;
+                results.count = user.getFavouriteStations().size();
+                results.values = user.getFavouriteStations();
                 return results;
             }
         };

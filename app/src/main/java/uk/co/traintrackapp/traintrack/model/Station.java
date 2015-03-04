@@ -16,7 +16,6 @@ public class Station {
     private double lat;
     private double lng;
     private double distance;
-    private boolean isFavourite;
 
     public Station() {
         id = 0;
@@ -25,7 +24,6 @@ public class Station {
         lat = 0;
         lng = 0;
         distance = 0;
-        isFavourite = false;
     }
 
     public Station(JSONObject json) {
@@ -75,21 +73,6 @@ public class Station {
      */
     public double getLongitude() {
         return lng;
-    }
-
-    /**
-     * @return true if favourite
-     */
-    //TODO remove the test case
-    public boolean isFavourite() {
-        return isFavourite || crs.equals("SBJ");
-    }
-
-    /**
-     * @param favourite true or false
-     */
-    public void setFavourite(boolean favourite) {
-        this.isFavourite = favourite;
     }
 
     /**

@@ -143,7 +143,8 @@ public class StationActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.station, menu);
-        if ((station != null) && (station.isFavourite())) {
+        TrainTrack app = (TrainTrack) getApplication();
+        if (app.getUser().getFavouriteStations().contains(station)) {
             menu.findItem(R.id.favourite).setIcon(
                     android.R.drawable.btn_star_big_on);
         }
@@ -152,16 +153,17 @@ public class StationActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        TrainTrack app = (TrainTrack) getApplication();
         switch (item.getItemId()) {
             case R.id.favourite:
-                if (!station.isFavourite()) {
-                    station.setFavourite(true);
-                    item.setIcon(android.R.drawable.btn_star_big_on);
-                } else {
+                if (app.getUser().getFavouriteStations().contains(station)) {
                     item.setIcon(android.R.drawable.btn_star_big_off);
-                    station.setFavourite(false);
+                    app.getUser().getFavouriteStations().remove(station);
+                } else {
+                    item.setIcon(android.R.drawable.btn_star_big_on);
+                    app.getUser().getFavouriteStations().add(station);
                 }
-                // station.save();
+                app.getUser().save(this);
                 return true;
             case R.id.refresh:
                 new GetBoardRequest().execute(station.getCrsCode());
