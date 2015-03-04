@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.model.Operator;
@@ -175,12 +177,13 @@ public class Service {
 
     public static Service getByServiceId(String serviceId) {
         JSONObject json = new JSONObject();
-        String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/services/" + serviceId);
         try {
+            String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/services/" + URLEncoder.encode(serviceId, "UTF-8"));
             json = new JSONObject(jsonString);
-        } catch (JSONException e) {
+        } catch (JSONException | UnsupportedEncodingException e) {
             Utils.log(e.getMessage());
         }
         return new Service(json);
     }
+
 }
