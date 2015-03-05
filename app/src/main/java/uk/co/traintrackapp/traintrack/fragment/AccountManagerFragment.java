@@ -1,6 +1,7 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.TrainTrack;
+import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.model.User;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
 
 public class AccountManagerFragment extends Fragment {
@@ -38,11 +47,11 @@ public class AccountManagerFragment extends Fragment {
             signup.setVisibility(View.VISIBLE);
             login.setVisibility(View.VISIBLE);
         } else {
-            username.setText(user.getUsername());
-            email.setText(user.getEmail());
             logout.setVisibility(View.VISIBLE);
             update.setVisibility(View.VISIBLE);
         }
+        username.setText(user.getUsername());
+        email.setText(user.getEmail());
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +59,17 @@ public class AccountManagerFragment extends Fragment {
                 //TODO: Send to server
                 user.setUsername(username.getText().toString());
                 user.setEmail(email.getText().toString());
+                user.save(getActivity());
+            }
+        });
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setUsername(username.getText().toString());
+                user.setEmail(email.getText().toString());
+                new LoginRequest().execute(user.toJson().toString());
+                //TODO start a progress spinner
             }
         });
 
@@ -61,6 +81,20 @@ public class AccountManagerFragment extends Fragment {
         });
 
         return v;
+    }
+
+    class LoginRequest extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            return Utils.httpPost(Utils.API_BASE_URL + "/login", params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String returnCode) {
+            super.onPostExecute(returnCode);
+            Utils.log("The return code is: " + returnCode);
+        }
     }
 
 }

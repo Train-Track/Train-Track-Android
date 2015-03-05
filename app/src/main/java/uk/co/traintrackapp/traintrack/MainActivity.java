@@ -33,6 +33,9 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    private static final String NEW_USER = "New User";
+    private static final String ONLINE_USER = "Online User";
+    private static final String OFFLINE_USER = "Offline User";
     private CharSequence title;
     private Fragment newFragment;
 
@@ -150,6 +153,7 @@ public class MainActivity extends ActionBarActivity
         @Override
         protected String doInBackground(String... asset) {
             TrainTrack app = (TrainTrack) getApplication();
+            String returnCode = NEW_USER;
 
             ArrayList<Station> stations = new ArrayList<>();
             try {
@@ -167,18 +171,24 @@ public class MainActivity extends ActionBarActivity
             try {
                 JSONObject jsonUser = new JSONObject(loadJSON(User.FILENAME, Utils.FILESYSTEM));
                 user = new User(jsonUser);
+                if (user.getId() > 0) {
+                    returnCode = ONLINE_USER;
+                } else if (user.getId() == 0) {
+                    returnCode = OFFLINE_USER;
+                }
             } catch (JSONException e) {
                 Utils.log(e.getMessage());
+                returnCode = NEW_USER;
             }
             app.setUser(user);
 
-            return "Everything is loaded";
+            return returnCode;
         }
 
         @Override
-        protected void onPostExecute(String message) {
-            super.onPostExecute(message);
-            Utils.log(message);
+        protected void onPostExecute(String returnCode) {
+            super.onPostExecute(returnCode);
+            Utils.log("The return code is: " + returnCode);
         }
     }
 
