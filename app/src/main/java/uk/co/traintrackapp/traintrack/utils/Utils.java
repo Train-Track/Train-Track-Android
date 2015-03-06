@@ -81,7 +81,9 @@ public class Utils {
             HttpClient client = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(new StringEntity(postData));
-            httpPost.setHeader("Content-Type", "text/xml");
+            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("API-KEY", "TEST");
             HttpResponse response = client.execute(httpPost);
             HttpEntity entity = response.getEntity();
             InputStream content = entity.getContent();
