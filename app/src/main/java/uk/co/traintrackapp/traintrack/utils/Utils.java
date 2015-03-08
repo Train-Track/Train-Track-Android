@@ -40,7 +40,7 @@ public class Utils {
     public static final int FILESYSTEM = 2;
     public static final int BLUE = Color.parseColor("#33b5e5");
     public static final String API_BASE_URL = "http://192.168.1.73:3000";
-    private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
     /**
      * @param message
@@ -186,6 +186,9 @@ public class Utils {
      * @return date
      */
     public static String getStringFromDate(Date date) {
+        if (date == null) {
+            return "";
+        }
         SimpleDateFormat formatter = new SimpleDateFormat(JSON_DATE_FORMAT);
         return formatter.format(date);
     }
