@@ -131,9 +131,16 @@ public class StationRowAdapter extends BaseAdapter implements Filterable {
                 } catch (JSONException e) {
                     Utils.log(e.getMessage());
                 }
-
-                results.count = user.getFavouriteStations().size();
-                results.values = user.getFavouriteStations();
+                List<Station> list = new ArrayList<>();
+                if (!user.getHomeStation().getCrsCode().isEmpty()) {
+                    list.add(user.getHomeStation());
+                }
+                if (!user.getWorkStation().getCrsCode().isEmpty()) {
+                    list.add(user.getWorkStation());
+                }
+                list.addAll(user.getFavouriteStations());
+                results.count = list.size();
+                results.values = list;
                 return results;
             }
         };
