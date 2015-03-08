@@ -216,7 +216,6 @@ public class JourneyLeg {
      * @return jsonObject the representation of the journey leg as JSON
      */
     public JSONObject toJson() {
-        //TODO get the real times
         JSONObject json = new JSONObject();
         try {
             json.put("id", getId());
