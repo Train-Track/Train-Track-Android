@@ -56,7 +56,6 @@ public class MainActivity extends ActionBarActivity
         updateFragment();
         Utils.log("Loading assets...");
         new LoadAssets().execute();
-
     }
 
     @Override

@@ -156,6 +156,10 @@ public class User {
         }
     }
 
+    public boolean isLoggedIn() {
+        return getId() > 0;
+    }
+
     /**
      * @return the title
      */
@@ -209,4 +213,23 @@ public class User {
             Utils.log(e.getMessage());
         }
     }
+
+    /**
+     * Set attributes back to default constructor
+     * @param context the context in which we are saving
+     */
+    public void logout(Context context) {
+        id = 0;
+        uuid = UUID.randomUUID().toString();
+        email = "";
+        username = "";
+        points = 0;
+        imageUrl = "";
+        journeys = new ArrayList<>();
+        homeStation = new Station();
+        workStation = new Station();
+        favouriteStations = new ArrayList<>();
+        save(context);
+    }
+
 }
