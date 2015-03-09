@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:text="New Journey"
+        android:textSize="@dimen/abc_text_size_title_material"
+        android:textColor="#ffffff"
+        android:background="#33b5e5"
+        android:id="@+id/new_journey"
+        android:layout_row="0"
+        android:layout_column="0" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:text="Get Me Home"
+        android:textSize="@dimen/abc_text_size_title_material"
+        android:textColor="#ffffff"
+        android:background="#ffb500"
+        android:id="@+id/get_me_home"
+        android:layout_row="0"
+        android:layout_column="0" />
+
+</LinearLayout>

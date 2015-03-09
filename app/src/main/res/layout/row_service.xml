@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:padding="10sp" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/scheduled_time"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/estimated_time"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10sp"
+            android:textIsSelectable="false"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10sp"
+            android:paddingTop="5sp"
+            android:textIsSelectable="false"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/platform"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10sp"
+        android:textIsSelectable="false"
+        android:gravity="center"
+        android:textSize="20sp" />
+
+</LinearLayout>
