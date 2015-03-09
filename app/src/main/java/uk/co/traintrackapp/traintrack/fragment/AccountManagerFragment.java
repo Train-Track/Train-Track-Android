@@ -25,7 +25,7 @@ public class AccountManagerFragment extends Fragment {
     private Button update;
     private Button logout;
     private Button login;
-    private Button signup;
+    private Button signUp;
 
     public static AccountManagerFragment newInstance() {
         return new AccountManagerFragment();
@@ -42,7 +42,7 @@ public class AccountManagerFragment extends Fragment {
         final EditText email = (EditText) v.findViewById(R.id.email);
         final EditText password = (EditText) v.findViewById(R.id.password);
         progress = (ProgressBar) v.findViewById(R.id.progress);
-        signup = (Button) v.findViewById(R.id.signup);
+        signUp = (Button) v.findViewById(R.id.sign_up);
         login = (Button) v.findViewById(R.id.login);
         update = (Button) v.findViewById(R.id.update);
         logout = (Button) v.findViewById(R.id.logout);
@@ -50,13 +50,13 @@ public class AccountManagerFragment extends Fragment {
         username.setText(user.getUsername());
         email.setText(user.getEmail());
 
-        signup.setOnClickListener(new View.OnClickListener() {
+        signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Send to server
-                user.setUsername(username.getText().toString());
-                user.setEmail(email.getText().toString());
-                user.save(getActivity());
+                progress.setVisibility(View.VISIBLE);
+                new SignUpRequest().execute(username.getText().toString(),
+                        email.getText().toString(),
+                        password.getText().toString());
             }
         });
 
@@ -117,18 +117,61 @@ public class AccountManagerFragment extends Fragment {
                 Toast.makeText(getActivity(), "Hello " + user.getUsername(), Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getActivity(), "Could not login sorry!", Toast.LENGTH_LONG).show();
+                Utils.log(userJson.toString());
+            }
+        }
+    }
+
+    class SignUpRequest extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            JSONObject postData = new JSONObject();
+            JSONObject user = new JSONObject();
+            try {
+                user.put("username", params[0]);
+                user.put("email", params[1]);
+                user.put("password", params[2]);
+                user.put("password_confirmation", params[2]);
+                postData.put("user", user);
+            } catch (JSONException e) {
+                Utils.log(e.getMessage());
+            }
+            return Utils.httpPost(Utils.API_BASE_URL + "/users", postData.toString());
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+            progress.setVisibility(View.GONE);
+            JSONObject userJson = new JSONObject();
+            try {
+                userJson = new JSONObject(response);
+            } catch (JSONException e) {
+                Utils.log(e.getMessage());
+            }
+            User user = new User(userJson);
+            if (user.isLoggedIn()) {
+                user.save(getActivity());
+                TrainTrack app = (TrainTrack) getActivity().getApplication();
+                app.setUser(user);
+                updateButtonVisibility(true);
+                Toast.makeText(getActivity(), "Hello " + user.getUsername(), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), "Could not sign up sorry!", Toast.LENGTH_LONG).show();
+                Utils.log(userJson.toString());
             }
         }
     }
 
     private void updateButtonVisibility(boolean loggedIn) {
         if (loggedIn) {
-            signup.setVisibility(View.GONE);
+            signUp.setVisibility(View.GONE);
             login.setVisibility(View.GONE);
             update.setVisibility(View.VISIBLE);
             logout.setVisibility(View.VISIBLE);
         } else {
-            signup.setVisibility(View.VISIBLE);
+            signUp.setVisibility(View.VISIBLE);
             login.setVisibility(View.VISIBLE);
             update.setVisibility(View.GONE);
             logout.setVisibility(View.GONE);

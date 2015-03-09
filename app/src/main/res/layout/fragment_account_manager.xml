@@ -58,7 +58,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/signup"
+            android:id="@+id/sign_up"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
