@@ -1,7 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
 
     </style>
 
@@ -18,16 +17,16 @@
     <style name="FormSectionHeader">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:background">#0099cc</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:background">@color/primary_dark</item>
+        <item name="android:textColor">@color/icons</item>
         <item name="android:padding">10dp</item>
     </style>
 
     <style name="FormButton">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:background">#33b5e5</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:background">@color/primary</item>
+        <item name="android:textColor">@color/icons</item>
         <item name="android:padding">10dp</item>
     </style>
 

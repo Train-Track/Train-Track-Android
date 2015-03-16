@@ -108,8 +108,9 @@ public class Station {
      * @return true if string is within name
      */
     public boolean isNameSimilarTo(CharSequence string) {
-        return getName().toLowerCase(Locale.UK).contains(
-                string.toString().toLowerCase(Locale.UK));
+        String query = string.toString().toLowerCase(Locale.UK);
+        return getName().toLowerCase(Locale.UK).contains(query) ||
+                getCrsCode().toLowerCase(Locale.UK).contains(query);
     }
 
     /**

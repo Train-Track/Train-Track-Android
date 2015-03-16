@@ -7,21 +7,21 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.MapActivity;
 import uk.co.traintrackapp.traintrack.R;
-import uk.co.traintrackapp.traintrack.StationActivity;
 import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.adapter.StationRowAdapter;
 import uk.co.traintrackapp.traintrack.model.Station;
@@ -31,7 +31,7 @@ public class StationsFragment extends Fragment {
 
     private Location gps;
     private ArrayList<Station> stations;
-    private ListView list;
+    private RecyclerView list;
     private StationRowAdapter adapter;
 
     public static StationsFragment newInstance() {
@@ -45,23 +45,14 @@ public class StationsFragment extends Fragment {
                 false);
         final TrainTrack app = (TrainTrack) getActivity().getApplication();
         stations = app.getStations();
-        list = (ListView) rootView.findViewById(R.id.list);
-        adapter = new StationRowAdapter(stations, getActivity());
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> arg0, View view, int index,
-                                    long x) {
-                Station station = adapter.getItem(index);
-                Intent intent = new Intent().setClass(getActivity(),
-                        StationActivity.class);
-                intent.putExtra("station_id", station.getId());
-                intent.putExtra("station_crs", station.getCrsCode());
-                intent.putExtra("station_name", station.getName());
-                startActivity(intent);
-            }
-        });
 
-        EditText search = (EditText) rootView.findViewById(R.id.search);
+        list = (RecyclerView) rootView.findViewById(R.id.list);
+        list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        list.setItemAnimator(new DefaultItemAnimator());
+        adapter = new StationRowAdapter(stations);
+        list.setAdapter(adapter);
+
+        final EditText search = (EditText) rootView.findViewById(R.id.search);
         search.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable arg0) {
             }
@@ -77,17 +68,17 @@ public class StationsFragment extends Fragment {
             }
         });
 
-        Button aZ = (Button) rootView.findViewById(R.id.a_z);
+        final Button aZ = (Button) rootView.findViewById(R.id.a_z);
         aZ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stations = app.getStations();
                 adapter.refresh(stations);
-                list.setSelection(0);
+                search.setText("");
             }
         });
 
-        Button nearby = (Button) rootView.findViewById(R.id.nearby);
+        final Button nearby = (Button) rootView.findViewById(R.id.nearby);
         nearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,20 +87,18 @@ public class StationsFragment extends Fragment {
                 }
                 adapter.getNearbyFilter().filter(
                         gps.getLatitude() + "," + gps.getLongitude());
-                list.setSelection(0);
             }
         });
 
-        Button favourites = (Button) rootView.findViewById(R.id.favourites);
+        final Button favourites = (Button) rootView.findViewById(R.id.favourites);
         favourites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 adapter.getFavouriteFilter().filter(app.getUser().toJson().toString());
-                list.setSelection(0);
             }
         });
 
-        Button map = (Button) rootView.findViewById(R.id.map);
+        final Button map = (Button) rootView.findViewById(R.id.map);
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
