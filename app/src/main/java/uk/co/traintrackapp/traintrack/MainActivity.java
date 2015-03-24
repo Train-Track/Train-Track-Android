@@ -54,6 +54,7 @@ public class MainActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        newFragment = DashboardFragment.newInstance();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerIndicatorEnabled(true);
@@ -106,6 +107,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
         new LoadAssets().execute();
+        updateFragment();
     }
 
     @Override

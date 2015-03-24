@@ -4,6 +4,10 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="ToolBar" parent="Theme.AppCompat">
+        <item name="android:background">@color/primary</item>
+    </style>
+
     <style name="SettingsCheckBox">
         <item name="android:padding">10dp</item>
         <item name="android:textSize">22sp</item>
