@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,8 +49,10 @@ public class ServiceActivity extends ActionBarActivity {
         final String destinationName = intent
                 .getStringExtra("destination_name");
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(originName + " to " + destinationName);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(originName + " to " + destinationName);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         callingPoints = new ArrayList<>();
         progress = (ProgressBar) findViewById(R.id.progress);

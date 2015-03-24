@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +40,11 @@ public class JourneyLegActivity extends ActionBarActivity {
             setContentView(R.layout.activity_journey_leg);
             journey = app.getJourney(journeyUuid);
             journeyLeg = journey.getJourneyLeg(journeyLegUuid);
+
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(journeyLeg.toString());
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             final TextView departureStation = (TextView) findViewById(R.id.departure_station);
             final TextView departureTime = (TextView) findViewById(R.id.departure_time);
@@ -63,7 +68,11 @@ public class JourneyLegActivity extends ActionBarActivity {
 
             setContentView(R.layout.activity_journey_leg_form);
             journeyLeg = new JourneyLeg();
+
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(getString(R.string.action_new_journey));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
             final String departureStationCrs = intent

@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,8 +45,10 @@ public class StationActivity extends ActionBarActivity {
         TrainTrack app = (TrainTrack) getApplication();
         station = app.getStation(stationCrs);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(station.getName());
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(station.getName());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         progress = (ProgressBar) findViewById(R.id.progress);
         nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
