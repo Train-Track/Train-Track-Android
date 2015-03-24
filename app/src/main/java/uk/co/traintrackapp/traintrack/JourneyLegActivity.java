@@ -207,7 +207,10 @@ public class JourneyLegActivity extends ActionBarActivity {
                 }
                 app.getUser().save(getApplicationContext());
                 finish();
+            case android.R.id.home:
+                finish();
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return true;
     }
 }

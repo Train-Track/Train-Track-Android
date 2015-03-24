@@ -81,6 +81,8 @@ public class JourneyActivity extends ActionBarActivity {
                         Toast.LENGTH_SHORT).show();
                 finish();
                 return true;
+            case android.R.id.home:
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }

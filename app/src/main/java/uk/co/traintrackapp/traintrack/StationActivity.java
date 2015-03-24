@@ -176,6 +176,8 @@ public class StationActivity extends ActionBarActivity {
                 intent.putExtra("station_crs", station.getCrsCode());
                 startActivity(intent);
                 return true;
+            case android.R.id.home:
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }

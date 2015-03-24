@@ -108,6 +108,8 @@ public class ServiceActivity extends ActionBarActivity {
                 intent.putExtra("service_id", serviceId);
                 startActivity(intent);
                 return true;
+            case android.R.id.home:
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
