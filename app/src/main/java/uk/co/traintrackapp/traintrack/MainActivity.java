@@ -7,12 +7,15 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +30,6 @@ import java.util.ArrayList;
 import uk.co.traintrackapp.traintrack.fragment.AccountManagerFragment;
 import uk.co.traintrackapp.traintrack.fragment.DashboardFragment;
 import uk.co.traintrackapp.traintrack.fragment.JourneysFragment;
-import uk.co.traintrackapp.traintrack.fragment.NavigationDrawerFragment;
 import uk.co.traintrackapp.traintrack.fragment.SettingsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationsFragment;
 import uk.co.traintrackapp.traintrack.model.Station;
@@ -36,7 +38,13 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private static final String NEW_USER = "New User";
+    private static final String ONLINE_USER = "Online User";
+    private static final String OFFLINE_USER = "Offline User";
     private ActionBarDrawerToggle toggle;
+    private DrawerLayout drawerLayout;
+    private Fragment newFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +54,58 @@ public class MainActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.setDrawerListener(toggle);
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                toggle.onDrawerSlide(drawerView, slideOffset);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                toggle.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                toggle.onDrawerClosed(drawerView);
+                updateFragment();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                toggle.onDrawerStateChanged(newState);
+            }
+        });
+
+        ListView listView = (ListView) findViewById(R.id.list);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItem(position);
+            }
+        });
+        listView.setAdapter(new ArrayAdapter<>(
+                getSupportActionBar().getThemedContext(),
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                new String[]{
+                        getString(R.string.title_dashboard_fragment),
+                        getString(R.string.title_stations_fragment),
+                        getString(R.string.title_journeys_fragment),
+                        getString(R.string.title_settings_fragment),
+                }));
+        listView.setItemChecked(0, true);
+        Button accountButton = (Button) findViewById(R.id.button);
+        accountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectItem(-1);
+            }
+        });
+        new LoadAssets().execute();
     }
 
     @Override
@@ -57,54 +113,22 @@ public class MainActivity extends ActionBarActivity {
         super.onPostCreate(savedInstanceState);
         toggle.syncState();
     }
-/*
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar, menu);
-        return true;
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Quit")
+                .setMessage("Are you sure you want to quit?")
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                finish();
+                            }
+                        }).setNegativeButton("No", null).show();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (toggle.onOptionsItemSelected(item))
-            return true;
-
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
-    }
-    */
-}
-/*
-public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
-    private static final String NEW_USER = "New User";
-    private static final String ONLINE_USER = "Online User";
-    private static final String OFFLINE_USER = "Offline User";
-    private CharSequence title;
-    private Fragment newFragment;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        NavigationDrawerFragment navigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        navigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout)
-        );
-        title = getString(R.string.app_name);
-        newFragment = DashboardFragment.newInstance();
-        restoreActionBar();
-        updateFragment();
-        Utils.log("Loading assets...");
-        new LoadAssets().execute();
-    }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
+    public void selectItem(int position) {
         switch (position) {
             case -1:
                 newFragment = AccountManagerFragment.newInstance();
@@ -122,42 +146,13 @@ public class MainActivity extends ActionBarActivity
                 newFragment = SettingsFragment.newInstance();
                 break;
         }
-        restoreActionBar();
-    }
-
-    @Override
-    public void onNavigationDrawerClosed() {
-        updateFragment();
-    }
-
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Quit")
-                .setMessage("Are you sure you want to quit?")
-                .setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                finish();
-                            }
-                        }).setNegativeButton("No", null).show();
+        drawerLayout.closeDrawers();
     }
 
     private void updateFragment() {
-        if (newFragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, newFragment).commit();
-            newFragment = null;
-        }
-    }
-
-    private void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(title);
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, newFragment).commit();
     }
 
     /**
@@ -165,7 +160,7 @@ public class MainActivity extends ActionBarActivity
      * @param filename the file to open
      * @param from either assets folder or the file system
      * @return JSON String
-
+     */
     private String loadJSON(String filename, int from) {
         String jsonString = "";
         try {
@@ -207,7 +202,7 @@ public class MainActivity extends ActionBarActivity
                     stations.add(station);
                 }
             } catch (JSONException e) {
-               Utils.log(e.getMessage());
+                Utils.log(e.getMessage());
             }
             app.setStations(stations);
 
@@ -237,4 +232,3 @@ public class MainActivity extends ActionBarActivity
     }
 
 }
-*/
