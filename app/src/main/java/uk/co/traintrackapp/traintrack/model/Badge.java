@@ -17,6 +17,7 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class Badge {
 
     private int id;
+    private String uuid;
     private String name;
     private String description;
     private String imageUrl;
@@ -25,6 +26,7 @@ public class Badge {
 
     public Badge() {
         id = 0;
+        uuid = "";
         name = "Unknown";
         description = "";
         imageUrl = "";
@@ -40,6 +42,7 @@ public class Badge {
         this();
         try {
             this.id = json.getInt("id");
+            this.uuid = json.getString("uuid");
             this.name = json.getString("name");
             this.description = json.getString("description");
             this.imageUrl = json.getString("image_url");
@@ -55,6 +58,13 @@ public class Badge {
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * @return the UUID
+     */
+    public String getUuid() {
+        return uuid;
     }
 
     /**
@@ -75,7 +85,6 @@ public class Badge {
      * @return the image
      */
     public Bitmap getImage() {
-
         try {
             URL url = new URL(imageUrl);
             return BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -83,6 +92,13 @@ public class Badge {
             Utils.log(e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * @return the number points
+     */
+    public int getPoints() {
+        return points;
     }
 
     /**
