@@ -30,24 +30,42 @@ public class TrainTrack extends Application {
         this.user = user;
     }
 
+    /**
+     * Caches all the stations so they are accessible by their UUID
+     * @param stations the list of stations
+     */
     public void setStations(List<Station> stations) {
         if (this.stations == null) {
             this.stations = new LinkedHashMap<>();
         }
         this.stations.clear();
         for (Station s: stations) {
-            this.stations.put(s.getCrsCode(), s);
+            this.stations.put(s.getUuid(), s);
         }
     }
 
+    /**
+     * The list of all stations
+     * @return all cached stations
+     */
     public ArrayList<Station> getStations() {
         return new ArrayList<>(stations.values());
     }
 
-    public Station getStation(String crsCode) {
-        return stations.get(crsCode);
+    /**
+     * Get a station by UUID
+     * @param uuid the UUID of the station to return
+     * @return the station
+     */
+    public Station getStation(String uuid) {
+        return stations.get(uuid);
     }
 
+    /**
+     * Loops through the user journeys until it finds one with that UUID
+     * @param uuid the UUID of the journey
+     * @return the journey
+     */
     public Journey getJourney(String uuid) {
         for (Journey journey : user.getJourneys()) {
             if (journey.getUuid().equals(uuid)) {
@@ -57,6 +75,9 @@ public class TrainTrack extends Application {
         return null;
     }
 
+    /**
+     * Set up some default empty objects
+     */
     public void onCreate() {
         super.onCreate();
         setStations(new ArrayList<Station>());

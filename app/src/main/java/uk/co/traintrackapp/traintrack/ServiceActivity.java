@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -44,7 +43,7 @@ public class ServiceActivity extends ActionBarActivity {
         new GetServiceRequest().execute(serviceId);
 
         final String journeyUuid = intent.getStringExtra("journey_uuid");
-        final String stationCrs = intent.getStringExtra("station_crs");
+        final String stationUuid = intent.getStringExtra("station_uuid");
         final String originName = intent.getStringExtra("origin_name");
         final String destinationName = intent
                 .getStringExtra("destination_name");
@@ -58,7 +57,7 @@ public class ServiceActivity extends ActionBarActivity {
         progress = (ProgressBar) findViewById(R.id.progress);
         disruptionReason = (TextView) findViewById(R.id.disruption_reason);
         toc = (TextView) findViewById(R.id.toc);
-        adapter = new CallingPointRowAdapter(callingPoints, stationCrs, this);
+        adapter = new CallingPointRowAdapter(callingPoints, stationUuid, this);
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new OnItemClickListener() {
@@ -77,11 +76,11 @@ public class ServiceActivity extends ActionBarActivity {
                 intent.putExtra("journey_uuid", journeyUuid);
                 intent.putExtra("service_id", service.getServiceId());
                 intent.putExtra("operator_code", service.getOperator().getCode());
-                intent.putExtra("departure_station_crs", service.getStation().getCrsCode());
+                intent.putExtra("departure_station_uuid", service.getStation().getUuid());
                 intent.putExtra("departure_time", service.getScheduledTimeDeparture());
                 intent.putExtra("departure_platform", service.getPlatform());
-                intent.putExtra("arrival_station_crs",
-                        callingPoint.getStation().getCrsCode());
+                intent.putExtra("arrival_station_uuid",
+                        callingPoint.getStation().getUuid());
                 intent.putExtra("arrival_time", callingPoint.getScheduledTime());
                 intent.putExtra("arrival_platform", "");
                 startActivityForResult(intent, 1);

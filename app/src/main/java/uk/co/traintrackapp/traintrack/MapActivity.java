@@ -61,9 +61,7 @@ public class MapActivity extends Activity {
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         StationActivity.class);
                 Station station = hashmap.get(marker);
-                intent.putExtra("station_id", station.getId());
-                intent.putExtra("station_name", station.getName());
-                intent.putExtra("station_crs", station.getCrsCode());
+                intent.putExtra("station_uuid", station.getUuid());
                 startActivity(intent);
             }
         });
@@ -119,9 +117,9 @@ public class MapActivity extends Activity {
             TrainTrack app = (TrainTrack) getApplication();
             ArrayList<Station> stations = new ArrayList<>();
 
-            String stationCrs = getIntent().getStringExtra("station_crs");
-            if (stationCrs != null) {
-                stations.add(app.getStation(stationCrs));
+            String stationUuid = getIntent().getStringExtra("station_uuid");
+            if (stationUuid != null) {
+                stations.add(app.getStation(stationUuid));
             }
 
             boolean all = getIntent().getBooleanExtra("all_stations", false);

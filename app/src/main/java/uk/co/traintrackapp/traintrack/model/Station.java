@@ -11,18 +11,24 @@ public class Station {
 
     public static final String FILENAME = "stations.json";
     private int id;
+    private String uuid;
     private String name;
     private String crs;
     private double lat;
     private double lng;
+    private boolean isUnderground;
+    private boolean isNationalRail;
     private double distance;
 
     public Station() {
         id = 0;
+        uuid = "";
         name = "Unknown";
         crs = "";
         lat = 0;
         lng = 0;
+        isUnderground = false;
+        isNationalRail = false;
         distance = 0;
     }
 
@@ -30,10 +36,13 @@ public class Station {
         this();
         try {
             this.id = json.getInt("id");
+            this.uuid = json.getString("uuid");
             this.name = json.getString("name");
             this.crs = json.getString("crs");
             this.lat = json.getDouble("lat");
             this.lng = json.getDouble("lng");
+            this.isUnderground = json.getBoolean("underground");
+            this.isNationalRail = json.getBoolean("national_rail");
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
@@ -45,6 +54,13 @@ public class Station {
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * @return the uuid
+     */
+    public String getUuid() {
+        return uuid;
     }
 
     /**
@@ -73,6 +89,20 @@ public class Station {
      */
     public double getLongitude() {
         return lng;
+    }
+
+    /**
+     * @return true if underground station
+     */
+    public boolean isUnderground() {
+        return isUnderground;
+    }
+
+    /**
+     * @return the true if national rail station
+     */
+    public boolean isNationalRail() {
+        return isNationalRail;
     }
 
     /**
@@ -128,13 +158,17 @@ public class Station {
         JSONObject json = new JSONObject();
         try {
             json.put("id", getId());
+            json.put("uuid", getUuid());
             json.put("name", getName());
             json.put("crs", getCrsCode());
             json.put("lat", getLatitude());
             json.put("lng", getLongitude());
+            json.put("underground_station", isUnderground());
+            json.put("national_rail", isNationalRail());
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
         return json;
     }
+
 }

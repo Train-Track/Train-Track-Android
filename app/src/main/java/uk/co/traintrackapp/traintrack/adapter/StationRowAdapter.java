@@ -47,9 +47,7 @@ public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.Vi
             if (station != null) {
                 Intent intent = new Intent().setClass(v.getContext(),
                         StationActivity.class);
-                intent.putExtra("station_id", station.getId());
-                intent.putExtra("station_crs", station.getCrsCode());
-                intent.putExtra("station_name", station.getName());
+                intent.putExtra("station_uuid", station.getUuid());
                 v.getContext().startActivity(intent);
             }
         }

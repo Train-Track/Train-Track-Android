@@ -69,8 +69,8 @@ public class JourneyActivity extends ActionBarActivity {
                         Toast.LENGTH_LONG).show();
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         StationActivity.class);
-                intent.putExtra("station_crs", journey.getDestination()
-                        .getCrsCode());
+                intent.putExtra("station_uuid", journey.getDestination()
+                        .getUuid());
                 intent.putExtra("journey_uuid", journey.getUuid());
                 startActivity(intent);
                 finish();

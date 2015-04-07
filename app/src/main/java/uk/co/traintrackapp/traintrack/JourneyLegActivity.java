@@ -75,9 +75,9 @@ public class JourneyLegActivity extends ActionBarActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             final TextView departureStationTv = (TextView) findViewById(R.id.departure_station);
-            final String departureStationCrs = intent
-                    .getStringExtra("departure_station_crs");
-            final Station departureStation = app.getStation(departureStationCrs);
+            final String departureStationUuid = intent
+                    .getStringExtra("departure_station_uuid");
+            final Station departureStation = app.getStation(departureStationUuid);
             departureStationTv.setText(departureStation.getName());
 
             final TextView departurePlatformTv = (TextView) findViewById(R.id.departure_platform);
@@ -113,9 +113,9 @@ public class JourneyLegActivity extends ActionBarActivity {
             });
 
             final TextView arrivalStationTv = (TextView) findViewById(R.id.arrival_station);
-            final String arrivalStationCrs = intent
-                    .getStringExtra("arrival_station_crs");
-            final Station arrivalStation = app.getStation(arrivalStationCrs);
+            final String arrivalStationUuid = intent
+                    .getStringExtra("arrival_station_uuid");
+            final Station arrivalStation = app.getStation(arrivalStationUuid);
             arrivalStationTv.setText(arrivalStation.getName());
 
             final TextView arrivalPlatformTv = (TextView) findViewById(R.id.arrival_platform);

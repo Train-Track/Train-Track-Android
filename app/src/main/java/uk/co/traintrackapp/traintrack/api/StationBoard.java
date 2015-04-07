@@ -56,9 +56,9 @@ public class StationBoard {
         return trainServices.toString();
     }
 
-    public static StationBoard getByCrs(String crs) {
+    public static StationBoard getByUuid(String uuid) {
         JSONObject json = new JSONObject();
-        String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/stations/" + crs + "/departures");
+        String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/stations/" + uuid + "/departures");
         try {
             json = new JSONObject(jsonString);
         } catch (JSONException e) {

@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,9 +40,9 @@ public class StationActivity extends ActionBarActivity {
 
         final Intent intent = getIntent();
         final String journeyUuid = intent.getStringExtra("journey_uuid");
-        final String stationCrs = intent.getStringExtra("station_crs");
+        final String stationUuid = intent.getStringExtra("station_uuid");
         TrainTrack app = (TrainTrack) getApplication();
-        station = app.getStation(stationCrs);
+        station = app.getStation(stationUuid);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,8 +65,7 @@ public class StationActivity extends ActionBarActivity {
                 intent.putExtra("journey_uuid", journeyUuid);
                 intent.putExtra("service_id", serviceItem.getServiceId());
                 intent.putExtra("origin_name", serviceItem.getOrigin().getName());
-                intent.putExtra("station_id", station.getId());
-                intent.putExtra("station_crs", station.getCrsCode());
+                intent.putExtra("station_uuid", station.getUuid());
                 intent.putExtra("station_name", station.getName());
                 intent.putExtra("destination_name", serviceItem.getDestination().getName());
                 intent.putExtra("operator_code", serviceItem.getOperator().getCode());
@@ -139,7 +137,7 @@ public class StationActivity extends ActionBarActivity {
         }
         */
 
-        new GetBoardRequest().execute(station.getCrsCode());
+        new GetBoardRequest().execute(station.getUuid());
 
     }
 
@@ -169,11 +167,11 @@ public class StationActivity extends ActionBarActivity {
                 app.getUser().save(this);
                 return true;
             case R.id.refresh:
-                new GetBoardRequest().execute(station.getCrsCode());
+                new GetBoardRequest().execute(station.getUuid());
                 return true;
             case R.id.map:
                 Intent intent = new Intent().setClass(this, MapActivity.class);
-                intent.putExtra("station_crs", station.getCrsCode());
+                intent.putExtra("station_uuid", station.getUuid());
                 startActivity(intent);
                 return true;
             case android.R.id.home:
@@ -206,9 +204,9 @@ public class StationActivity extends ActionBarActivity {
     class GetBoardRequest extends AsyncTask<String, String, StationBoard> {
 
         @Override
-        protected StationBoard doInBackground(String... crs) {
+        protected StationBoard doInBackground(String... uuid) {
             Utils.log("Getting station board...");
-            return StationBoard.getByCrs(crs[0]);
+            return StationBoard.getByUuid(uuid[0]);
         }
 
         @Override
