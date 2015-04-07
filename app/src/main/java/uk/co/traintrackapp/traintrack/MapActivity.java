@@ -30,12 +30,16 @@ public class MapActivity extends Activity {
 
     private GoogleMap map;
     private HashMap<Marker, Station> hashmap;
+    private BitmapDescriptor nationalRailIcon;
+    private BitmapDescriptor undergroundIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        nationalRailIcon = BitmapDescriptorFactory.fromResource(R.drawable.rail);
+        undergroundIcon = BitmapDescriptorFactory.fromResource(R.drawable.tube);
         hashmap = new HashMap<>();
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
@@ -98,9 +102,12 @@ public class MapActivity extends Activity {
                         .position(points[i])
                         .title(callingPoint.getStation().toString())
                         .snippet(callingPoint.getScheduledTime())
-                        .icon(BitmapDescriptorFactory
-                                .fromResource(R.drawable.ic_launcher))
                         .visible(true));
+                if (callingPoint.getStation().isUnderground()) {
+                    m.setIcon(undergroundIcon);
+                } else {
+                    m.setIcon(nationalRailIcon);
+                }
                 hashmap.put(m, station);
             }
             map.addPolyline(new PolylineOptions().add(points).width(12)
@@ -132,13 +139,16 @@ public class MapActivity extends Activity {
         @Override
         protected void onPostExecute(ArrayList<Station> stations) {
             super.onPostExecute(stations);
-            BitmapDescriptor icon = BitmapDescriptorFactory
-                    .fromResource(R.drawable.ic_launcher);
             for (Station s : stations) {
                 LatLng pos = new LatLng(s.getLatitude(), s.getLongitude());
                 Marker m = map.addMarker(new MarkerOptions().position(pos)
                         .title(s.getName())
-                        .snippet("View Arrival/Departure Board").icon(icon));
+                        .snippet("View Arrival/Departure Board"));
+                if (s.isUnderground()) {
+                    m.setIcon(undergroundIcon);
+                } else {
+                    m.setIcon(nationalRailIcon);
+                }
                 hashmap.put(m, s);
             }
             if (stations.size() == 1) {

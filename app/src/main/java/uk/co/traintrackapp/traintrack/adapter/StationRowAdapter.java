@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -30,15 +31,17 @@ public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public Station station;
-        public TextView crsCode;
         public TextView name;
         public TextView distance;
+        public ImageView nationalRailIcon;
+        public ImageView undergroundIcon;
 
         public ViewHolder(View v) {
             super(v);
-            crsCode = (TextView) v.findViewById(R.id.crs_code);
             name = (TextView) v.findViewById(R.id.name);
             distance = (TextView) v.findViewById(R.id.distance);
+            nationalRailIcon = (ImageView) v.findViewById(R.id.national_rail_icon);
+            undergroundIcon = (ImageView) v.findViewById(R.id.underground_icon);
             v.setOnClickListener(this);
         }
 
@@ -69,9 +72,18 @@ public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         Station station = rowList.get(position);
         holder.station = station;
-        holder.crsCode.setText(station.getCrsCode());
         holder.name.setText(station.getName());
         holder.distance.setText(station.getDistanceText());
+        if (station.isNationalRail()) {
+            holder.nationalRailIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.nationalRailIcon.setVisibility(View.GONE);
+        }
+        if (station.isUnderground()) {
+            holder.undergroundIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.undergroundIcon.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -138,10 +150,10 @@ public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.Vi
                     Utils.log(e.getMessage());
                 }
                 List<Station> list = new ArrayList<>();
-                if (!user.getHomeStation().getCrsCode().isEmpty()) {
+                if (!user.getHomeStation().getUuid().isEmpty()) {
                     list.add(user.getHomeStation());
                 }
-                if (!user.getWorkStation().getCrsCode().isEmpty()) {
+                if (!user.getWorkStation().getUuid().isEmpty()) {
                     list.add(user.getWorkStation());
                 }
                 list.addAll(user.getFavouriteStations());

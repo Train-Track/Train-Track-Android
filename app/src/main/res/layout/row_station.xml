@@ -3,31 +3,43 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
-    android:padding="10sp"
+    android:padding="14sp"
     android:background="@drawable/row">
-
-    <TextView
-        android:id="@+id/crs_code"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="false"
-        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/name"
         style="@style/Row"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:paddingLeft="10sp"
         android:textIsSelectable="false" />
 
     <TextView
         android:id="@+id/distance"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:layout_gravity="center_vertical"
+        android:gravity="end"
         android:textIsSelectable="false"
         android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/national_rail_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/rail"
+        android:contentDescription="@string/national_rail"
+        android:scaleType="fitCenter" />
+
+    <ImageView
+        android:id="@+id/underground_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/tube"
+        android:contentDescription="@string/underground"
+        android:scaleType="fitCenter" />
 
 </LinearLayout>

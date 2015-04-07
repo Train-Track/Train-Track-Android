@@ -58,5 +58,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="signup">Sign Up</string>
+    <string name="national_rail">National Rail</string>
+    <string name="underground">Underground</string>
 
 </resources>
