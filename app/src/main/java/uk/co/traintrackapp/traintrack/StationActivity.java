@@ -206,7 +206,7 @@ public class StationActivity extends ActionBarActivity {
         @Override
         protected StationBoard doInBackground(String... uuid) {
             Utils.log("Getting station board...");
-            return StationBoard.getByUuid(uuid[0]);
+            return StationBoard.getDepartures(uuid[0]);
         }
 
         @Override

@@ -55,9 +55,21 @@ public class StationBoard {
         return trainServices.toString();
     }
 
-    public static StationBoard getByUuid(String uuid) {
+    public static StationBoard getDepartures(String uuid) {
+        return getStationBoard(uuid + "/departures");
+    }
+
+    public static StationBoard getArrivals(String uuid) {
+        return getStationBoard(uuid + "/arrivals");
+    }
+
+    public static StationBoard getUnderground(String uuid) {
+        return getStationBoard(uuid + "/tube");
+    }
+
+    private static StationBoard getStationBoard(String path) {
         JSONObject json = new JSONObject();
-        String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/stations/" + uuid + "/departures");
+        String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/stations/" + path);
         try {
             json = new JSONObject(jsonString);
         } catch (JSONException e) {
