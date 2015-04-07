@@ -206,7 +206,12 @@ public class StationActivity extends ActionBarActivity {
         @Override
         protected StationBoard doInBackground(String... uuid) {
             Utils.log("Getting station board...");
-            return StationBoard.getDepartures(uuid[0]);
+            if (station.isUnderground()) {
+                return StationBoard.getUnderground(uuid[0]);
+            } else if (station.isNationalRail()) {
+                return StationBoard.getDepartures(uuid[0]);
+            }
+            return new StationBoard();
         }
 
         @Override
@@ -215,7 +220,12 @@ public class StationActivity extends ActionBarActivity {
             Utils.log("Got station board.");
             progress.setVisibility(View.GONE);
             serviceItems.clear();
-            serviceItems.addAll(board.getTrainServices());
+            if (!station.isUnderground()) {
+                serviceItems.addAll(board.getTrainServices());
+            } else {
+                Utils.log(board.getTubeLines().toString());
+                serviceItems.addAll(board.getTubeLines().get(0).getServices());
+            }
             adapter.notifyDataSetChanged();
 
             ArrayList<String> nrccMessages = board.getNrccMessages();

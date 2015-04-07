@@ -21,17 +21,36 @@ public class ServiceItem {
     private String platform;
     private Operator operator;
 
+    public ServiceItem() {
+        serviceId = "";
+        origin = new Station();
+        destination = new Station();
+        scheduledTimeArrival = "";
+        estimatedTimeArrival = "";
+        scheduledTimeDeparture = "";
+        estimatedTimeDeparture = "";
+        platform = "";
+        operator = new Operator();
+    }
+
     public ServiceItem(JSONObject json) {
+        this();
         try {
             serviceId = json.getString("service_id");
-            origin = new Station(json.getJSONObject("origin"));
-            destination = new Station(json.getJSONObject("destination"));
+            if (!json.isNull("origin")) {
+                origin = new Station(json.getJSONObject("origin"));
+            }
+            if (!json.isNull("destination")) {
+                destination = new Station(json.getJSONObject("destination"));
+            }
             scheduledTimeArrival = json.getString("sta");
             estimatedTimeArrival = json.getString("eta");
             scheduledTimeDeparture = json.getString("std");
             estimatedTimeDeparture = json.getString("etd");
             platform = json.getString("platform");
-            operator = new Operator(json.getJSONObject("operator"));
+            if (!json.isNull("operator")) {
+                operator = new Operator(json.getJSONObject("operator"));
+            }
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }

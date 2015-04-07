@@ -27,7 +27,7 @@ public class TubeLine {
             backgroundColour = json.getString("background_colour");
             textColour = json.getString("text_colour");
             services = new ArrayList<>();
-            JSONArray jsonServices = json.getJSONArray("train_services");
+            JSONArray jsonServices = json.getJSONArray("services");
             for (int i = 0; i < jsonServices.length(); i++) {
                 ServiceItem item = new ServiceItem(jsonServices.getJSONObject(i));
                 services.add(item);

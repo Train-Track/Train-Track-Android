@@ -14,10 +14,14 @@ public class StationBoard {
     private ArrayList<ServiceItem> trainServices;
     private ArrayList<TubeLine> tubeLines;
 
-    public StationBoard(JSONObject json) {
+    public StationBoard() {
         nrccMessages = new ArrayList<>();
         trainServices = new ArrayList<>();
         tubeLines = new ArrayList<>();
+    }
+
+    public StationBoard(JSONObject json) {
+        this();
         try {
             JSONArray jsonNrccMessages = json.getJSONArray("nrcc_messages");
             for (int i = 0; i < jsonNrccMessages.length(); i++) {
@@ -36,7 +40,6 @@ public class StationBoard {
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
-
     }
 
     public ArrayList<String> getNrccMessages() {
