@@ -26,7 +26,6 @@ import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.adapter.StationRowAdapter;
 import uk.co.traintrackapp.traintrack.model.Station;
 
-
 public class StationsFragment extends Fragment {
 
     private Location gps;
