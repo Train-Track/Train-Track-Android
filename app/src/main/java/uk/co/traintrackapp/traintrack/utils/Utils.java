@@ -39,7 +39,8 @@ public class Utils {
     public static final int ASSETS = 1;
     public static final int FILESYSTEM = 2;
     public static final int BLUE = Color.parseColor("#33b5e5");
-    public static final String API_BASE_URL = "http://traintrackapp.co.uk";
+    public static final String ARGS_PAGE_TITLE = "ARGS_PAGE_TITLE";
+    public static final String API_BASE_URL = "http://192.168.1.73:3000";
     private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
     /**

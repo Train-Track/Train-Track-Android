@@ -26,7 +26,6 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class StationActivity extends ActionBarActivity {
 
     private Station station;
-    private String journeyUuid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,6 @@ public class StationActivity extends ActionBarActivity {
         final String stationUuid = intent.getStringExtra("station_uuid");
         TrainTrack app = (TrainTrack) getApplication();
         station = app.getStation(stationUuid);
-        journeyUuid = intent.getStringExtra("journey_uuid");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -112,11 +110,11 @@ public class StationActivity extends ActionBarActivity {
             fragments = new ArrayList<>();
             fragments.add(StationDetailsFragment.newInstance(station.getUuid()));
             if (station.isNationalRail()) {
-                fragments.add(StationDeparturesFragment.newInstance(station.getUuid(), journeyUuid));
-                fragments.add(StationArrivalsFragment.newInstance(station.getUuid(), journeyUuid));
+                fragments.add(StationDeparturesFragment.newInstance(station.getUuid()));
+                fragments.add(StationArrivalsFragment.newInstance(station.getUuid()));
             }
             if (station.isUnderground()) {
-                fragments.add(StationUndergroundFragment.newInstance(station.getUuid(), journeyUuid));
+                fragments.add(StationUndergroundFragment.newInstance(station.getUuid()));
             }
         }
 

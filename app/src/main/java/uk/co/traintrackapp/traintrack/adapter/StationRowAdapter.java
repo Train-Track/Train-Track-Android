@@ -23,7 +23,6 @@ import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.model.User;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-
 public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.ViewHolder> implements Filterable {
 
     private List<Station> rowList;
