@@ -10,17 +10,15 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationBoard {
 
-    private Boolean isPlatformAvailable;
-    private Boolean areServicesAvailable;
     private ArrayList<String> nrccMessages;
     private ArrayList<ServiceItem> trainServices;
+    private ArrayList<TubeLine> tubeLines;
 
     public StationBoard(JSONObject json) {
-        trainServices = new ArrayList<ServiceItem>();
-        nrccMessages = new ArrayList<String>();
+        nrccMessages = new ArrayList<>();
+        trainServices = new ArrayList<>();
+        tubeLines = new ArrayList<>();
         try {
-            isPlatformAvailable = json.getBoolean("platform_available");
-            areServicesAvailable = json.getBoolean("services_available");
             JSONArray jsonNrccMessages = json.getJSONArray("nrcc_messages");
             for (int i = 0; i < jsonNrccMessages.length(); i++) {
                 nrccMessages.add(jsonNrccMessages.getString(i));
@@ -30,18 +28,15 @@ public class StationBoard {
                 ServiceItem item = new ServiceItem(jsonTrainServices.getJSONObject(i));
                 trainServices.add(item);
             }
+            JSONArray jsonTubeLines = json.getJSONArray("tube_lines");
+            for (int i = 0; i < jsonTubeLines.length(); i++) {
+                TubeLine line = new TubeLine(jsonTubeLines.getJSONObject(i));
+                tubeLines.add(line);
+            }
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
 
-    }
-
-    public Boolean isPlatformAvailable() {
-        return isPlatformAvailable;
-    }
-
-    public Boolean areServicesAvailable() {
-        return areServicesAvailable;
     }
 
     public ArrayList<String> getNrccMessages() {
@@ -50,6 +45,10 @@ public class StationBoard {
 
     public ArrayList<ServiceItem> getTrainServices() {
         return trainServices;
+    }
+
+    public ArrayList<TubeLine> getTubeLines() {
+        return tubeLines;
     }
 
     public String toString() {
