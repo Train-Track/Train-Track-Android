@@ -1,10 +1,13 @@
 package uk.co.traintrackapp.traintrack.model;
 
+import android.support.v4.app.Fragment;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
 
+import uk.co.traintrackapp.traintrack.fragment.StationDetailsFragment;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class Station {

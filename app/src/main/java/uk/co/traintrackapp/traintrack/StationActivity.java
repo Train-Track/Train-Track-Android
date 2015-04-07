@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,12 +19,19 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import uk.co.traintrackapp.traintrack.adapter.ServiceItemRowAdapter;
 import uk.co.traintrackapp.traintrack.api.ServiceItem;
 import uk.co.traintrackapp.traintrack.api.StationBoard;
+import uk.co.traintrackapp.traintrack.fragment.StationArrivalsFragment;
+import uk.co.traintrackapp.traintrack.fragment.StationDeparturesFragment;
+import uk.co.traintrackapp.traintrack.fragment.StationDetailsFragment;
+import uk.co.traintrackapp.traintrack.fragment.StationUndergroundFragment;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
@@ -48,6 +59,21 @@ public class StationActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(station.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+
+        // Give the PagerSlidingTabStrip the ViewPager
+        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        // Attach the view pager to the tab strip
+        tabsStrip.setViewPager(viewPager);
+
+
+/*
+
 
         progress = (ProgressBar) findViewById(R.id.progress);
         nrccMessage = (TextView) findViewById(R.id.nrcc_messages);
@@ -77,67 +103,8 @@ public class StationActivity extends ActionBarActivity {
 
         });
 
-        //TODO do some cool image stuff
-        /*
-        final ParseImageView image = (ParseImageView) findViewById(R.id.image);
-        image.setPlaceholder(getResources().getDrawable(R.drawable.platform));
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent takePictureIntent = new Intent(
-                        MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, TAKE_PHOTO);
-                }
-            }
-        });
-        */
-
-        //TODO some fancy image thing
-        /*
-        GetCallback<Image> imageCallback = new GetCallback<Image>() {
-            @Override
-            public void done(Image stationImage, ParseException e) {
-                if ((e == null) && (stationImage != null)) {
-                    image.setParseFile(stationImage.getFile());
-                    image.loadInBackground(null);
-                } else {
-                    Utils.log("Station image problem for " + station);
-                }
-            }
-        };
-        savedImageCallback = new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Utils.log("Image saved");
-                } else {
-                    Utils.log("Image save: " + e.getMessage());
-                }
-            }
-        };
-        savedFileCallback = new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Utils.log("File saved");
-                    newImage = new Image();
-                    newImage.setTitle(station.getName());
-                    newImage.setFile(imageFile);
-                    newImage.setUser(ParseUser.getCurrentUser());
-                    newImage.saveInBackground(savedImageCallback);
-                } else {
-                    Utils.log("File save: " + e.getMessage());
-                }
-            }
-        };
-
-        if (station.getImage() != null) {
-            station.getImage().fetchInBackground(imageCallback);
-        }
-        */
-
         new GetBoardRequest().execute(station.getUuid());
+*/
 
     }
 
@@ -234,6 +201,39 @@ public class StationActivity extends ActionBarActivity {
                 nrccMessage.setText(nrccMessages.get(0));
             }
 
+        }
+    }
+
+    public class PagerAdapter extends FragmentPagerAdapter {
+
+        private ArrayList<Fragment> fragments;
+
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
+            fragments = new ArrayList<>();
+            fragments.add(StationDetailsFragment.newInstance(station.getUuid()));
+            if (station.isNationalRail()) {
+                fragments.add(StationDeparturesFragment.newInstance(station.getUuid()));
+                fragments.add(StationArrivalsFragment.newInstance(station.getUuid()));
+            }
+            if (station.isUnderground()) {
+                fragments.add(StationUndergroundFragment.newInstance(station.getUuid()));
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragments.get(position).getArguments().getString(Utils.ARGS_PAGE_TITLE);
         }
     }
 
