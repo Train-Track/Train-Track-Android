@@ -166,7 +166,7 @@ public class Station {
             json.put("crs", getCrsCode());
             json.put("lat", getLatitude());
             json.put("lng", getLongitude());
-            json.put("underground_station", isUnderground());
+            json.put("underground", isUnderground());
             json.put("national_rail", isNationalRail());
         } catch (JSONException e) {
             Utils.log(e.getMessage());
