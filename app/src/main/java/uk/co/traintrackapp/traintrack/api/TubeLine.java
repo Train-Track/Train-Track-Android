@@ -27,10 +27,12 @@ public class TubeLine {
             backgroundColour = json.getString("background_colour");
             textColour = json.getString("text_colour");
             services = new ArrayList<>();
-            JSONArray jsonServices = json.getJSONArray("services");
-            for (int i = 0; i < jsonServices.length(); i++) {
-                ServiceItem item = new ServiceItem(jsonServices.getJSONObject(i));
-                services.add(item);
+            if (!json.isNull("services")) {
+                JSONArray jsonServices = json.getJSONArray("services");
+                for (int i = 0; i < jsonServices.length(); i++) {
+                    ServiceItem item = new ServiceItem(jsonServices.getJSONObject(i));
+                    services.add(item);
+                }
             }
         } catch (JSONException e) {
             Utils.log(e.getMessage());
@@ -67,6 +69,24 @@ public class TubeLine {
 
     public String toString() {
         return name;
+    }
+
+    /**
+     * Get the live status of the underground lines
+     * @return the list of tube lines
+     */
+    public static ArrayList<TubeLine> getStatus() {
+        ArrayList<TubeLine> tubeLines = new ArrayList<>();
+        String jsonString = Utils.httpGet(Utils.API_BASE_URL + "/tube");
+        try {
+            JSONArray jsonTubeLines = new JSONArray(jsonString);
+            for (int i = 0; i < jsonTubeLines.length(); i++) {
+                tubeLines.add(new TubeLine(jsonTubeLines.getJSONObject(i)));
+            }
+        } catch (JSONException e) {
+            Utils.log(e.getMessage());
+        }
+        return tubeLines;
     }
 
 }
