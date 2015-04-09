@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
@@ -17,11 +18,12 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class StationDetailsFragment extends Fragment {
 
     private static final String ARGS_UUID = "ARGS_UUID";
+    private static final String PAGE_TITLE = "Details";
     private Station station;
 
     public static Fragment newInstance(String uuid) {
         Bundle args = new Bundle();
-        args.putString(Utils.ARGS_PAGE_TITLE, "Details");
+        args.putString(Utils.ARGS_PAGE_TITLE, PAGE_TITLE);
         args.putString(ARGS_UUID, uuid);
         StationDetailsFragment fragment = new StationDetailsFragment();
         fragment.setArguments(args);
@@ -63,6 +65,20 @@ public class StationDetailsFragment extends Fragment {
                 app.getUser().save(getActivity());
             }
         });
+
+        ImageView nationalRailIcon = (ImageView) v.findViewById(R.id.national_rail_icon);
+        if (station.isNationalRail()) {
+            nationalRailIcon.setVisibility(View.VISIBLE);
+        } else {
+            nationalRailIcon.setVisibility(View.GONE);
+        }
+
+        ImageView undergroundIcon = (ImageView) v.findViewById(R.id.underground_icon);
+        if (station.isUnderground()) {
+            undergroundIcon.setVisibility(View.VISIBLE);
+        } else {
+            undergroundIcon.setVisibility(View.GONE);
+        }
 
         TextView address = (TextView) v.findViewById(R.id.address);
         address.setText(station.getAddress());

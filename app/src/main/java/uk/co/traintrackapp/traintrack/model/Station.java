@@ -218,6 +218,26 @@ public class Station {
         return getName();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Station station = (Station) o;
+        if (!uuid.equals(station.uuid)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
+    }
+
     /**
      *
      * @return JSON Object
