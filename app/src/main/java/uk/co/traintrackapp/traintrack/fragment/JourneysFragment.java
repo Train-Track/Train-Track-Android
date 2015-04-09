@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -31,6 +34,16 @@ public class JourneysFragment extends Fragment {
         final TrainTrack app = (TrainTrack) getActivity().getApplication();
         final ArrayList<Journey> journeys = app.getUser().getJourneys();
         final ListView list = (ListView) v.findViewById(R.id.list);
+
+        final FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        fab.attachToListView(list);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Choose a departing station", Toast.LENGTH_LONG).show();
+            }
+        });
+
         final JourneyRowAdapter adapter = new JourneyRowAdapter(journeys, getActivity());
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
