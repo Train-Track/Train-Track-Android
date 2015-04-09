@@ -3,6 +3,7 @@ package uk.co.traintrackapp.traintrack;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,11 @@ public class JourneyActivity extends ActionBarActivity {
         final Intent intent = getIntent();
         final String journeyUuid = intent.getStringExtra("journey_uuid");
         journey = app.getJourney(journeyUuid);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Journey");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final TextView name = (TextView) findViewById(R.id.name);
         name.setText(journey.toString());

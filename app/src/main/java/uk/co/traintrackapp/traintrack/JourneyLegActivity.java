@@ -43,7 +43,7 @@ public class JourneyLegActivity extends ActionBarActivity {
 
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle(journeyLeg.toString());
+            getSupportActionBar().setTitle("Journey Leg");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             final TextView departureStation = (TextView) findViewById(R.id.departure_station);
