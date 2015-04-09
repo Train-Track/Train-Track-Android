@@ -1,13 +1,13 @@
 package uk.co.traintrackapp.traintrack.model;
 
-import android.support.v4.app.Fragment;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 
-import uk.co.traintrackapp.traintrack.fragment.StationDetailsFragment;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class Station {
@@ -21,6 +21,11 @@ public class Station {
     private double lng;
     private boolean isUnderground;
     private boolean isNationalRail;
+    private String address;
+    private String phone;
+    private String twitter;
+    private String undergroundZones;
+    private HashMap<String, String> facilities;
     private double distance;
 
     public Station() {
@@ -32,6 +37,10 @@ public class Station {
         lng = 0;
         isUnderground = false;
         isNationalRail = false;
+        phone = "";
+        twitter = "";
+        undergroundZones = "";
+        facilities = new HashMap<>();
         distance = 0;
     }
 
@@ -46,6 +55,27 @@ public class Station {
             this.lng = json.getDouble("lng");
             this.isUnderground = json.getBoolean("underground");
             this.isNationalRail = json.getBoolean("national_rail");
+            if (!json.isNull("address")) {
+                this.address = json.getString("address");
+            }
+            if (!json.isNull("phone")) {
+                this.phone = json.getString("phone");
+            }
+            if (!json.isNull("twitter")) {
+                this.twitter = json.getString("twitter");
+            }
+            if (!json.isNull("underground_zones")) {
+                this.undergroundZones = json.getString("underground_zones");
+            }
+            JSONArray facilities = json.getJSONArray("facilities");
+            for (int i = 0; i < facilities.length(); i++) {
+                JSONObject facility = facilities.getJSONObject(i);
+                Iterator<String> keys = facility.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    this.facilities.put(key, facility.getString(key));
+                }
+            }
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
@@ -109,6 +139,41 @@ public class Station {
     }
 
     /**
+     * @return address of the station
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+      * @return phone number of the station
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * @return twitter handle of the station
+     */
+    public String getTwitter() {
+        return twitter;
+    }
+
+    /**
+     * @return underground zones if underground station
+     */
+    public String getUndergroundZones() {
+        return undergroundZones;
+    }
+
+    /**
+     * @return map of facilities
+     */
+    public HashMap<String, String> getFacilities() {
+        return facilities;
+    }
+
+    /**
      * @param distance (in km)
      */
     public void setDistance(double distance) {
@@ -168,6 +233,16 @@ public class Station {
             json.put("lng", getLongitude());
             json.put("underground", isUnderground());
             json.put("national_rail", isNationalRail());
+            json.put("phone", getPhone());
+            json.put("twitter", getTwitter());
+            json.put("underground_zones", getUndergroundZones());
+            JSONArray facilities = new JSONArray();
+            for (String key : getFacilities().keySet()) {
+                JSONObject facility = new JSONObject();
+                facility.put(key, getFacilities().get(key));
+                facilities.put(facility);
+            }
+            json.put("facilities", facilities);
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }

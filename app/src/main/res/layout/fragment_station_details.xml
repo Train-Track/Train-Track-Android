@@ -16,7 +16,7 @@
             android:layout_height="160dp"
             android:src="@drawable/platform"
             android:scaleType="fitXY"
-            android:contentDescription="@string/app_name"/>
+            android:contentDescription="@string/app_name" />
 
         <ImageView
             android:id="@+id/transparent"
@@ -24,7 +24,7 @@
             android:layout_height="160dp"
             android:background="#55000000"
             android:scaleType="fitXY"
-            android:contentDescription="@string/app_name"/>
+            android:contentDescription="@string/app_name" />
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fab"
@@ -50,13 +50,48 @@
             android:textColor="#fff"
             android:text="@string/app_name" />
 
+        <ImageView
+            android:id="@+id/national_rail_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/rail"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/app_name"
+            android:layout_below="@+id/image" />
+
+        <ImageView
+            android:id="@+id/underground_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/tube"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/app_name"
+            android:layout_below="@+id/image"
+            android:layout_toRightOf="@+id/national_rail_icon" />
+
         <TextView
-            android:id="@+id/uuid"
+            android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceLarge"
             android:text="@string/app_name"
-            android:layout_below="@+id/name" />
+            android:layout_below="@+id/underground_icon" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:text="@string/app_name"
+            android:layout_below="@+id/address" />
+
+        <TextView
+            android:id="@+id/twitter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:text="@string/app_name"
+            android:layout_below="@+id/phone" />
 
     </RelativeLayout>
 

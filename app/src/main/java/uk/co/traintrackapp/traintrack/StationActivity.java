@@ -52,28 +52,12 @@ public class StationActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.station, menu);
-        TrainTrack app = (TrainTrack) getApplication();
-        if (app.getUser().getFavouriteStations().contains(station)) {
-            menu.findItem(R.id.favourite).setIcon(
-                    android.R.drawable.btn_star_big_on);
-        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        TrainTrack app = (TrainTrack) getApplication();
         switch (item.getItemId()) {
-            case R.id.favourite:
-                if (app.getUser().getFavouriteStations().contains(station)) {
-                    item.setIcon(android.R.drawable.btn_star_big_off);
-                    app.getUser().getFavouriteStations().remove(station);
-                } else {
-                    item.setIcon(android.R.drawable.btn_star_big_on);
-                    app.getUser().getFavouriteStations().add(station);
-                }
-                app.getUser().save(this);
-                return true;
             case R.id.refresh:
                 return true;
             case R.id.map:
