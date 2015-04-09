@@ -15,7 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.R;
-import uk.co.traintrackapp.traintrack.TrainTrack;
+import uk.co.traintrackapp.traintrack.StationActivity;
 import uk.co.traintrackapp.traintrack.adapter.ServiceItemArrivalRowAdapter;
 import uk.co.traintrackapp.traintrack.api.ServiceItem;
 import uk.co.traintrackapp.traintrack.api.StationBoard;
@@ -24,38 +24,30 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationArrivalsFragment extends Fragment {
 
-    private static final String ARGS_STATION_UUID = "ARGS_STATION_UUID";
     private static final String PAGE_TITLE = "Arrivals";
-    private Station station;
     private ServiceItemArrivalRowAdapter adapter;
     private ArrayList<ServiceItem> serviceItems;
     private ProgressBar progress;
     private TextView nrccMessage;
 
-    public static Fragment newInstance(String stationUuid) {
+    public static Fragment newInstance() {
         Bundle args = new Bundle();
         args.putString(Utils.ARGS_PAGE_TITLE, PAGE_TITLE);
-        args.putString(ARGS_STATION_UUID, stationUuid);
         StationArrivalsFragment fragment = new StationArrivalsFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        String stationUuid = getArguments().getString(ARGS_STATION_UUID);
-        TrainTrack app = (TrainTrack) getActivity().getApplication();
-        station = app.getStation(stationUuid);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_station_board, container, false);
+        StationActivity activity = ((StationActivity) getActivity());
+        Station station = activity.getStation();
+        StationBoard board = activity.getArrivalsBoard();
 
+        serviceItems = new ArrayList<>();
         progress = (ProgressBar) v.findViewById(R.id.progress);
         nrccMessage = (TextView) v.findViewById(R.id.nrcc_messages);
-        serviceItems = new ArrayList<>();
 
         RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -63,9 +55,27 @@ public class StationArrivalsFragment extends Fragment {
         adapter = new ServiceItemArrivalRowAdapter(serviceItems);
         list.setAdapter(adapter);
 
-        new GetArrivalsBoardRequest().execute(station.getUuid());
+        if (board == null) {
+            new GetArrivalsBoardRequest().execute(station.getUuid());
+        } else {
+            updateBoard(board);
+        }
 
         return v;
+    }
+
+    private void updateBoard(StationBoard board) {
+        progress.setVisibility(View.GONE);
+        serviceItems.clear();
+        serviceItems.addAll(board.getTrainServices());
+        adapter.notifyDataSetChanged();
+
+        ArrayList<String> nrccMessages = board.getNrccMessages();
+        //TODO: Loop through all messages
+        if (nrccMessages.size() > 0) {
+            nrccMessage.setVisibility(View.VISIBLE);
+            nrccMessage.setText(nrccMessages.get(0));
+        }
     }
 
     class GetArrivalsBoardRequest extends AsyncTask<String, String, StationBoard> {
@@ -80,18 +90,12 @@ public class StationArrivalsFragment extends Fragment {
         protected void onPostExecute(StationBoard board) {
             super.onPostExecute(board);
             Utils.log("Got arrivals board.");
-            progress.setVisibility(View.GONE);
-            serviceItems.clear();
-            serviceItems.addAll(board.getTrainServices());
-            adapter.notifyDataSetChanged();
-
-            ArrayList<String> nrccMessages = board.getNrccMessages();
-            //TODO: Loop through all messages
-            if (nrccMessages.size() > 0) {
-                nrccMessage.setVisibility(View.VISIBLE);
-                nrccMessage.setText(nrccMessages.get(0));
+            StationActivity activity = ((StationActivity) getActivity());
+            if (activity != null) {
+                activity.setArrivalsBoard(board);
             }
-
+            updateBoard(board);
         }
     }
+
 }

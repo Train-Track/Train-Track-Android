@@ -16,6 +16,7 @@ import com.astuetz.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 
+import uk.co.traintrackapp.traintrack.api.StationBoard;
 import uk.co.traintrackapp.traintrack.fragment.StationArrivalsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationDeparturesFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationDetailsFragment;
@@ -26,6 +27,37 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class StationActivity extends ActionBarActivity {
 
     private Station station;
+    private StationBoard departuresBoard;
+    private StationBoard arrivalsBoard;
+    private StationBoard undergroundBoard;
+
+    public Station getStation() {
+        return station;
+    }
+
+    public StationBoard getDeparturesBoard() {
+        return departuresBoard;
+    }
+
+    public void setDeparturesBoard(StationBoard departuresBoard) {
+        this.departuresBoard = departuresBoard;
+    }
+
+    public StationBoard getArrivalsBoard() {
+        return arrivalsBoard;
+    }
+
+    public void setArrivalsBoard(StationBoard arrivalsBoard) {
+        this.arrivalsBoard = arrivalsBoard;
+    }
+
+    public StationBoard getUndergroundBoard() {
+        return undergroundBoard;
+    }
+
+    public void setUndergroundBoard(StationBoard undergroundBoard) {
+        this.undergroundBoard = undergroundBoard;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +90,6 @@ public class StationActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.refresh:
-                return true;
             case R.id.map:
                 Intent intent = new Intent().setClass(this, MapActivity.class);
                 intent.putExtra("station_uuid", station.getUuid());
@@ -92,13 +122,13 @@ public class StationActivity extends ActionBarActivity {
         public PagerAdapter(FragmentManager fm) {
             super(fm);
             fragments = new ArrayList<>();
-            fragments.add(StationDetailsFragment.newInstance(station.getUuid()));
+            fragments.add(StationDetailsFragment.newInstance());
             if (station.isNationalRail()) {
-                fragments.add(StationDeparturesFragment.newInstance(station.getUuid()));
-                fragments.add(StationArrivalsFragment.newInstance(station.getUuid()));
+                fragments.add(StationDeparturesFragment.newInstance());
+                fragments.add(StationArrivalsFragment.newInstance());
             }
             if (station.isUnderground()) {
-                fragments.add(StationUndergroundFragment.newInstance(station.getUuid()));
+                fragments.add(StationUndergroundFragment.newInstance());
             }
         }
 
