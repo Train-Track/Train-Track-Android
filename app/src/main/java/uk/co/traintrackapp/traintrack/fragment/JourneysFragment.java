@@ -3,6 +3,7 @@ package uk.co.traintrackapp.traintrack.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,9 @@ public class JourneysFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Choose a departing station", Toast.LENGTH_LONG).show();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, StationsFragment.newInstance()).commit();
+                ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Stations");
             }
         });
 

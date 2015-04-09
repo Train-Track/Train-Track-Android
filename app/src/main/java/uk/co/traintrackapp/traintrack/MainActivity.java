@@ -159,11 +159,14 @@ public class MainActivity extends ActionBarActivity {
         drawerLayout.closeDrawers();
     }
 
+    /**
+     * Commits the new fragment and updates the title
+     */
     private void updateFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, newFragment).commit();
-        toolbar.setTitle("Your Journeys");
+        toolbar.setTitle(newTitle);
     }
 
     /**
