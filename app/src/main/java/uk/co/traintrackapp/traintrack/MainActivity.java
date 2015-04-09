@@ -45,16 +45,19 @@ public class MainActivity extends ActionBarActivity {
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
     private Fragment newFragment;
+    private String newTitle;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         newFragment = DashboardFragment.newInstance();
+        newTitle = "Dashboard";
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerIndicatorEnabled(true);
@@ -134,18 +137,23 @@ public class MainActivity extends ActionBarActivity {
         switch (position) {
             case -1:
                 newFragment = AccountManagerFragment.newInstance();
+                newTitle = "Account";
                 break;
             case 0:
                 newFragment = DashboardFragment.newInstance();
+                newTitle = "Dashboard";
                 break;
             case 1:
                 newFragment = StationsFragment.newInstance();
+                newTitle = "Stations";
                 break;
             case 2:
                 newFragment = JourneysFragment.newInstance();
+                newTitle = "Your Journeys";
                 break;
             case 3:
                 newFragment = SettingsFragment.newInstance();
+                newTitle = "Settings";
                 break;
         }
         drawerLayout.closeDrawers();
@@ -155,6 +163,7 @@ public class MainActivity extends ActionBarActivity {
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, newFragment).commit();
+        toolbar.setTitle("Your Journeys");
     }
 
     /**
