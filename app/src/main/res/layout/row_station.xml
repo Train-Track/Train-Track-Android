@@ -4,16 +4,15 @@
     android:layout_height="fill_parent"
     android:orientation="horizontal"
     android:padding="14sp"
-    android:background="@drawable/row">
+    android:background="?android:attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/name"
-        style="@style/Row"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:textIsSelectable="false" />
+        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
     <TextView
         android:id="@+id/distance"
@@ -21,8 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="end"
-        android:textIsSelectable="false"
-        android:textSize="16sp" />
+        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
     <ImageView
         android:id="@+id/national_rail_icon"

@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:padding="14sp"
+    android:background="?android:attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/icon"
@@ -19,21 +21,18 @@
 
     <TextView
         android:id="@+id/station"
-        style="@style/Row"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="10sp"
-        android:textIsSelectable="false"
-        android:textSize="16sp" />
+        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingLeft="10sp"
-        android:textIsSelectable="false"
-        android:textSize="16sp" />
+        android:padding="10sp"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
 </LinearLayout>
