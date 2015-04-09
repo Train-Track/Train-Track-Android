@@ -19,6 +19,7 @@ import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.adapter.ServiceItemUndergroundRowAdapter;
 import uk.co.traintrackapp.traintrack.api.ServiceItem;
 import uk.co.traintrackapp.traintrack.api.StationBoard;
+import uk.co.traintrackapp.traintrack.api.TubeLine;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
@@ -82,7 +83,10 @@ public class StationUndergroundFragment extends Fragment {
             Utils.log("Got underground board.");
             progress.setVisibility(View.GONE);
             serviceItems.clear();
-            serviceItems.addAll(board.getTubeLines().get(0).getServices());
+            //TODO: put them in some form of vertical tabs
+            for (TubeLine tubeLine : board.getTubeLines()) {
+                serviceItems.addAll(tubeLine.getServices());
+            }
             adapter.notifyDataSetChanged();
 
             ArrayList<String> nrccMessages = board.getNrccMessages();
