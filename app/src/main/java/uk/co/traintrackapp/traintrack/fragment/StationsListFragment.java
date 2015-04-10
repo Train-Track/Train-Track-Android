@@ -96,7 +96,7 @@ public class StationsListFragment extends Fragment {
                             Location stationLocation = new Location("");
                             stationLocation.setLatitude(station.getLatitude());
                             stationLocation.setLongitude(station.getLongitude());
-                            station.setDistance(gps.distanceTo(stationLocation));
+                            station.setDistance((int) gps.distanceTo(stationLocation));
                             newStations.add(station);
                         }
                     }

@@ -1,5 +1,7 @@
 package uk.co.traintrackapp.traintrack.model;
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +28,7 @@ public class Station implements Comparable {
     private String twitter;
     private String undergroundZones;
     private HashMap<String, String> facilities;
-    private double distance;
+    private int distance;
 
     public Station() {
         id = 0;
@@ -174,16 +176,16 @@ public class Station implements Comparable {
     }
 
     /**
-     * @param distance (in km)
+     * @param distance (in m)
      */
-    public void setDistance(double distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
     }
 
     /**
-     * @return distance (km)
+     * @return distance (m)
      */
-    public double getDistance() {
+    public int getDistance() {
         return distance;
     }
 
@@ -191,12 +193,13 @@ public class Station implements Comparable {
      * @return text representation of distance
      */
     public String getDistanceText() {
-        double distance = getDistance();
+        int distance = getDistance();
         String format = "";
-        if (distance > 100) {
-            format = "%.0f km";
+        if (distance > 1000) {
+            distance = distance / 1000;
+            format = "%d km";
         } else if (distance > 0) {
-            format = "%.2f km";
+            format = "%d m";
         }
         return String.format(Locale.getDefault(), format, distance);
     }
@@ -227,10 +230,7 @@ public class Station implements Comparable {
             return false;
         }
         Station station = (Station) o;
-        if (!uuid.equals(station.uuid)) {
-            return false;
-        }
-        return true;
+        return uuid.equals(station.uuid);
     }
 
     @Override
@@ -239,19 +239,19 @@ public class Station implements Comparable {
     }
 
     @Override
-    public int compareTo(Object obj) {
+    public int compareTo(@NonNull Object obj) {
         if (this.getDistance() == 0) {
             return -1;
         }
-        if ((obj == null) || (!(obj instanceof Station))) {
+        if (!(obj instanceof Station)) {
             return -1;
         }
         Station comparison = (Station) obj;
         if (comparison.getDistance() == 0) {
             return -1;
         }
-        int comparisonDistance = (int) comparison.getDistance() * 1000;
-        int distance = (int) this.getDistance() * 1000;
+        int comparisonDistance = comparison.getDistance() * 1000;
+        int distance = this.getDistance() * 1000;
         return distance - comparisonDistance;
     }
 
