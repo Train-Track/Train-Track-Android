@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
+
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.R;
@@ -27,8 +29,8 @@ public class StationUndergroundFragment extends Fragment {
 
     private static final String PAGE_TITLE = "Underground";
     private ServiceItemUndergroundRowAdapter adapter;
+    private PullRefreshLayout refresh;
     private ArrayList<ServiceItem> serviceItems;
-    private ProgressBar progress;
     private TextView nrccMessage;
 
     public static Fragment newInstance() {
@@ -43,11 +45,10 @@ public class StationUndergroundFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_station_board, container, false);
         StationActivity activity = ((StationActivity) getActivity());
-        Station station = activity.getStation();
+        final Station station = activity.getStation();
         StationBoard board = activity.getUndergroundBoard();
 
         serviceItems = new ArrayList<>();
-        progress = (ProgressBar) v.findViewById(R.id.progress);
         nrccMessage = (TextView) v.findViewById(R.id.nrcc_messages);
 
         RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
@@ -56,7 +57,16 @@ public class StationUndergroundFragment extends Fragment {
         adapter = new ServiceItemUndergroundRowAdapter(serviceItems);
         list.setAdapter(adapter);
 
+        refresh = (PullRefreshLayout) v.findViewById(R.id.refresh);
+        refresh.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetUndergroundBoardRequest().execute(station.getUuid());
+            }
+        });
+
         if (board == null) {
+            refresh.setRefreshing(true);
             new GetUndergroundBoardRequest().execute(station.getUuid());
         } else {
             updateBoard(board);
@@ -66,7 +76,7 @@ public class StationUndergroundFragment extends Fragment {
     }
 
     private void updateBoard(StationBoard board) {
-        progress.setVisibility(View.GONE);
+        refresh.setRefreshing(false);
         serviceItems.clear();
         //TODO: put them in some form of vertical tabs
         for (TubeLine tubeLine : board.getTubeLines()) {

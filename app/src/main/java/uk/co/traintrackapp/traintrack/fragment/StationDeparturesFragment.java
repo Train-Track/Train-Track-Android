@@ -9,8 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.baoyz.widget.PullRefreshLayout;
 
 import java.util.ArrayList;
 
@@ -26,8 +27,8 @@ public class StationDeparturesFragment extends Fragment {
 
     private static final String PAGE_TITLE = "Departures";
     private ServiceItemDepartureRowAdapter adapter;
+    private PullRefreshLayout refresh;
     private ArrayList<ServiceItem> serviceItems;
-    private ProgressBar progress;
     private TextView nrccMessage;
 
     public static Fragment newInstance() {
@@ -42,11 +43,10 @@ public class StationDeparturesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_station_board, container, false);
         StationActivity activity = ((StationActivity) getActivity());
-        Station station = activity.getStation();
+        final Station station = activity.getStation();
         StationBoard board = activity.getDeparturesBoard();
 
         serviceItems = new ArrayList<>();
-        progress = (ProgressBar) v.findViewById(R.id.progress);
         nrccMessage = (TextView) v.findViewById(R.id.nrcc_messages);
 
         RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
@@ -55,7 +55,16 @@ public class StationDeparturesFragment extends Fragment {
         adapter = new ServiceItemDepartureRowAdapter(serviceItems);
         list.setAdapter(adapter);
 
+        refresh = (PullRefreshLayout) v.findViewById(R.id.refresh);
+        refresh.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetDepartureBoardRequest().execute(station.getUuid());
+            }
+        });
+
         if (board == null) {
+            refresh.setRefreshing(true);
             new GetDepartureBoardRequest().execute(station.getUuid());
         } else {
             updateBoard(board);
@@ -65,7 +74,7 @@ public class StationDeparturesFragment extends Fragment {
     }
 
     private void updateBoard(StationBoard board) {
-        progress.setVisibility(View.GONE);
+        refresh.setRefreshing(false);
         serviceItems.clear();
         serviceItems.addAll(board.getTrainServices());
         adapter.notifyDataSetChanged();
