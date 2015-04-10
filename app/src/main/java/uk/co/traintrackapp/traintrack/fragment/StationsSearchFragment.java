@@ -1,5 +1,6 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ public class StationsSearchFragment extends Fragment {
 
         final EditText search = (EditText) v.findViewById(R.id.search);
         search.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         search.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable arg0) {
             }
