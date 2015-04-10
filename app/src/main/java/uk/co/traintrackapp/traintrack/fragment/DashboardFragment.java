@@ -1,6 +1,6 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;

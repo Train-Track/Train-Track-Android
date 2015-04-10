@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class Station {
+public class Station implements Comparable {
 
     public static final String FILENAME = "stations.json";
     private int id;
@@ -236,6 +236,23 @@ public class Station {
     @Override
     public int hashCode() {
         return uuid.hashCode();
+    }
+
+    @Override
+    public int compareTo(Object obj) {
+        if (this.getDistance() == 0) {
+            return -1;
+        }
+        if ((obj == null) || (!(obj instanceof Station))) {
+            return -1;
+        }
+        Station comparison = (Station) obj;
+        if (comparison.getDistance() == 0) {
+            return -1;
+        }
+        int comparisonDistance = (int) comparison.getDistance() * 1000;
+        int distance = (int) this.getDistance() * 1000;
+        return distance - comparisonDistance;
     }
 
     /**
