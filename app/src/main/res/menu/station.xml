@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/map"
         android:icon="@android:drawable/ic_menu_mapmode"
         android:orderInCategory="98"
-        app:showAsAction="never"
-        android:title="@string/map"/>
+        android:title="@string/map"
+        app:showAsAction="never" />
 
 </menu>

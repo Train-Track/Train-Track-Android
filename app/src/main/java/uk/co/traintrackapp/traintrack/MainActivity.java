@@ -1,9 +1,8 @@
 package uk.co.traintrackapp.traintrack;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +35,6 @@ import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.model.User;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-
 public class MainActivity extends ActionBarActivity {
 
     private static final String NEW_USER = "New User";
@@ -46,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
     private Fragment newFragment;
     private String newTitle;
     private Toolbar toolbar;
+    private boolean backToExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,20 +116,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         toggle.syncState();
-    }
-
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Quit")
-                .setMessage("Are you sure you want to quit?")
-                .setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                finish();
-                            }
-                        }).setNegativeButton("No", null).show();
     }
 
     public void selectItem(int position) {

@@ -10,6 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -33,6 +36,12 @@ public class StationsFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_stations, container,
@@ -44,22 +53,6 @@ public class StationsFragment extends Fragment {
         tabsStrip.setViewPager(viewPager);
 
 /*
-        final EditText search = (EditText) rootView.findViewById(R.id.search);
-        search.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable arg0) {
-            }
-
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
-            }
-
-            public void onTextChanged(CharSequence search, int arg1, int arg2,
-                                      int arg3) {
-                adapter.getFilter().filter(search);
-                list.smoothScrollToPosition(0);
-            }
-        });
-
         final Button map = (Button) rootView.findViewById(R.id.map);
         map.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +93,26 @@ public class StationsFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.stations, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, StationsSearchFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+               break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public class PagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<android.support.v4.app.Fragment> fragments;
@@ -108,7 +121,6 @@ public class StationsFragment extends Fragment {
             super(fm);
             fragments = new ArrayList<>();
             fragments.addAll(StationsListFragment.getFragments());
-
         }
 
         @Override

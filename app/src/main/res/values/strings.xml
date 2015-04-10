@@ -60,5 +60,6 @@
     <string name="signup">Sign Up</string>
     <string name="national_rail">National Rail</string>
     <string name="underground">Underground</string>
+    <string name="search">Search</string>
 
 </resources>
