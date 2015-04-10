@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="Buses"
+        android:title="Display"
         android:key="pref_buses">
+        <ListPreference
+            android:key="pref_distance_units"
+            android:title="@string/distance_units"
+            android:summary="@string/distance_units_summary"
+            android:entries="@array/distance_units_entries"
+            android:entryValues="@array/distance_units_entry_values" />
         <CheckBoxPreference
             android:key="pref_view_bus_services"
             android:title="@string/view_bus_services"
             android:summary="@string/view_bus_services_summary"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="pref_view_extra_data"
+            android:title="@string/view_extra_data"
+            android:summary="@string/view_extra_data_summary"
             android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory

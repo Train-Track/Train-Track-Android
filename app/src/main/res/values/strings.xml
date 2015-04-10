@@ -61,5 +61,9 @@
     <string name="national_rail">National Rail</string>
     <string name="underground">Underground</string>
     <string name="search">Search</string>
+    <string name="view_extra_data">View extended train data</string>
+    <string name="view_extra_data_summary">Show train IDs and timing locations</string>
+    <string name="distance_units">Distance Units</string>
+    <string name="distance_units_summary">Choose between kilometers and miles</string>
 
 </resources>
