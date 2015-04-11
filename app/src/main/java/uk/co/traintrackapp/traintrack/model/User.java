@@ -4,9 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +29,7 @@ public class User {
     private Station homeStation;
     private Station workStation;
     private ArrayList<Station> favouriteStations;
+    private ArrayList<Station> recentStations;
 
     public User() {
         id = 0;
@@ -44,6 +42,7 @@ public class User {
         homeStation = new Station();
         workStation = new Station();
         favouriteStations = new ArrayList<>();
+        recentStations = new ArrayList<>();
     }
 
     /**
@@ -68,6 +67,10 @@ public class User {
             JSONArray favouriteStations = json.getJSONArray("favourite_stations");
             for (int i = 0; i < favouriteStations.length(); i++) {
                 this.favouriteStations.add(new Station(favouriteStations.getJSONObject(i)));
+            }
+            JSONArray recentStations = json.getJSONArray("recent_stations");
+            for (int i = 0; i < recentStations.length(); i++) {
+                this.recentStations.add(new Station(recentStations.getJSONObject(i)));
             }
         } catch (JSONException e) {
             Utils.log(e.getMessage());
@@ -142,6 +145,18 @@ public class User {
         this.favouriteStations = favouriteStations;
     }
 
+    public ArrayList<Station> getRecentStations() {
+        return recentStations;
+    }
+
+    public void setRecentStations(ArrayList<Station> recentStations) {
+        this.recentStations = recentStations;
+    }
+
+    public void addRecentStation(Station station) {
+        this.recentStations.add(station);
+    }
+
     /**
      * @return the image
      */
@@ -192,6 +207,11 @@ public class User {
                 favouriteStations.put(station.toJson());
             }
             json.put("favourite_stations", favouriteStations);
+            JSONArray recentStations = new JSONArray();
+            for (Station station : getRecentStations()) {
+                recentStations.put(station.toJson());
+            }
+            json.put("recent_stations", recentStations);
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
@@ -229,6 +249,7 @@ public class User {
         homeStation = new Station();
         workStation = new Station();
         favouriteStations = new ArrayList<>();
+        recentStations = new ArrayList<>();
         save(context);
     }
 
