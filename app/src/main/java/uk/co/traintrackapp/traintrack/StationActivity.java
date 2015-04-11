@@ -22,6 +22,7 @@ import uk.co.traintrackapp.traintrack.fragment.StationDeparturesFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationDetailsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationUndergroundFragment;
 import uk.co.traintrackapp.traintrack.model.Station;
+import uk.co.traintrackapp.traintrack.model.User;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationActivity extends ActionBarActivity {
@@ -68,6 +69,9 @@ public class StationActivity extends ActionBarActivity {
         final String stationUuid = intent.getStringExtra("station_uuid");
         TrainTrack app = (TrainTrack) getApplication();
         station = app.getStation(stationUuid);
+        User user = app.getUser();
+        user.addRecentStation(station);
+        user.save(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

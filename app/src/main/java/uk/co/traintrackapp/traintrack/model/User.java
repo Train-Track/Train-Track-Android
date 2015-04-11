@@ -149,12 +149,12 @@ public class User {
         return recentStations;
     }
 
-    public void setRecentStations(ArrayList<Station> recentStations) {
-        this.recentStations = recentStations;
-    }
-
     public void addRecentStation(Station station) {
-        this.recentStations.add(station);
+        this.recentStations.remove(station);
+        this.recentStations.add(0, station);
+        if (this.recentStations.size() > 10) {
+            this.recentStations.remove(10);
+        }
     }
 
     /**

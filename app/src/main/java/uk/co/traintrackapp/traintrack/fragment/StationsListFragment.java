@@ -106,7 +106,7 @@ public class StationsListFragment extends Fragment {
                     newStations.addAll(app.getUser().getFavouriteStations());
                     break;
                 case RECENT:
-                    //TODO Get recently viewed stations from prefs
+                    newStations.addAll(app.getUser().getRecentStations());
                     break;
             }
 
