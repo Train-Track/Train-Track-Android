@@ -100,6 +100,33 @@
                 android:textAppearance="?android:textAppearanceLarge"
                 android:text="@string/app_name" />
 
+            <Button
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/map"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:background="@color/primary_light" />
+
+            <Button
+                android:id="@+id/home_station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/home_station"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:background="@color/primary_dark" />
+
+            <Button
+                android:id="@+id/work_station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/work_station"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:background="@color/accent"/>
+
         </LinearLayout>
 
     </RelativeLayout>

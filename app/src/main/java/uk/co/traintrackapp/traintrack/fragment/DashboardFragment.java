@@ -1,5 +1,6 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.MainActivity;
 import uk.co.traintrackapp.traintrack.R;
+import uk.co.traintrackapp.traintrack.StationActivity;
 import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.api.TubeLine;
 import uk.co.traintrackapp.traintrack.model.User;
@@ -40,7 +42,7 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
         TrainTrack app = (TrainTrack) getActivity().getApplication();
-        User user = app.getUser();
+        final User user = app.getUser();
 
         CardView newJourney = (CardView) v.findViewById(R.id.new_journey);
         newJourney.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +58,15 @@ public class DashboardFragment extends Fragment {
             TextView workStationName = (TextView) v.findViewById(work_station_name);
             workStationName.setText(user.getWorkStation().toString());
             workStation.setVisibility(View.VISIBLE);
+            workStation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent().setClass(v.getContext(),
+                            StationActivity.class);
+                    intent.putExtra("station_uuid", user.getWorkStation().getUuid());
+                    v.getContext().startActivity(intent);
+                }
+            });
         } else {
             workStation.setVisibility(View.GONE);
         }
@@ -65,6 +76,15 @@ public class DashboardFragment extends Fragment {
             TextView homeStationName = (TextView) v.findViewById(home_station_name);
             homeStationName.setText(user.getHomeStation().toString());
             homeStation.setVisibility(View.VISIBLE);
+            homeStation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent().setClass(v.getContext(),
+                            StationActivity.class);
+                    intent.putExtra("station_uuid", user.getHomeStation().getUuid());
+                    v.getContext().startActivity(intent);
+                }
+            });
         } else {
             homeStation.setVisibility(View.GONE);
         }

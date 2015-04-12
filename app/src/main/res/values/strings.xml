@@ -61,5 +61,7 @@
     <string name="view_extra_data_summary">Show train IDs and timing locations</string>
     <string name="distance_units">Distance Units</string>
     <string name="distance_units_summary">Choose between kilometers and miles</string>
+    <string name="work_station">Work Station</string>
+    <string name="home_station">Home Station</string>
 
 </resources>
