@@ -190,16 +190,26 @@ public class Station implements Comparable {
     }
 
     /**
+     * @param unit km or mi
      * @return text representation of distance
      */
-    public String getDistanceText() {
+    public String getDistanceText(String unit) {
         int distance = getDistance();
         String format = "";
-        if (distance > 1000) {
-            distance = distance / 1000;
-            format = "%d km";
-        } else if (distance > 0) {
-            format = "%d m";
+        if (unit.equals("mi")) {
+            if (distance > 1609) {
+                distance = distance / 1609;
+                format = "%d mi";
+            } else if (distance > 0) {
+                    format = "%d m";
+            }
+        } else if (unit.equals("km")) {
+            if (distance > 1000) {
+                distance = distance / 1000;
+                format = "%d km";
+            } else if (distance > 0) {
+                format = "%d m";
+            }
         }
         return String.format(Locale.getDefault(), format, distance);
     }

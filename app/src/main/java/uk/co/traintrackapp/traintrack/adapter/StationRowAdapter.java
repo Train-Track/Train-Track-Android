@@ -24,6 +24,7 @@ public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.Vi
 
     private List<Station> rowList;
     private List<Station> origRowList;
+    private String distanceUnit;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public Station station;
@@ -54,8 +55,9 @@ public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.Vi
         }
     }
 
-    public StationRowAdapter(ArrayList<Station> stations) {
+    public StationRowAdapter(ArrayList<Station> stations, String distanceUnit) {
         this.rowList = stations;
+        this.distanceUnit = distanceUnit;
     }
 
     @Override
@@ -71,7 +73,8 @@ public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.Vi
         Station station = rowList.get(position);
         holder.station = station;
         holder.name.setText(station.getName());
-        holder.distance.setText(station.getDistanceText());
+
+        holder.distance.setText(station.getDistanceText(distanceUnit));
         if (station.isNationalRail()) {
             holder.nationalRailIcon.setVisibility(View.VISIBLE);
         } else {

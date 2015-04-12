@@ -1,7 +1,9 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,7 +39,9 @@ public class StationsSearchFragment extends Fragment {
         final RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setItemAnimator(new DefaultItemAnimator());
-        final StationRowAdapter adapter = new StationRowAdapter(stations);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String distanceUnit = prefs.getString("pref_distance_units", "km");
+        final StationRowAdapter adapter = new StationRowAdapter(stations, distanceUnit);
         list.setAdapter(adapter);
 
         final EditText search = (EditText) v.findViewById(R.id.search);

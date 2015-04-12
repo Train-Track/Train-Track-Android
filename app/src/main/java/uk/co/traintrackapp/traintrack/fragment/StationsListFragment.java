@@ -1,8 +1,10 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,7 +61,9 @@ public class StationsListFragment extends Fragment {
         RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setItemAnimator(new DefaultItemAnimator());
-        adapter = new StationRowAdapter(stations);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String distanceUnit = prefs.getString("pref_distance_units", "km");
+        adapter = new StationRowAdapter(stations, distanceUnit);
         list.setAdapter(adapter);
 
         refresh = (PullRefreshLayout) v.findViewById(R.id.refresh);
