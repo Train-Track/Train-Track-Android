@@ -24,7 +24,6 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationsListFragment extends Fragment {
 
-    private static final String A_Z = "A-Z";
     private static final String NEARBY = "Nearby";
     private static final String FAVOURITES = "Favourites";
     private static final String RECENT = "Recent";
@@ -36,7 +35,6 @@ public class StationsListFragment extends Fragment {
     public static ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments = new ArrayList<>();
         String[] tabs = {
-            A_Z,
             NEARBY,
             FAVOURITES,
             RECENT
@@ -86,9 +84,6 @@ public class StationsListFragment extends Fragment {
             ArrayList<Station> newStations = new ArrayList<>();
             TrainTrack app = (TrainTrack) getActivity().getApplication();
             switch (tab) {
-                case A_Z:
-                    newStations.addAll(app.getStations());
-                    break;
                 case NEARBY:
                     Location gps = ((StationsFragment) getParentFragment()).getGps();
                     for (Station station : app.getStations()) {
@@ -123,4 +118,5 @@ public class StationsListFragment extends Fragment {
             refresh.setRefreshing(false);
         }
     }
+
 }
