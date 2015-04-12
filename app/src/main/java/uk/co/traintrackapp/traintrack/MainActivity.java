@@ -34,14 +34,22 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class MainActivity extends ActionBarActivity {
 
+    public static final int DASHBOARD_FRAGMENT = 0;
+    public static final int STATIONS_FRAGMENT = 1;
+    public static final int JOURNEYS_FRAGMENT = 2;
+    public static final int SETTINGS_FRAGMENT = 3;
+    public static final int ACCOUNT_FRAGMENT = 4;
+
     private static final String NEW_USER = "New User";
     private static final String ONLINE_USER = "Online User";
     private static final String OFFLINE_USER = "Offline User";
+
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
     private Fragment newFragment;
     private String newTitle;
     private Toolbar toolbar;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +59,6 @@ public class MainActivity extends ActionBarActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        newFragment = DashboardFragment.newInstance();
-        newTitle = "Dashboard";
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerIndicatorEnabled(true);
@@ -79,7 +85,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        ListView listView = (ListView) findViewById(R.id.list);
+        listView = (ListView) findViewById(R.id.list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -97,9 +103,9 @@ public class MainActivity extends ActionBarActivity {
                         getString(R.string.title_settings_fragment),
                         getString(R.string.title_account_fragment),
                 }));
-        listView.setItemChecked(0, true);
+
+        updateFragment(0);
         new LoadAssets().execute();
-        updateFragment();
     }
 
     @Override
@@ -108,25 +114,26 @@ public class MainActivity extends ActionBarActivity {
         toggle.syncState();
     }
 
-    public void selectItem(int position) {
+    private void selectItem(int position) {
+        listView.setItemChecked(position, true);
         switch (position) {
-            case 0:
+            case DASHBOARD_FRAGMENT:
                 newFragment = DashboardFragment.newInstance();
                 newTitle = getString(R.string.title_dashboard_fragment);
                 break;
-            case 1:
+            case STATIONS_FRAGMENT:
                 newFragment = StationsFragment.newInstance();
                 newTitle = getString(R.string.title_stations_fragment);
                 break;
-            case 2:
+            case JOURNEYS_FRAGMENT:
                 newFragment = JourneysFragment.newInstance();
                 newTitle = getString(R.string.title_journeys_fragment);
                 break;
-            case 3:
+            case SETTINGS_FRAGMENT:
                 newFragment = SettingsFragment.newInstance();
                 newTitle = getString(R.string.title_settings_fragment);
                 break;
-            case 4:
+            case ACCOUNT_FRAGMENT:
                 newFragment = AccountManagerFragment.newInstance();
                 newTitle = getString(R.string.title_account_fragment);
                 break;
@@ -142,6 +149,15 @@ public class MainActivity extends ActionBarActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.container, newFragment).commit();
         toolbar.setTitle(newTitle);
+    }
+
+    /**
+     * Update the application fragment
+      * @param position the id fragment to show
+     */
+    public void updateFragment(int position) {
+        selectItem(position);
+        updateFragment();
     }
 
     /**

@@ -1,9 +1,9 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
-import android.support.v4.app.Fragment;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,9 +13,11 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import uk.co.traintrackapp.traintrack.MainActivity;
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.api.TubeLine;
@@ -40,8 +42,17 @@ public class DashboardFragment extends Fragment {
         TrainTrack app = (TrainTrack) getActivity().getApplication();
         User user = app.getUser();
 
+        CardView newJourney = (CardView) v.findViewById(R.id.new_journey);
+        newJourney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Choose a departing station", Toast.LENGTH_LONG).show();
+                ((MainActivity) getActivity()).updateFragment(MainActivity.STATIONS_FRAGMENT);
+            }
+        });
+
         CardView workStation = (CardView) v.findViewById(R.id.work_station);
-        if (user.getWorkStation() != null) {
+        if (user.getWorkStation().getId() != 0) {
             TextView workStationName = (TextView) v.findViewById(work_station_name);
             workStationName.setText(user.getWorkStation().toString());
             workStation.setVisibility(View.VISIBLE);
@@ -50,7 +61,7 @@ public class DashboardFragment extends Fragment {
         }
 
         CardView homeStation = (CardView) v.findViewById(R.id.home_station);
-        if (user.getHomeStation() != null) {
+        if (user.getHomeStation().getId() != 0) {
             TextView homeStationName = (TextView) v.findViewById(home_station_name);
             homeStationName.setText(user.getHomeStation().toString());
             homeStation.setVisibility(View.VISIBLE);
