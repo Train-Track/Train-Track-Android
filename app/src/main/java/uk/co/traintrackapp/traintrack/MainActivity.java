@@ -2,7 +2,6 @@ package uk.co.traintrackapp.traintrack;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -12,9 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +42,6 @@ public class MainActivity extends ActionBarActivity {
     private Fragment newFragment;
     private String newTitle;
     private Toolbar toolbar;
-    private boolean backToExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,15 +95,9 @@ public class MainActivity extends ActionBarActivity {
                         getString(R.string.title_stations_fragment),
                         getString(R.string.title_journeys_fragment),
                         getString(R.string.title_settings_fragment),
+                        getString(R.string.title_account_fragment),
                 }));
         listView.setItemChecked(0, true);
-        Button accountButton = (Button) findViewById(R.id.button);
-        accountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectItem(-1);
-            }
-        });
         new LoadAssets().execute();
         updateFragment();
     }
@@ -120,25 +110,25 @@ public class MainActivity extends ActionBarActivity {
 
     public void selectItem(int position) {
         switch (position) {
-            case -1:
-                newFragment = AccountManagerFragment.newInstance();
-                newTitle = "Account";
-                break;
             case 0:
                 newFragment = DashboardFragment.newInstance();
-                newTitle = "Dashboard";
+                newTitle = getString(R.string.title_dashboard_fragment);
                 break;
             case 1:
                 newFragment = StationsFragment.newInstance();
-                newTitle = "Stations";
+                newTitle = getString(R.string.title_stations_fragment);
                 break;
             case 2:
                 newFragment = JourneysFragment.newInstance();
-                newTitle = "Your Journeys";
+                newTitle = getString(R.string.title_journeys_fragment);
                 break;
             case 3:
                 newFragment = SettingsFragment.newInstance();
-                newTitle = "Settings";
+                newTitle = getString(R.string.title_settings_fragment);
+                break;
+            case 4:
+                newFragment = AccountManagerFragment.newInstance();
+                newTitle = getString(R.string.title_account_fragment);
                 break;
         }
         drawerLayout.closeDrawers();

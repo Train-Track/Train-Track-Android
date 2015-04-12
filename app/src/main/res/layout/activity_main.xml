@@ -47,12 +47,6 @@
                 android:textColor="#fff"
                 android:textSize="24sp" />
 
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="120dp"
-                android:background="#00000000"
-                android:id="@+id/button" />
-
             <ListView
                 android:id="@+id/list"
                 android:layout_width="fill_parent"
