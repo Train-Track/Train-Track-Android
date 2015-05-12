@@ -100,7 +100,11 @@ public class Service {
     }
 
     private boolean terminatesHere() {
-        return getScheduledTimeDeparture() == null;
+        String std = getScheduledTimeDeparture();
+        if ((std == null) || (std.isEmpty())) {
+            return true;
+        }
+        return false;
     }
 
     public String getServiceId() {
