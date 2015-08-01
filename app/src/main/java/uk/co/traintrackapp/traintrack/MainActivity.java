@@ -1,9 +1,16 @@
 package uk.co.traintrackapp.traintrack;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +19,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,12 +54,15 @@ public class MainActivity extends ActionBarActivity {
     private static final String ONLINE_USER = "Online User";
     private static final String OFFLINE_USER = "Offline User";
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
     private Fragment newFragment;
     private String newTitle;
     private Toolbar toolbar;
     private ListView listView;
+    private BroadcastReceiver registrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +119,39 @@ public class MainActivity extends ActionBarActivity {
 
         updateFragment(0);
         new LoadAssets().execute();
+
+        registrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean("sentTokenToServer", false);
+                if (sentToken) {
+                    Utils.log("Sent token");
+                } else {
+                    Utils.log("Couldn't send token");
+                }
+            }
+        };
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(registrationBroadcastReceiver,
+                new IntentFilter("registrationComplete"));
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(registrationBroadcastReceiver);
+        super.onPause();
     }
 
     @Override
@@ -192,6 +238,25 @@ public class MainActivity extends ActionBarActivity {
         return jsonString;
     }
 
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Utils.log("This device is not supported.");
+            }
+            return false;
+        }
+        return true;
+    }
+
     class LoadAssets extends AsyncTask<String, String, String> {
 
         @Override
@@ -210,6 +275,7 @@ public class MainActivity extends ActionBarActivity {
                 Utils.log(e.getMessage());
             }
             app.setStations(stations);
+            Utils.log("Stations set");
 
             User user = new User();
             try {
@@ -225,6 +291,7 @@ public class MainActivity extends ActionBarActivity {
                 returnCode = NEW_USER;
             }
             app.setUser(user);
+            Utils.log("User set");
 
             return returnCode;
         }
