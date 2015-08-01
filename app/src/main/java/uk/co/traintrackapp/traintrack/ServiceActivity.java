@@ -68,8 +68,7 @@ public class ServiceActivity extends ActionBarActivity {
                     return;
                 }
 
-                CallingPoint callingPoint = adapter
-                        .getItem(index);
+                CallingPoint callingPoint = adapter.getItem(index);
 
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
