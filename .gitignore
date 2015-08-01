@@ -6,3 +6,5 @@
 build/intermediates/dex-cache/cache.xml
 
 *.apk
+
+local.properties
