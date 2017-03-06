@@ -105,7 +105,6 @@ public class Utils {
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestProperty("API-KEY", "TEST");
             conn.setUseCaches(false);
-            conn.setDoOutput(true);
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     conn.getInputStream()));
             String line;
