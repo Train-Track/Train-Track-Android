@@ -118,21 +118,33 @@ public class DashboardFragment extends Fragment {
                 LinearLayout linearLayout = new LinearLayout(getActivity());
                 linearLayout.setLayoutParams(linearLayoutParams);
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                linearLayout.setBackgroundColor(Color.parseColor("#" + tubeLine.getBackgroundColour()));
+                int backgroundColour = Color.WHITE;
+                try {
+                    Color.parseColor("#" + tubeLine.getBackgroundColour());
+                } catch (IllegalArgumentException ex) {
+                    Utils.log(tubeLine.getBackgroundColour() + " is not a colour.");
+                }
+                linearLayout.setBackgroundColor(backgroundColour);
                 linearLayout.setPadding(12, 12, 12, 12);
 
                 TextView name = new TextView(getActivity());
                 name.setLayoutParams(textViewParams);
                 name.setText(tubeLine.getName());
                 name.setTextSize(18);
-                name.setTextColor(Color.parseColor("#" + tubeLine.getTextColour()));
+                int textColour = Color.BLACK;
+                try {
+                    Color.parseColor("#" + tubeLine.getTextColour());
+                } catch (IllegalArgumentException ex) {
+                    Utils.log(tubeLine.getTextColour() + " is not a colour.");
+                }
+                name.setTextColor(textColour);
                 linearLayout.addView(name);
 
                 TextView status = new TextView(getActivity());
                 status.setLayoutParams(statusTextParams);
                 status.setText(tubeLine.getStatus());
                 status.setTextSize(18);
-                status.setTextColor(Color.parseColor("#" + tubeLine.getTextColour()));
+                status.setTextColor(textColour);
                 status.setGravity(Gravity.END);
                 linearLayout.addView(status);
 
