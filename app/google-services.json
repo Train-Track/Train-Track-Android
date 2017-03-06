@@ -1,1 +1,59 @@
-{"project_info":{"project_id":"train-track-app","project_number":"327788817886","name":"Train Track"},"client":[{"client_info":{"client_id":"android:uk.co.traintrackapp.traintrack","client_type":1,"android_client_info":{"package_name":"uk.co.traintrackapp.traintrack"}},"oauth_client":[{"client_id":"327788817886-c869de7jc5sd8t8f5eeaqansmd290u83.apps.googleusercontent.com","client_type":1,"android_info":{"package_name":"uk.co.traintrackapp.traintrack","certificate_hash":"03888145f0d6f13dd7e85f19e2fc09c4bc32a7df"}}],"services":{"analytics_service":{"status":1},"cloud_messaging_service":{"status":2,"apns_config":[]},"appinvite_service":{"status":1,"other_platform_oauth_client":[]},"google_signin_service":{"status":1},"ads_service":{"status":1}}}],"ARTIFACT_VERSION":"1"}
+{
+  "project_info": {
+    "project_number": "327788817886",
+    "firebase_url": "https://train-track-app-2018b.firebaseio.com",
+    "project_id": "train-track-app",
+    "storage_bucket": "train-track-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327788817886:android:5451b76ca7f0e669",
+        "android_client_info": {
+          "package_name": "uk.co.traintrackapp.traintrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327788817886-s69v7b7n49rs75q4u3vv1da13pjpevnf.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "327788817886-cu0pqs4v0jhfd6h8i9fn9qlpganuad3g.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "327788817886-c869de7jc5sd8t8f5eeaqansmd290u83.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uk.co.traintrackapp.traintrack",
+            "certificate_hash": "03888145f0d6f13dd7e85f19e2fc09c4bc32a7df"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlc4kI1F1XfZBIBIz52sKHinhw0n8BlaA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327788817886-s69v7b7n49rs75q4u3vv1da13pjpevnf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
