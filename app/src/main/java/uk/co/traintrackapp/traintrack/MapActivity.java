@@ -11,8 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -28,7 +28,7 @@ import uk.co.traintrackapp.traintrack.api.CallingPoint;
 import uk.co.traintrackapp.traintrack.api.Service;
 import uk.co.traintrackapp.traintrack.model.Station;
 
-public class MapActivity extends Activity {
+public class MapActivity extends Activity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private HashMap<Marker, Station> hashmap;
@@ -44,11 +44,13 @@ public class MapActivity extends Activity {
         undergroundIcon = BitmapDescriptorFactory.fromResource(R.drawable.tube);
         hashmap = new HashMap<>();
 
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-                .getMap();
-        map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(54.47942,
-                -4.232974)));
-        map.animateCamera(CameraUpdateFactory.zoomTo(5));
+        ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -61,17 +63,14 @@ public class MapActivity extends Activity {
         } else {
             map.setMyLocationEnabled(true);
         }
-        map.setOnMapLoadedCallback(new OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                String serviceId = getIntent().getStringExtra("service_id");
-                if (serviceId != null) {
-                    new GetServiceRequest().execute(serviceId);
-                } else {
-                    new GetMapMarkers().execute();
-                }
-            }
-        });
+
+        String serviceId = getIntent().getStringExtra("service_id");
+        if (serviceId != null) {
+            new GetServiceRequest().execute(serviceId);
+        } else {
+            new GetMapMarkers().execute();
+        }
+
         map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -85,7 +84,7 @@ public class MapActivity extends Activity {
 
     }
 
-    class GetServiceRequest extends AsyncTask<String, String, Service> {
+    private class GetServiceRequest extends AsyncTask<String, String, Service> {
 
         @Override
         protected Service doInBackground(String... service) {
@@ -130,7 +129,7 @@ public class MapActivity extends Activity {
         }
     }
 
-    class GetMapMarkers extends AsyncTask<String, String, ArrayList<Station>> {
+    private class GetMapMarkers extends AsyncTask<String, String, ArrayList<Station>> {
 
         @Override
         protected ArrayList<Station> doInBackground(String... service) {
