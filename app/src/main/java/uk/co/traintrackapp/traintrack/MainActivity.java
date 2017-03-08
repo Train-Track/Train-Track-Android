@@ -1,19 +1,12 @@
 package uk.co.traintrackapp.traintrack;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,7 +34,7 @@ import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.model.User;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     public static final int DASHBOARD_FRAGMENT = 0;
     public static final int STATIONS_FRAGMENT = 1;
@@ -61,7 +54,6 @@ public class MainActivity extends ActionBarActivity {
     private String newTitle;
     private Toolbar toolbar;
     private ListView listView;
-    private BroadcastReceiver registrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 toggle.onDrawerSlide(drawerView, slideOffset);
@@ -118,36 +110,7 @@ public class MainActivity extends ActionBarActivity {
 
         updateFragment(0);
         new LoadAssets().execute();
-
-        registrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean("sentTokenToServer", false);
-                if (sentToken) {
-                    Utils.log("Sent token");
-                } else {
-                    Utils.log("Couldn't send token");
-                }
-            }
-        };
-
         FirebaseMessaging.getInstance().subscribeToTopic("news");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(registrationBroadcastReceiver,
-                new IntentFilter("registrationComplete"));
-    }
-
-    @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(registrationBroadcastReceiver);
-        super.onPause();
     }
 
     @Override
@@ -234,7 +197,7 @@ public class MainActivity extends ActionBarActivity {
         return jsonString;
     }
 
-    class LoadAssets extends AsyncTask<String, String, String> {
+    private class LoadAssets extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... asset) {
