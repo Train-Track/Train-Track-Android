@@ -11,32 +11,42 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class StationBoard {
 
     private ArrayList<String> nrccMessages;
-    private ArrayList<ServiceItem> trainServices;
+    private ArrayList<Service> trainServices;
     private ArrayList<TubeLine> tubeLines;
 
-    public StationBoard() {
-        nrccMessages = new ArrayList<>();
-        trainServices = new ArrayList<>();
-        tubeLines = new ArrayList<>();
+    private StationBoard() {
+        this.nrccMessages = new ArrayList<>();
+        this.trainServices = new ArrayList<>();
+        this.tubeLines = new ArrayList<>();
     }
 
-    public StationBoard(JSONObject json) {
+    private StationBoard(JSONObject json) {
         this();
         try {
-            JSONArray jsonNrccMessages = json.getJSONArray("nrcc_messages");
-            for (int i = 0; i < jsonNrccMessages.length(); i++) {
-                nrccMessages.add(jsonNrccMessages.getString(i));
+
+            if (json.has("nrcc_messages")) {
+                JSONArray jsonNrccMessages = json.getJSONArray("nrcc_messages");
+                for (int i = 0; i < jsonNrccMessages.length(); i++) {
+                    this.nrccMessages.add(jsonNrccMessages.getString(i));
+                }
             }
-            JSONArray jsonTrainServices = json.getJSONArray("train_services");
-            for (int i = 0; i < jsonTrainServices.length(); i++) {
-                ServiceItem item = new ServiceItem(jsonTrainServices.getJSONObject(i));
-                trainServices.add(item);
+
+            if (json.has("train_services")) {
+                JSONArray jsonTrainServices = json.getJSONArray("train_services");
+                for (int i = 0; i < jsonTrainServices.length(); i++) {
+                    Service service = new Service(jsonTrainServices.getJSONObject(i));
+                    this.trainServices.add(service);
+                }
             }
-            JSONArray jsonTubeLines = json.getJSONArray("tube_lines");
-            for (int i = 0; i < jsonTubeLines.length(); i++) {
-                TubeLine line = new TubeLine(jsonTubeLines.getJSONObject(i));
-                tubeLines.add(line);
+
+            if (json.has("tube_lines")) {
+                JSONArray jsonTubeLines = json.getJSONArray("tube_lines");
+                for (int i = 0; i < jsonTubeLines.length(); i++) {
+                    TubeLine line = new TubeLine(jsonTubeLines.getJSONObject(i));
+                    this.tubeLines.add(line);
+                }
             }
+
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
@@ -46,7 +56,7 @@ public class StationBoard {
         return nrccMessages;
     }
 
-    public ArrayList<ServiceItem> getTrainServices() {
+    public ArrayList<Service> getTrainServices() {
         return trainServices;
     }
 

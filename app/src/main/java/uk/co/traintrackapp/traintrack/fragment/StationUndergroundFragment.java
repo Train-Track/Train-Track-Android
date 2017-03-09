@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.StationActivity;
-import uk.co.traintrackapp.traintrack.adapter.ServiceItemUndergroundRowAdapter;
-import uk.co.traintrackapp.traintrack.api.ServiceItem;
+import uk.co.traintrackapp.traintrack.adapter.ServiceUndergroundRowAdapter;
+import uk.co.traintrackapp.traintrack.api.Service;
 import uk.co.traintrackapp.traintrack.api.StationBoard;
 import uk.co.traintrackapp.traintrack.api.TubeLine;
 import uk.co.traintrackapp.traintrack.model.Station;
@@ -27,9 +27,9 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class StationUndergroundFragment extends Fragment {
 
     private static final String PAGE_TITLE = "Underground";
-    private ServiceItemUndergroundRowAdapter adapter;
+    private ServiceUndergroundRowAdapter adapter;
     private PullRefreshLayout refresh;
-    private ArrayList<ServiceItem> serviceItems;
+    private ArrayList<Service> services;
     private TextView nrccMessage;
 
     public static Fragment newInstance() {
@@ -47,13 +47,13 @@ public class StationUndergroundFragment extends Fragment {
         final Station station = activity.getStation();
         StationBoard board = activity.getUndergroundBoard();
 
-        serviceItems = new ArrayList<>();
+        services = new ArrayList<>();
         nrccMessage = (TextView) v.findViewById(R.id.nrcc_messages);
 
         RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ServiceItemUndergroundRowAdapter(serviceItems);
+        adapter = new ServiceUndergroundRowAdapter(services);
         list.setAdapter(adapter);
 
         refresh = (PullRefreshLayout) v.findViewById(R.id.refresh);
@@ -76,10 +76,10 @@ public class StationUndergroundFragment extends Fragment {
 
     private void updateBoard(StationBoard board) {
         refresh.setRefreshing(false);
-        serviceItems.clear();
+        services.clear();
         //TODO: put them in some form of vertical tabs
         for (TubeLine tubeLine : board.getTubeLines()) {
-            serviceItems.addAll(tubeLine.getServices());
+            services.addAll(tubeLine.getServices());
         }
         adapter.notifyDataSetChanged();
 
@@ -91,7 +91,7 @@ public class StationUndergroundFragment extends Fragment {
         }
     }
 
-    class GetUndergroundBoardRequest extends AsyncTask<String, String, StationBoard> {
+    private class GetUndergroundBoardRequest extends AsyncTask<String, String, StationBoard> {
 
         @Override
         protected StationBoard doInBackground(String... uuid) {

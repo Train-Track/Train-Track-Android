@@ -16,39 +16,60 @@ public class TubeLine {
     private String number;
     private String backgroundColour;
     private String textColour;
-    private ArrayList<ServiceItem> services;
+    private ArrayList<Service> services;
     private String status;
 
-    public TubeLine() {
-        id = 0;
-        uuid = "";
-        name = "";
-        number = "";
-        backgroundColour = "";
-        textColour = "";
-        services = new ArrayList<>();
-        status = "";
+    private TubeLine() {
+        this.id = 0;
+        this.uuid = "";
+        this.name = "";
+        this.number = "";
+        this.backgroundColour = "";
+        this.textColour = "";
+        this.services = new ArrayList<>();
+        this.status = "";
     }
 
-    public TubeLine(JSONObject json) {
+    protected TubeLine(JSONObject json) {
         this();
         try {
-            id = json.getInt("id");
-            uuid = json.getString("uuid");
-            name = json.getString("name");
-            number = json.getString("number");
-            backgroundColour = json.getString("background_colour");
-            textColour = json.getString("text_colour");
-            if (!json.isNull("services")) {
+
+            if (json.has("id")) {
+                this.id = json.getInt("id");
+            }
+
+            if (json.has("uuid")) {
+                this.uuid = json.getString("uuid");
+            }
+
+            if (json.has("name")) {
+                this.name = json.getString("name");
+            }
+
+            if (json.has("number")) {
+                this.number = json.getString("number");
+            }
+
+            if (json.has("background_colour")) {
+                this.backgroundColour = json.getString("background_colour");
+            }
+
+            if (json.has("text_colour")) {
+                this.textColour = json.getString("text_colour");
+            }
+
+             if (json.has("services")) {
                 JSONArray jsonServices = json.getJSONArray("services");
                 for (int i = 0; i < jsonServices.length(); i++) {
-                    ServiceItem item = new ServiceItem(jsonServices.getJSONObject(i));
-                    services.add(item);
+                    Service service = new Service(jsonServices.getJSONObject(i));
+                    services.add(service);
                 }
             }
-            if (!json.isNull("status")) {
+
+            if (json.has("status")) {
                 status = json.getString("status");
             }
+
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
@@ -78,7 +99,7 @@ public class TubeLine {
         return textColour;
     }
 
-    public ArrayList<ServiceItem> getServices() {
+    public ArrayList<Service> getServices() {
         return services;
     }
 

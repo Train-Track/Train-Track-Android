@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.StationActivity;
-import uk.co.traintrackapp.traintrack.adapter.ServiceItemDepartureRowAdapter;
-import uk.co.traintrackapp.traintrack.api.ServiceItem;
+import uk.co.traintrackapp.traintrack.adapter.ServiceDepartureRowAdapter;
+import uk.co.traintrackapp.traintrack.api.Service;
 import uk.co.traintrackapp.traintrack.api.StationBoard;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
@@ -26,9 +26,9 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class StationDeparturesFragment extends Fragment {
 
     private static final String PAGE_TITLE = "Departures";
-    private ServiceItemDepartureRowAdapter adapter;
+    private ServiceDepartureRowAdapter adapter;
     private PullRefreshLayout refresh;
-    private ArrayList<ServiceItem> serviceItems;
+    private ArrayList<Service> services;
     private TextView nrccMessage;
 
     public static Fragment newInstance() {
@@ -46,13 +46,13 @@ public class StationDeparturesFragment extends Fragment {
         final Station station = activity.getStation();
         StationBoard board = activity.getDeparturesBoard();
 
-        serviceItems = new ArrayList<>();
+        services = new ArrayList<>();
         nrccMessage = (TextView) v.findViewById(R.id.nrcc_messages);
 
         RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ServiceItemDepartureRowAdapter(serviceItems);
+        adapter = new ServiceDepartureRowAdapter(services);
         list.setAdapter(adapter);
 
         refresh = (PullRefreshLayout) v.findViewById(R.id.refresh);
@@ -75,8 +75,8 @@ public class StationDeparturesFragment extends Fragment {
 
     private void updateBoard(StationBoard board) {
         refresh.setRefreshing(false);
-        serviceItems.clear();
-        serviceItems.addAll(board.getTrainServices());
+        services.clear();
+        services.addAll(board.getTrainServices());
         adapter.notifyDataSetChanged();
 
         ArrayList<String> nrccMessages = board.getNrccMessages();
