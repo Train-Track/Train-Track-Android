@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +40,14 @@ public class ServiceDepartureRowAdapter extends RecyclerView.Adapter<ServiceView
     public void onBindViewHolder(ServiceViewHolder holder, int position) {
         Service service = services.get(position);
         holder.service = service;
-        holder.scheduledTime.setText(service.getScheduledTimeDeparture());
-        holder.estimatedTime.setText(service.getEstimatedTimeDeparture());
+        DateTime std = service.getScheduledTimeDeparture();
+        if (std != null) {
+            holder.scheduledTime.setText(std.toString());
+        }
+        DateTime eta = service.getEstimatedTimeDeparture();
+        if (eta != null) {
+            holder.estimatedTime.setText(eta.toString());
+        }
         if (service.terminatesHere()) {
             holder.title.setText("Terminates Here");
             if (service.isDelayedDeparting()) {

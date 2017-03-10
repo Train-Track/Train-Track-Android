@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +40,14 @@ public class ServiceArrivalRowAdapter extends RecyclerView.Adapter<ServiceViewHo
     public void onBindViewHolder(ServiceViewHolder holder, int position) {
         Service service = services.get(position);
         holder.service = service;
-        holder.scheduledTime.setText(service.getScheduledTimeArrival());
-        holder.estimatedTime.setText(service.getEstimatedTimeArrival());
+        DateTime sta = service.getScheduledTimeArrival();
+        if (sta != null) {
+            holder.scheduledTime.setText(sta.toString());
+        }
+        DateTime eta = service.getEstimatedTimeArrival();
+        if (eta != null) {
+            holder.estimatedTime.setText(eta.toString());
+        }
         holder.title.setText(service.getOrigin().toString());
         if (service.isDelayedArriving()) {
             holder.estimatedTime.setTextColor(Color.RED);

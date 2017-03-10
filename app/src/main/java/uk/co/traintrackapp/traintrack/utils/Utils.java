@@ -3,6 +3,10 @@ package uk.co.traintrackapp.traintrack.utils;
 import android.graphics.Color;
 import android.util.Log;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -22,7 +26,7 @@ public class Utils {
     public static final int BLUE = Color.parseColor("#33b5e5");
     public static final String ARGS_PAGE_TITLE = "ARGS_PAGE_TITLE";
     public static final String API_BASE_URL = "http://192.168.1.69:3000";
-    private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
     /**
      * @param message
@@ -173,6 +177,19 @@ public class Utils {
         }
         SimpleDateFormat formatter = new SimpleDateFormat(JSON_DATE_FORMAT);
         return formatter.format(date);
+    }
+
+    /**
+     * Convert an ISO8601 formatted date-time string into an object
+     * @param input the date-time string
+     * @return the date-time object
+     */
+    public static DateTime getDateTimeFromString(String input) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(JSON_DATE_FORMAT);
+        if (input == null) {
+            return null;
+        }
+        return formatter.parseDateTime(input);
     }
 
 }

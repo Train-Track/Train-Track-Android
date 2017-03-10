@@ -1,5 +1,6 @@
 package uk.co.traintrackapp.traintrack.api;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,12 +25,12 @@ public class Service {
     private Station destination;
     private Operator operator;
     private String platform;
-    private String scheduledTimeArrival;
-    private String estimatedTimeArrival;
-    private String actualTimeArrival;
-    private String scheduledTimeDeparture;
-    private String estimatedTimeDeparture;
-    private String actualTimeDeparture;
+    private DateTime scheduledTimeArrival;
+    private DateTime estimatedTimeArrival;
+    private DateTime actualTimeArrival;
+    private DateTime scheduledTimeDeparture;
+    private DateTime estimatedTimeDeparture;
+    private DateTime actualTimeDeparture;
     private ArrayList<CallingPoint> callingPoints;
 
     private Service() {
@@ -43,12 +44,12 @@ public class Service {
         this.destination = new Station();
         this.operator = new Operator();
         this.platform = "";
-        this.scheduledTimeArrival = "";
-        this.estimatedTimeArrival = "";
-        this.actualTimeArrival = "";
-        this.scheduledTimeDeparture = "";
-        this.estimatedTimeDeparture = "";
-        this.actualTimeDeparture = "";
+        this.scheduledTimeArrival = null;
+        this.estimatedTimeArrival = null;
+        this.actualTimeArrival = null;
+        this.scheduledTimeDeparture = null;
+        this.estimatedTimeDeparture = null;
+        this.actualTimeDeparture = null;
         this.callingPoints = new ArrayList<>();
     }
 
@@ -96,28 +97,34 @@ public class Service {
                 this.platform = json.getString("platform");
             }
 
-            if (json.has("sta")) {
-                this.scheduledTimeArrival = json.getString("sta");
+            if (!json.isNull("sta")) {
+                String sta = json.getString("sta");
+                this.scheduledTimeArrival = Utils.getDateTimeFromString(sta);
             }
 
-            if (json.has("eta")) {
-                this.estimatedTimeArrival = json.getString("eta");
+            if (!json.isNull("eta")) {
+                String eta = json.getString("eta");
+                this.estimatedTimeArrival = Utils.getDateTimeFromString(eta);
             }
 
-            if (json.has("ata")) {
-                this.actualTimeArrival = json.getString("ata");
+            if (!json.isNull("ata")) {
+                String ata = json.getString("ata");
+                this.actualTimeArrival = Utils.getDateTimeFromString(ata);
             }
 
-            if (json.has("std")) {
-                this.scheduledTimeDeparture = json.getString("std");
+            if (!json.isNull("std")) {
+                String std = json.getString("std");
+                this.scheduledTimeDeparture = Utils.getDateTimeFromString(std);
             }
 
-            if (json.has("etd")) {
-                this.estimatedTimeDeparture = json.getString("etd");
+            if (!json.isNull("etd")) {
+                String etd = json.getString("etd");
+                this.estimatedTimeDeparture = Utils.getDateTimeFromString(etd);
             }
 
-            if (json.has("atd")) {
-                this.actualTimeDeparture = json.getString("atd");
+            if (!json.isNull("atd")) {
+                String atd = json.getString("atd");
+                this.actualTimeDeparture = Utils.getDateTimeFromString(atd);
             }
 
             if (json.has("calling_points")) {
@@ -138,46 +145,6 @@ public class Service {
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }
-    }
-
-    public boolean startsHere() {
-        String sta = getScheduledTimeArrival();
-        if ((sta == null) || (sta.isEmpty())) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean terminatesHere() {
-        String std = getScheduledTimeDeparture();
-        if ((std == null) || (std.isEmpty())) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isDelayedArriving() {
-        String sta = getScheduledTimeArrival();
-        String eta = getScheduledTimeArrival();
-        if ((eta == null) || (eta.isEmpty())) {
-            return false;
-        } else if (eta != sta)  {
-            //TODO potentially could be early, needs converting
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isDelayedDeparting() {
-        String std = getScheduledTimeDeparture();
-        String etd = getScheduledTimeDeparture();
-        if ((std == null) || (etd.isEmpty())) {
-            return false;
-        } else if (std != etd)  {
-            //TODO potentially could be early, needs converting
-            return true;
-        }
-        return false;
     }
 
     public String getServiceId() {
@@ -220,27 +187,27 @@ public class Service {
         return platform;
     }
 
-    public String getScheduledTimeArrival() {
+    public DateTime getScheduledTimeArrival() {
         return scheduledTimeArrival;
     }
 
-    public String getEstimatedTimeArrival() {
+    public DateTime getEstimatedTimeArrival() {
         return estimatedTimeArrival;
     }
 
-    public String getActualTimeArrival() {
+    public DateTime getActualTimeArrival() {
         return actualTimeArrival;
     }
 
-    public String getScheduledTimeDeparture() {
+    public DateTime getScheduledTimeDeparture() {
         return scheduledTimeDeparture;
     }
 
-    public String getEstimatedTimeDeparture() {
+    public DateTime getEstimatedTimeDeparture() {
         return estimatedTimeDeparture;
     }
 
-    public String getActualTimeDeparture() {
+    public DateTime getActualTimeDeparture() {
         return actualTimeDeparture;
     }
 
@@ -248,9 +215,51 @@ public class Service {
         return callingPoints;
     }
 
-    public String getTime() {
-        //TODO Add all other possibilities
-        return getScheduledTimeArrival();
+
+    public boolean startsHere() {
+        if (getScheduledTimeArrival() == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean terminatesHere() {
+        if (getScheduledTimeDeparture() == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isDelayedArriving() {
+        DateTime sta = getScheduledTimeArrival();
+        DateTime eta = getScheduledTimeArrival();
+        if ((sta == null) || (eta == null)) {
+            return false;
+        } else if (eta.isAfter(sta)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isDelayedDeparting() {
+        DateTime std = getScheduledTimeDeparture();
+        DateTime etd = getScheduledTimeDeparture();
+        if ((std == null) || (etd == null)) {
+            return false;
+        } else if (etd.isAfter(std)) {
+            return true;
+        }
+        return false;
+    }
+
+    public DateTime getTime() {
+        if (getScheduledTimeDeparture() != null) {
+            return getScheduledTimeDeparture();
+        } else {
+            return getScheduledTimeArrival();
+        }
     }
 
     public static Service getByServiceId(String serviceId) {
