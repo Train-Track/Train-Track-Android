@@ -36,36 +36,36 @@ public class CallingPoint {
         this();
         try {
 
-            if (json.has("station")) {
+            if (!json.isNull("station")) {
                 this.station = new Station(json.getJSONObject("station"));
             }
 
-            if (json.has("sta")) {
+            if (!json.isNull("sta")) {
                 this.scheduledTimeArrival = json.getString("sta");
             }
 
-            if (json.has("eta")) {
+            if (!json.isNull("eta")) {
                 this.estimatedTimeArrival = json.getString("eta");
             }
 
-            if (json.has("ata")) {
+            if (!json.isNull("ata")) {
                 this.actualTimeArrival = json.getString("ata");
             }
 
-            if (json.has("std")) {
+            if (!json.isNull("std")) {
                 this.scheduledTimeDeparture = json.getString("std");
             }
 
-            if (json.has("etd")) {
+            if (!json.isNull("etd")) {
                 this.estimatedTimeDeparture = json.getString("etd");
             }
 
-            if (json.has("atd")) {
+            if (!json.isNull("atd")) {
                 this.actualTimeDeparture = json.getString("atd");
             }
 
         } catch (JSONException e) {
-            Utils.log(e.getMessage());
+            Utils.log("Calling Point: " + e.getMessage());
         }
     }
 
