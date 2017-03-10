@@ -31,19 +31,19 @@ public class Station implements Comparable {
     private int distance;
 
     public Station() {
-        id = 0;
-        uuid = "";
-        name = "Unknown";
-        crs = "";
-        lat = 0;
-        lng = 0;
-        isUnderground = false;
-        isNationalRail = false;
-        phone = "";
-        twitter = "";
-        undergroundZones = "";
-        facilities = new HashMap<>();
-        distance = 0;
+        this.id = 0;
+        this.uuid = "";
+        this.name = "Unknown";
+        this.crs = "";
+        this.lat = 0;
+        this.lng = 0;
+        this.isUnderground = false;
+        this.isNationalRail = false;
+        this.phone = "";
+        this.twitter = "";
+        this.undergroundZones = "";
+        this.facilities = new HashMap<>();
+        this.distance = 0;
     }
 
     public Station(JSONObject json) {

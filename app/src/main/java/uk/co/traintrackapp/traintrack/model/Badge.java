@@ -25,13 +25,13 @@ public class Badge {
     private String googleAchievementId;
 
     public Badge() {
-        id = 0;
-        uuid = "";
-        name = "Unknown";
-        description = "";
-        imageUrl = "";
-        points = 0;
-        googleAchievementId = "";
+        this.id = 0;
+        this.uuid = "";
+        this.name = "Unknown";
+        this.description = "";
+        this.imageUrl = "";
+        this.points = 0;
+        this.googleAchievementId = "";
     }
 
     /**

@@ -32,17 +32,17 @@ public class User {
     private ArrayList<Station> recentStations;
 
     public User() {
-        id = 0;
-        uuid = UUID.randomUUID().toString();
-        email = "";
-        username = "";
-        points = 0;
-        imageUrl = "";
-        journeys = new ArrayList<>();
-        homeStation = new Station();
-        workStation = new Station();
-        favouriteStations = new ArrayList<>();
-        recentStations = new ArrayList<>();
+        this.id = 0;
+        this.uuid = UUID.randomUUID().toString();
+        this.email = "";
+        this.username = "";
+        this.points = 0;
+        this.imageUrl = "";
+        this.journeys = new ArrayList<>();
+        this.homeStation = new Station();
+        this.workStation = new Station();
+        this.favouriteStations = new ArrayList<>();
+        this.recentStations = new ArrayList<>();
     }
 
     /**

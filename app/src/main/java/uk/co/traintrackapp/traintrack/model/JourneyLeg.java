@@ -26,29 +26,29 @@ public class JourneyLeg {
     private Station destination;
 
     public JourneyLeg() {
-        id = 0;
-        uuid = UUID.randomUUID().toString();
+        this.id = 0;
+        this.uuid = UUID.randomUUID().toString();
     }
 
     public JourneyLeg(JSONObject json) {
         this();
         try {
-            id = json.getInt("id");
-            journeyId = json.getInt("journey_id");
-            uuid = json.getString("uuid");
+            this.id = json.getInt("id");
+            this.journeyId = json.getInt("journey_id");
+            this.uuid = json.getString("uuid");
             String schDep = json.getString("scheduled_departure");
-            scheduledDeparture = Utils.getDateFromString(schDep);
+            this.scheduledDeparture = Utils.getDateFromString(schDep);
             String schArr = json.getString("scheduled_arrival");
-            scheduledArrival = Utils.getDateFromString(schArr);
+            this.scheduledArrival = Utils.getDateFromString(schArr);
             String actualDep = json.getString("actual_departure");
-            actualDeparture = Utils.getDateFromString(actualDep);
+            this.actualDeparture = Utils.getDateFromString(actualDep);
             String actualArr = json.getString("actual_arrival");
-            actualArrival = Utils.getDateFromString(actualArr);
-            departurePlatform = json.getString("departure_platform");
-            arrivalPlatform = json.getString("arrival_platform");
-            operator = new Operator(json.getJSONObject("operator"));
-            origin = new Station(json.getJSONObject("origin"));
-            destination = new Station(json.getJSONObject("destination"));
+            this.actualArrival = Utils.getDateFromString(actualArr);
+            this.departurePlatform = json.getString("departure_platform");
+            this.arrivalPlatform = json.getString("arrival_platform");
+            this.operator = new Operator(json.getJSONObject("operator"));
+            this.origin = new Station(json.getJSONObject("origin"));
+            this.destination = new Station(json.getJSONObject("destination"));
         } catch (JSONException e) {
             Utils.log(e.getMessage());
         }

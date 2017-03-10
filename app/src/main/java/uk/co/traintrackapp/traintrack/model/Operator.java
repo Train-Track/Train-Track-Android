@@ -15,12 +15,12 @@ public class Operator {
     private String numericCode;
 
     public Operator() {
-        id = 0;
-        name = "Unknown";
-        code = "";
-        twitter = "";
-        delayRepayUrl = "";
-        numericCode = "";
+        this.id = 0;
+        this.name = "Unknown";
+        this.code = "";
+        this.twitter = "";
+        this.delayRepayUrl = "";
+        this.numericCode = "";
     }
 
     public Operator(JSONObject json) {

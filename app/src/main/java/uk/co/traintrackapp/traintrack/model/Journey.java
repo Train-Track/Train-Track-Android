@@ -16,19 +16,19 @@ public class Journey {
     private ArrayList<JourneyLeg> journeyLegs;
 
     public Journey() {
-        id = 0;
-        uuid = UUID.randomUUID().toString();
-        journeyLegs = new ArrayList<>();
+        this.id = 0;
+        this.uuid = UUID.randomUUID().toString();
+        this.journeyLegs = new ArrayList<>();
     }
 
     public Journey (JSONObject json) {
         this();
         try {
-            id = json.getInt("id");
-            uuid = json.getString("uuid");
+            this.id = json.getInt("id");
+            this.uuid = json.getString("uuid");
             JSONArray legs = json.getJSONArray("journey_legs");
             for (int i = 0; i < legs.length(); i++) {
-                journeyLegs.add(new JourneyLeg(legs.getJSONObject(i)));
+                this.journeyLegs.add(new JourneyLeg(legs.getJSONObject(i)));
             }
         }
         catch (JSONException e) {
