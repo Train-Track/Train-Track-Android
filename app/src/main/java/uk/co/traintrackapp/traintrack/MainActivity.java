@@ -193,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             Utils.log(e.getMessage());
         }
-        Utils.log("OPENED: " + jsonString);
         return jsonString;
     }
 

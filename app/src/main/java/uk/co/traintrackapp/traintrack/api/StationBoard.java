@@ -48,7 +48,7 @@ public class StationBoard {
             }
 
         } catch (JSONException e) {
-            Utils.log(e.getMessage());
+            Utils.log("Station Board: " + e.getMessage());
         }
     }
 
@@ -62,10 +62,6 @@ public class StationBoard {
 
     public ArrayList<TubeLine> getTubeLines() {
         return tubeLines;
-    }
-
-    public String toString() {
-        return trainServices.toString();
     }
 
     public static StationBoard getDepartures(String uuid) {
@@ -91,4 +87,12 @@ public class StationBoard {
         return new StationBoard(json);
     }
 
+    @Override
+    public String toString() {
+        return "StationBoard{" +
+                "nrccMessages=" + nrccMessages +
+                ", trainServices=" + trainServices +
+                ", tubeLines=" + tubeLines +
+                '}';
+    }
 }

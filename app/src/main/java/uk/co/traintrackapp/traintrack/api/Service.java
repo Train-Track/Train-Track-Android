@@ -143,7 +143,7 @@ public class Service {
             }
 
         } catch (JSONException e) {
-            Utils.log(e.getMessage());
+            Utils.log("Service: " + e.getMessage());
         }
     }
 

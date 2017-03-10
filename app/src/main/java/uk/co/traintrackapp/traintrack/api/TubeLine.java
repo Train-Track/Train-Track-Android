@@ -58,7 +58,7 @@ public class TubeLine {
                 this.textColour = json.getString("text_colour");
             }
 
-             if (json.has("services")) {
+             if (!json.isNull("services")) {
                 JSONArray jsonServices = json.getJSONArray("services");
                 for (int i = 0; i < jsonServices.length(); i++) {
                     Service service = new Service(jsonServices.getJSONObject(i));
@@ -71,7 +71,7 @@ public class TubeLine {
             }
 
         } catch (JSONException e) {
-            Utils.log(e.getMessage());
+            Utils.log("Tube Line: " + e.getMessage());
         }
     }
 
