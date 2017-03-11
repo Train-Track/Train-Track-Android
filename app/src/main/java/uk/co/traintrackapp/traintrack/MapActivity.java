@@ -24,8 +24,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import uk.co.traintrackapp.traintrack.api.CallingPoint;
-import uk.co.traintrackapp.traintrack.api.Service;
+import uk.co.traintrackapp.traintrack.model.CallingPoint;
+import uk.co.traintrackapp.traintrack.model.Service;
 import uk.co.traintrackapp.traintrack.model.Station;
 
 public class MapActivity extends Activity implements OnMapReadyCallback {

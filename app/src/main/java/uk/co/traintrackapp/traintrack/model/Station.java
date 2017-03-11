@@ -15,6 +15,8 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 public class Station implements Comparable {
 
     public static final String FILENAME = "stations.json";
+    protected static final String DEFAULT_NAME = "Unknown";
+
     private int id;
     private String uuid;
     private String name;
@@ -33,7 +35,7 @@ public class Station implements Comparable {
     public Station() {
         this.id = 0;
         this.uuid = "";
-        this.name = "Unknown";
+        this.name = DEFAULT_NAME;
         this.crs = "";
         this.lat = 0;
         this.lng = 0;

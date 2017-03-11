@@ -1,11 +1,10 @@
-package uk.co.traintrackapp.traintrack.api;
+package uk.co.traintrackapp.traintrack.model;
 
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import uk.co.traintrackapp.traintrack.R;
-import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class CallingPoint {
@@ -15,12 +14,16 @@ public class CallingPoint {
     public static final int END = R.drawable.end;
 
     private Station station;
+    private Tiploc tiploc;
     private DateTime scheduledTimeArrival;
     private DateTime estimatedTimeArrival;
     private DateTime actualTimeArrival;
     private DateTime scheduledTimeDeparture;
     private DateTime estimatedTimeDeparture;
     private DateTime actualTimeDeparture;
+    private boolean cancelled;
+    private boolean passingPoint;
+    private boolean noReport;
     private int icon;
 
     public CallingPoint() {
@@ -31,6 +34,9 @@ public class CallingPoint {
         this.scheduledTimeDeparture = null;
         this.estimatedTimeDeparture = null;
         this.actualTimeDeparture = null;
+        this.cancelled = false;
+        this.passingPoint = false;
+        this.noReport = false;
     }
 
     public CallingPoint(JSONObject json) {
@@ -39,6 +45,10 @@ public class CallingPoint {
 
             if (!json.isNull("station")) {
                 this.station = new Station(json.getJSONObject("station"));
+            }
+
+            if (!json.isNull("tiploc")) {
+                this.tiploc = new Tiploc(json.getJSONObject("tiploc"));
             }
 
             if (!json.isNull("sta")) {
@@ -71,6 +81,18 @@ public class CallingPoint {
                 this.actualTimeDeparture = Utils.getDateTimeFromString(atd);
             }
 
+            if (json.has("cancelled")) {
+                this.cancelled = json.getBoolean("cancelled");
+            }
+
+            if (json.has("pass")) {
+                this.passingPoint = json.getBoolean("pass");
+            }
+
+            if (json.has("no_report")) {
+                this.noReport = json.getBoolean("no_report");
+            }
+
         } catch (JSONException e) {
             Utils.log("Calling Point: " + e.getMessage());
         }
@@ -82,6 +104,14 @@ public class CallingPoint {
 
     public Station getStation() {
         return station;
+    }
+
+    public Tiploc getTiploc() {
+        return tiploc;
+    }
+
+    public void setTiploc(Tiploc tiploc) {
+        this.tiploc = tiploc;
     }
 
     public DateTime getScheduledTimeArrival() {
@@ -132,6 +162,30 @@ public class CallingPoint {
         this.actualTimeDeparture = actualTimeDeparture;
     }
 
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    public boolean isPassingPoint() {
+        return passingPoint;
+    }
+
+    public void setPassingPoint(boolean passingPoint) {
+        this.passingPoint = passingPoint;
+    }
+
+    public boolean isNoReport() {
+        return noReport;
+    }
+
+    public void setNoReport(boolean noReport) {
+        this.noReport = noReport;
+    }
+
     public void setIcon(int icon) {
         this.icon = icon;
     }
@@ -141,7 +195,17 @@ public class CallingPoint {
     }
 
     public String toString() {
-        return getScheduledTimeDeparture() + " " + getStation() + " " + getTime() + "\n";
+        return getScheduledTime() + " " + getName() + " " + getTime() + "\n";
+    }
+
+    public String getName() {
+        if (!getStation().getName().equals(Station.DEFAULT_NAME)) {
+            return getStation().toString();
+        } else if (!getTiploc().getName().equals(Tiploc.DEFAULT_NAME)) {
+            return getTiploc().toString();
+        } else {
+            return Station.DEFAULT_NAME;
+        }
     }
 
     public boolean hasArrived() {

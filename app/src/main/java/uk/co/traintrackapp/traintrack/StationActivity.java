@@ -15,7 +15,7 @@ import com.astuetz.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 
-import uk.co.traintrackapp.traintrack.api.StationBoard;
+import uk.co.traintrackapp.traintrack.model.StationBoard;
 import uk.co.traintrackapp.traintrack.fragment.StationArrivalsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationDeparturesFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationDetailsFragment;

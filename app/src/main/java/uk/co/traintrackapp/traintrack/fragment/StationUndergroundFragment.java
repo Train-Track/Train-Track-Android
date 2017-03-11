@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.StationActivity;
 import uk.co.traintrackapp.traintrack.adapter.ServiceUndergroundRowAdapter;
-import uk.co.traintrackapp.traintrack.api.Service;
-import uk.co.traintrackapp.traintrack.api.StationBoard;
-import uk.co.traintrackapp.traintrack.api.TubeLine;
+import uk.co.traintrackapp.traintrack.model.Service;
+import uk.co.traintrackapp.traintrack.model.StationBoard;
+import uk.co.traintrackapp.traintrack.model.TubeLine;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 

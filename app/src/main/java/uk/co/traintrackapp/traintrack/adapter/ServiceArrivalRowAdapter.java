@@ -14,7 +14,7 @@ import java.util.List;
 
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.adapter.viewholders.ServiceViewHolder;
-import uk.co.traintrackapp.traintrack.api.Service;
+import uk.co.traintrackapp.traintrack.model.Service;
 
 public class ServiceArrivalRowAdapter extends RecyclerView.Adapter<ServiceViewHolder> {
 

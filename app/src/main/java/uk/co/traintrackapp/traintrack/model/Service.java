@@ -1,4 +1,4 @@
-package uk.co.traintrackapp.traintrack.api;
+package uk.co.traintrackapp.traintrack.model;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -9,8 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import uk.co.traintrackapp.traintrack.model.Operator;
-import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class Service {

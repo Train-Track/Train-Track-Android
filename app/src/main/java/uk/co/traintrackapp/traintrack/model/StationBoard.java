@@ -1,4 +1,4 @@
-package uk.co.traintrackapp.traintrack.api;
+package uk.co.traintrackapp.traintrack.model;
 
 import org.json.JSONArray;
 import org.json.JSONException;

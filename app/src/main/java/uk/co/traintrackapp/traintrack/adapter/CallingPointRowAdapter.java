@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.R;
-import uk.co.traintrackapp.traintrack.api.CallingPoint;
+import uk.co.traintrackapp.traintrack.model.CallingPoint;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class CallingPointRowAdapter extends BaseAdapter {
@@ -23,7 +23,7 @@ public class CallingPointRowAdapter extends BaseAdapter {
      * @param callingPoints
      *            to be displayed
      * @param stationCrs
-     *            the station it is being seen from
+     *            the name it is being seen from
      * @param context
      *            the context the adapter is being used in
      */
@@ -55,7 +55,7 @@ public class CallingPointRowAdapter extends BaseAdapter {
             holder.icon = (TextView) convertView.findViewById(R.id.icon);
             holder.scheduledTime = (TextView) convertView
                     .findViewById(R.id.scheduled_time);
-            holder.station = (TextView) convertView.findViewById(R.id.station);
+            holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.time = (TextView) convertView.findViewById(R.id.time);
             convertView.setTag(holder);
         } else {
@@ -67,15 +67,15 @@ public class CallingPointRowAdapter extends BaseAdapter {
                 callingPoint.getIcon()));
         holder.scheduledTime.setText(callingPoint.getScheduledTime().toString("HH:mm"));
         holder.time.setText(callingPoint.getTime().toString("HH:mm"));
-        holder.station.setText(callingPoint.getStation().toString());
+        holder.name.setText(callingPoint.getName());
         if (callingPoint.getStation().getCrsCode().equals(this.stationCrs)) {
-            holder.station.setTextColor(Utils.BLUE);
+            holder.name.setTextColor(Utils.BLUE);
             convertView.setEnabled(false);
         } else if (callingPoint.hasArrived()) {
-            holder.station.setTextColor(Color.GRAY);
+            holder.name.setTextColor(Color.GRAY);
             convertView.setEnabled(false);
         } else {
-            holder.station.setTextColor(Color.BLACK);
+            holder.name.setTextColor(Color.BLACK);
             convertView.setEnabled(true);
         }
 
@@ -85,7 +85,7 @@ public class CallingPointRowAdapter extends BaseAdapter {
     static class ViewHolder {
         TextView icon;
         TextView scheduledTime;
-        TextView station;
+        TextView name;
         TextView time;
     }
 }

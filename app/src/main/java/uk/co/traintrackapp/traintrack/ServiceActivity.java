@@ -19,8 +19,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.adapter.CallingPointRowAdapter;
-import uk.co.traintrackapp.traintrack.api.CallingPoint;
-import uk.co.traintrackapp.traintrack.api.Service;
+import uk.co.traintrackapp.traintrack.model.CallingPoint;
+import uk.co.traintrackapp.traintrack.model.Service;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class ServiceActivity extends ActionBarActivity {

@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.ServiceActivity;
-import uk.co.traintrackapp.traintrack.api.Service;
+import uk.co.traintrackapp.traintrack.model.Service;
 
 public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public TextView scheduledTime;

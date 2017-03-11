@@ -22,7 +22,7 @@ import uk.co.traintrackapp.traintrack.MainActivity;
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.StationActivity;
 import uk.co.traintrackapp.traintrack.TrainTrack;
-import uk.co.traintrackapp.traintrack.api.TubeLine;
+import uk.co.traintrackapp.traintrack.model.TubeLine;
 import uk.co.traintrackapp.traintrack.model.User;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
