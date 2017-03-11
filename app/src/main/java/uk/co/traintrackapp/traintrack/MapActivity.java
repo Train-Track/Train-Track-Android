@@ -113,7 +113,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
                 Marker m = map.addMarker(new MarkerOptions()
                         .position(points[i])
                         .title(callingPoint.getStation().toString())
-                        .snippet(callingPoint.getScheduledTime())
+                        .snippet(callingPoint.getScheduledTime().toString("HH:mm"))
                         .visible(true));
                 if (callingPoint.getStation().isUnderground()) {
                     m.setIcon(undergroundIcon);

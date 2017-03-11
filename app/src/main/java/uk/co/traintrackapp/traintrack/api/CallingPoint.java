@@ -1,5 +1,6 @@
 package uk.co.traintrackapp.traintrack.api;
 
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,22 +15,22 @@ public class CallingPoint {
     public static final int END = R.drawable.end;
 
     private Station station;
-    private String scheduledTimeArrival;
-    private String estimatedTimeArrival;
-    private String actualTimeArrival;
-    private String scheduledTimeDeparture;
-    private String estimatedTimeDeparture;
-    private String actualTimeDeparture;
+    private DateTime scheduledTimeArrival;
+    private DateTime estimatedTimeArrival;
+    private DateTime actualTimeArrival;
+    private DateTime scheduledTimeDeparture;
+    private DateTime estimatedTimeDeparture;
+    private DateTime actualTimeDeparture;
     private int icon;
 
     public CallingPoint() {
         this.station = new Station();
-        this.scheduledTimeArrival = "";
-        this.estimatedTimeArrival = "";
-        this.actualTimeArrival = "";
-        this.scheduledTimeDeparture = "";
-        this.estimatedTimeDeparture = "";
-        this.actualTimeDeparture = "";
+        this.scheduledTimeArrival = null;
+        this.estimatedTimeArrival = null;
+        this.actualTimeArrival = null;
+        this.scheduledTimeDeparture = null;
+        this.estimatedTimeDeparture = null;
+        this.actualTimeDeparture = null;
     }
 
     public CallingPoint(JSONObject json) {
@@ -41,27 +42,33 @@ public class CallingPoint {
             }
 
             if (!json.isNull("sta")) {
-                this.scheduledTimeArrival = json.getString("sta");
+                String sta = json.getString("sta");
+                this.scheduledTimeArrival = Utils.getDateTimeFromString(sta);
             }
 
             if (!json.isNull("eta")) {
-                this.estimatedTimeArrival = json.getString("eta");
+                String eta = json.getString("eta");
+                this.estimatedTimeArrival = Utils.getDateTimeFromString(eta);
             }
 
             if (!json.isNull("ata")) {
-                this.actualTimeArrival = json.getString("ata");
+                String ata = json.getString("ata");
+                this.actualTimeArrival = Utils.getDateTimeFromString(ata);
             }
 
             if (!json.isNull("std")) {
-                this.scheduledTimeDeparture = json.getString("std");
+                String std = json.getString("std");
+                this.scheduledTimeDeparture = Utils.getDateTimeFromString(std);
             }
 
             if (!json.isNull("etd")) {
-                this.estimatedTimeDeparture = json.getString("etd");
+                String etd = json.getString("etd");
+                this.estimatedTimeDeparture = Utils.getDateTimeFromString(etd);
             }
 
             if (!json.isNull("atd")) {
-                this.actualTimeDeparture = json.getString("atd");
+                String atd = json.getString("atd");
+                this.actualTimeDeparture = Utils.getDateTimeFromString(atd);
             }
 
         } catch (JSONException e) {
@@ -77,51 +84,51 @@ public class CallingPoint {
         return station;
     }
 
-    public String getScheduledTimeArrival() {
+    public DateTime getScheduledTimeArrival() {
         return scheduledTimeArrival;
     }
 
-    public void setScheduledTimeArrival(String scheduledTimeArrival) {
+    public void setScheduledTimeArrival(DateTime scheduledTimeArrival) {
         this.scheduledTimeArrival = scheduledTimeArrival;
     }
 
-    public String getEstimatedTimeArrival() {
+    public DateTime getEstimatedTimeArrival() {
         return estimatedTimeArrival;
     }
 
-    public void setEstimatedTimeArrival(String estimatedTimeArrival) {
+    public void setEstimatedTimeArrival(DateTime estimatedTimeArrival) {
         this.estimatedTimeArrival = estimatedTimeArrival;
     }
 
-    public String getActualTimeArrival() {
+    public DateTime getActualTimeArrival() {
         return actualTimeArrival;
     }
 
-    public void setActualTimeArrival(String actualTimeArrival) {
+    public void setActualTimeArrival(DateTime actualTimeArrival) {
         this.actualTimeArrival = actualTimeArrival;
     }
 
-    public String getScheduledTimeDeparture() {
+    public DateTime getScheduledTimeDeparture() {
         return scheduledTimeDeparture;
     }
 
-    public void setScheduledTimeDeparture(String scheduledTimeDeparture) {
+    public void setScheduledTimeDeparture(DateTime scheduledTimeDeparture) {
         this.scheduledTimeDeparture = scheduledTimeDeparture;
     }
 
-    public String getEstimatedTimeDeparture() {
+    public DateTime getEstimatedTimeDeparture() {
         return estimatedTimeDeparture;
     }
 
-    public void setEstimatedTimeDeparture(String estimatedTimeDeparture) {
+    public void setEstimatedTimeDeparture(DateTime estimatedTimeDeparture) {
         this.estimatedTimeDeparture = estimatedTimeDeparture;
     }
 
-    public String getActualTimeDeparture() {
+    public DateTime getActualTimeDeparture() {
         return actualTimeDeparture;
     }
 
-    public void setActualTimeDeparture(String actualTimeDeparture) {
+    public void setActualTimeDeparture(DateTime actualTimeDeparture) {
         this.actualTimeDeparture = actualTimeDeparture;
     }
 
@@ -138,29 +145,35 @@ public class CallingPoint {
     }
 
     public boolean hasArrived() {
-        return !getActualTimeArrival().isEmpty();
+        return getActualTimeArrival() != null;
     }
 
     public boolean isOnTime() {
-        return getEstimatedTimeArrival().equalsIgnoreCase(getScheduledTimeArrival());
+        if (getEstimatedTimeDeparture() != null) {
+            return getEstimatedTimeDeparture().isAfter(getScheduledTimeDeparture());
+        } else if (getEstimatedTimeArrival() != null) {
+            return getEstimatedTimeArrival().isAfter(getScheduledTimeArrival());
+        }
+        else {
+            return true;
+        }
     }
 
-    public String getScheduledTime() {
-        String std = getScheduledTimeDeparture();
-        if ((std != null) && (!std.isEmpty())) {
-            return std;
+    public DateTime getScheduledTime() {
+        if (getScheduledTimeDeparture() != null) {
+            return getScheduledTimeDeparture();
         } else {
             return getScheduledTimeArrival();
         }
     }
 
-    public String getTime() {
-        if (hasArrived()) {
-            return getActualTimeArrival();
-        } else if (isOnTime()) {
-            return getEstimatedTimeArrival();
-        } else {
-            return getScheduledTimeArrival();
+    public DateTime getTime() {
+        if (getActualTimeDeparture() != null) {
+            return getActualTimeDeparture();
+        } else if (getEstimatedTimeDeparture() != null) {
+            return getEstimatedTimeDeparture();
+        }  else {
+            return getScheduledTime();
         }
     }
 
