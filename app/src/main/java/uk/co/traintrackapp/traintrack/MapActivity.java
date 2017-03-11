@@ -23,15 +23,17 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import uk.co.traintrackapp.traintrack.model.CallingPoint;
 import uk.co.traintrackapp.traintrack.model.Service;
 import uk.co.traintrackapp.traintrack.model.Station;
+import uk.co.traintrackapp.traintrack.model.Tiploc;
 
 public class MapActivity extends Activity implements OnMapReadyCallback {
 
     private GoogleMap map;
-    private HashMap<Marker, Station> hashmap;
+    private HashMap<Marker, Station> stationMarkers;
     private BitmapDescriptor nationalRailIcon;
     private BitmapDescriptor undergroundIcon;
 
@@ -42,7 +44,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
         nationalRailIcon = BitmapDescriptorFactory.fromResource(R.drawable.rail);
         undergroundIcon = BitmapDescriptorFactory.fromResource(R.drawable.tube);
-        hashmap = new HashMap<>();
+        stationMarkers = new HashMap<>();
 
         ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
     }
@@ -76,9 +78,11 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             public void onInfoWindowClick(Marker marker) {
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         StationActivity.class);
-                Station station = hashmap.get(marker);
-                intent.putExtra("station_uuid", station.getUuid());
-                startActivity(intent);
+                Station station = stationMarkers.get(marker);
+                if (station != null) {
+                    intent.putExtra("station_uuid", station.getUuid());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -97,34 +101,47 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             if (s == null) {
                 return;
             }
-            ArrayList<CallingPoint> callingPoints = s.getCallingPoints();
-            LatLng[] points = new LatLng[callingPoints.size()];
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (int i = 0; i < callingPoints.size(); i++) {
-                CallingPoint callingPoint = callingPoints.get(i);
+            List<CallingPoint> callingPoints = s.getCallingPoints();
+            List<LatLng> line = new ArrayList<>();
+            LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+            for (CallingPoint callingPoint : callingPoints) {
                 Station station = callingPoint.getStation();
-                if (station != null) {
-                    points[i] = new LatLng(station.getLatitude(),
-                            station.getLongitude());
-                } else {
-                    points[i] = new LatLng(0, 0);
+                Tiploc tiploc = callingPoint.getTiploc();
+                if ((station != null) && (station.getLatitude() != null) && (station.getLongitude() != null)) {
+                    LatLng point = new LatLng(station.getLatitude(), station.getLongitude());
+                    line.add(point);
+                    bounds.include(point);
+                    Marker m = map.addMarker(new MarkerOptions()
+                            .position(point)
+                            .title(station.toString())
+                            .snippet(callingPoint.getScheduledTime().toString("HH:mm"))
+                            .visible(true));
+                    stationMarkers.put(m, station);
+                } else if ((tiploc != null) && (tiploc.getLatitude() != null) && (tiploc.getLongitude() != null)) {
+                    LatLng point = new LatLng(tiploc.getLatitude(), tiploc.getLongitude());
+                    line.add(point);
+                    bounds.include(point);
+                    Marker m = map.addMarker(new MarkerOptions()
+                            .position(point)
+                            .title(tiploc.toString())
+                            .snippet(callingPoint.getScheduledTime().toString("HH:mm"))
+                            .visible(true));
+                    stationMarkers.put(m, null);
                 }
-                builder.include(points[i]);
-                Marker m = map.addMarker(new MarkerOptions()
-                        .position(points[i])
-                        .title(callingPoint.getStation().toString())
-                        .snippet(callingPoint.getScheduledTime().toString("HH:mm"))
-                        .visible(true));
+
+                /*
+                //These icons are too big
                 if (callingPoint.getStation().isUnderground()) {
                     m.setIcon(undergroundIcon);
                 } else {
                     m.setIcon(nationalRailIcon);
                 }
-                hashmap.put(m, station);
+                */
+
             }
-            map.addPolyline(new PolylineOptions().add(points).width(12)
+            map.addPolyline(new PolylineOptions().add(line.toArray(new LatLng[line.size()])).width(12)
                     .color(Color.RED));
-            map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(),
                     100));
         }
     }
@@ -161,7 +178,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
                 } else {
                     m.setIcon(nationalRailIcon);
                 }
-                hashmap.put(m, s);
+                stationMarkers.put(m, s);
             }
             if (stations.size() == 1) {
                 map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(

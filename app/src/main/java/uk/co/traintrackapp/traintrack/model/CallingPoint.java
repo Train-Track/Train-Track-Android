@@ -29,6 +29,7 @@ public class CallingPoint {
 
     public CallingPoint() {
         this.station = new Station();
+        this.tiploc = new Tiploc();
         this.scheduledTimeArrival = null;
         this.estimatedTimeArrival = null;
         this.actualTimeArrival = null;

@@ -21,8 +21,8 @@ public class Station implements Comparable {
     private String uuid;
     private String name;
     private String crs;
-    private double lat;
-    private double lng;
+    private Double lat;
+    private Double lng;
     private boolean isUnderground;
     private boolean isNationalRail;
     private String address;
@@ -37,8 +37,8 @@ public class Station implements Comparable {
         this.uuid = "";
         this.name = DEFAULT_NAME;
         this.crs = "";
-        this.lat = 0;
-        this.lng = 0;
+        this.lat = null;
+        this.lng = null;
         this.isUnderground = false;
         this.isNationalRail = false;
         this.phone = "";
@@ -117,14 +117,14 @@ public class Station implements Comparable {
     /**
      * @return the latitude
      */
-    public double getLatitude() {
+    public Double getLatitude() {
         return lat;
     }
 
     /**
      * @return the longitude
      */
-    public double getLongitude() {
+    public Double getLongitude() {
         return lng;
     }
 
