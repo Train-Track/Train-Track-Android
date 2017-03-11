@@ -12,6 +12,7 @@ public class CallingPoint {
     public static final int START = R.drawable.start;
     public static final int STOP = R.drawable.stop;
     public static final int END = R.drawable.end;
+    public static final int PASS = R.drawable.pass;
 
     private Station station;
     private Tiploc tiploc;

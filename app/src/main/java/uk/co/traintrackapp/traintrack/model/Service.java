@@ -129,7 +129,9 @@ public class Service {
                 JSONArray stations = json.getJSONArray("calling_points");
                 for (int i = 0; i < stations.length(); i++) {
                     CallingPoint cp = new CallingPoint(stations.getJSONObject(i));
-                    if (i == 0) {
+                    if (cp.isPassingPoint()) {
+                        cp.setIcon(CallingPoint.PASS);
+                    } else if (i == 0) {
                         cp.setIcon(CallingPoint.START);
                     } else if (i == stations.length() - 1) {
                         cp.setIcon(CallingPoint.END);
