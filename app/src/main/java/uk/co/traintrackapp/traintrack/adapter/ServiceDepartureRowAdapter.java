@@ -42,11 +42,11 @@ public class ServiceDepartureRowAdapter extends RecyclerView.Adapter<ServiceView
         holder.service = service;
         DateTime std = service.getScheduledTimeDeparture();
         if (std != null) {
-            holder.scheduledTime.setText(std.toString());
+            holder.scheduledTime.setText(std.toString("HH:mm"));
         }
         DateTime eta = service.getEstimatedTimeDeparture();
         if (eta != null) {
-            holder.estimatedTime.setText(eta.toString());
+            holder.estimatedTime.setText(eta.toString("HH:mm"));
         }
         if (service.terminatesHere()) {
             holder.title.setText("Terminates Here");

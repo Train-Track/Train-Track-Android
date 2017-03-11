@@ -42,11 +42,11 @@ public class ServiceArrivalRowAdapter extends RecyclerView.Adapter<ServiceViewHo
         holder.service = service;
         DateTime sta = service.getScheduledTimeArrival();
         if (sta != null) {
-            holder.scheduledTime.setText(sta.toString());
+            holder.scheduledTime.setText(sta.toString("HH:mm"));
         }
         DateTime eta = service.getEstimatedTimeArrival();
         if (eta != null) {
-            holder.estimatedTime.setText(eta.toString());
+            holder.estimatedTime.setText(eta.toString("HH:mm"));
         }
         holder.title.setText(service.getOrigin().toString());
         if (service.isDelayedArriving()) {
