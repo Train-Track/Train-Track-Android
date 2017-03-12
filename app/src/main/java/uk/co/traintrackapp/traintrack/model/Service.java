@@ -5,13 +5,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class Service {
+public class Service implements Serializable {
 
     private String serviceId;
     private String serviceType;

@@ -3,9 +3,11 @@ package uk.co.traintrackapp.traintrack.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class Operator {
+public class Operator implements Serializable {
 
     private int id;
     private String name;

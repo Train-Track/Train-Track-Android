@@ -6,13 +6,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class Station implements Comparable {
+public class Station implements Comparable, Serializable {
 
     public static final String FILENAME = "stations.json";
     protected static final String DEFAULT_NAME = "Unknown";

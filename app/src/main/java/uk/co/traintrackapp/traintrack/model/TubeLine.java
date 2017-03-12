@@ -4,11 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class TubeLine {
+public class TubeLine implements Serializable {
 
     private int id;
     private String uuid;

@@ -10,13 +10,14 @@ import org.json.JSONObject;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class User {
+public class User implements Serializable {
 
     public static final String FILENAME = "user.json";
     private int id;

@@ -4,12 +4,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class Journey {
+public class Journey implements Serializable {
 
     private int id;
     private String uuid;
