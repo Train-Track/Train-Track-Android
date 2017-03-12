@@ -30,8 +30,6 @@ public class ServiceActivity extends AppCompatActivity {
     private ProgressBar progress;
     private ArrayList<CallingPoint> callingPoints;
     private TextView disruptionReason;
-    private TextView toc;
-    private String serviceId;
     private Service service;
 
     @Override
@@ -39,25 +37,36 @@ public class ServiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
 
-        final Intent intent = getIntent();
-        serviceId = intent.getStringExtra(Utils.ARGS_SERVICE_ID);
-        new GetServiceRequest().execute(serviceId);
+        Intent intent = getIntent();
+        service = (Service) intent.getExtras().getSerializable(Utils.ARGS_SERVICE);
+        if (service == null) {
+            finish();
+        }
+        new GetServiceRequest().execute(service.getServiceId());
 
-        final String journeyUuid = intent.getStringExtra("journey_uuid");
-        final String stationUuid = intent.getStringExtra("station_uuid");
-        Utils.log("The station uuid: " + stationUuid);
-        final String originName = intent.getStringExtra("origin_name");
-        final String destinationName = intent.getStringExtra("destination_name");
+        //TODO These are both currently empty but we need them for later
+        final String journeyUuid = intent.getStringExtra(Utils.ARGS_JOURNEY_UUID);
+        final String stationUuid = intent.getStringExtra(Utils.ARGS_STATION_UUID);
+
+        progress = (ProgressBar) findViewById(R.id.progress);
+        disruptionReason = (TextView) findViewById(R.id.disruption_reason);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(originName + " to " + destinationName);
+        getSupportActionBar().setTitle(service.getOrigin() + " to " + service.getDestination());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        callingPoints = new ArrayList<>();
-        progress = (ProgressBar) findViewById(R.id.progress);
-        disruptionReason = (TextView) findViewById(R.id.disruption_reason);
-        toc = (TextView) findViewById(R.id.toc);
+        TextView toc = (TextView) findViewById(R.id.toc);
+        toc.setText(service.getOperator() + " - @" + service.getOperator().getTwitter());
+        toc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tweetUrl = "https://twitter.com/intent/tweet?text=@" + service.getOperator().getTwitter();
+                Intent tweet = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+                startActivity(tweet);
+            }
+        });
+        callingPoints = service.getCallingPoints();
         adapter = new CallingPointRowAdapter(callingPoints, stationUuid, this);
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
@@ -69,12 +78,7 @@ public class ServiceActivity extends AppCompatActivity {
                     return;
                 }
 
-                Intent intent = new Intent().setClass(getApplicationContext(),
-                        JourneyLegActivity.class);
-                Bundle bundle = new Bundle();
-                JourneyLeg journeyLeg = new JourneyLeg();
                 CallingPoint callingPoint = adapter.getItem(index);
-
                 // Find the calling point the journey leg is starting from
                 CallingPoint here = new CallingPoint();
                 for (CallingPoint cp : service.getCallingPoints()) {
@@ -82,8 +86,8 @@ public class ServiceActivity extends AppCompatActivity {
                         here = cp;
                     }
                 }
-                Utils.log("The station details are: " + here);
 
+                JourneyLeg journeyLeg = new JourneyLeg();
                 journeyLeg.setOrigin(here.getStation());
                 journeyLeg.setScheduledDeparture(here.getScheduledTimeDeparture());
                 journeyLeg.setActualDeparture(here.getActualTimeDeparture());
@@ -93,9 +97,13 @@ public class ServiceActivity extends AppCompatActivity {
                 journeyLeg.setActualArrival(callingPoint.getActualTimeArrival());
                 journeyLeg.setArrivalPlatform(callingPoint.getPlatform());
                 journeyLeg.setOperator(service.getOperator());
-                bundle.putSerializable("journeyLeg", journeyLeg);
+
+                Intent intent = new Intent().setClass(getApplicationContext(),
+                        JourneyLegActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Utils.ARGS_JOURNEY_LEG, journeyLeg);
                 intent.putExtras(bundle);
-                intent.putExtra("journeyUuid", journeyUuid);
+                intent.putExtra(Utils.ARGS_JOURNEY_UUID, journeyUuid);
                 startActivityForResult(intent, 1);
             }
 
@@ -113,11 +121,12 @@ public class ServiceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
-                new GetServiceRequest().execute(serviceId);
+                new GetServiceRequest().execute(service.getServiceId());
                 return true;
             case R.id.map:
                 Intent intent = new Intent().setClass(this, MapActivity.class);
-                intent.putExtra("service_id", serviceId);
+                //TODO send whole service
+                intent.putExtra(Utils.ARGS_SERVICE_ID, service.getServiceId());
                 startActivity(intent);
                 return true;
             case android.R.id.home:
@@ -157,15 +166,6 @@ public class ServiceActivity extends AppCompatActivity {
             callingPoints.clear();
             callingPoints.addAll(s.getCallingPoints());
             adapter.notifyDataSetChanged();
-            toc.setText(service.getOperator() + " - @" + service.getOperator().getTwitter());
-            toc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String tweetUrl = "https://twitter.com/intent/tweet?text=@" + service.getOperator().getTwitter();
-                    Intent tweet = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
-                    startActivity(tweet);
-                }
-            });
             if (s.getDisruptionReason() != null) {
                 disruptionReason.setText(s.getDisruptionReason());
                 disruptionReason.setVisibility(View.VISIBLE);

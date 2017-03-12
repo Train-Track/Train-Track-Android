@@ -20,6 +20,7 @@ import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.TrainTrack;
 import uk.co.traintrackapp.traintrack.adapter.JourneyRowAdapter;
 import uk.co.traintrackapp.traintrack.model.Journey;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class JourneysFragment extends Fragment {
 
@@ -54,7 +55,8 @@ public class JourneysFragment extends Fragment {
                 Journey journey = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getActivity(),
                         JourneyActivity.class);
-                intent.putExtra("journey_uuid", journey.getUuid());
+                //TODO pass whole journey through
+                intent.putExtra(Utils.ARGS_JOURNEY_UUID, journey.getUuid());
                 startActivity(intent);
             }
         });

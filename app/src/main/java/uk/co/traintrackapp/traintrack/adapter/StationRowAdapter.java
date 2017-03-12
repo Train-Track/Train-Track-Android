@@ -47,6 +47,7 @@ public class StationRowAdapter extends RecyclerView.Adapter<StationRowAdapter.Vi
             if (station != null) {
                 Intent intent = new Intent().setClass(v.getContext(),
                         StationActivity.class);
+                //TODO send whole station
                 intent.putExtra("station_uuid", station.getUuid());
                 v.getContext().startActivity(intent);
                 InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

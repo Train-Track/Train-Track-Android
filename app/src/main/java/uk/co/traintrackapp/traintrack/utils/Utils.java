@@ -23,8 +23,10 @@ public class Utils {
     public static final String ARGS_PAGE_TITLE = "ARGS_PAGE_TITLE";
     public static final String ARGS_STATION_UUID = "ARGS_STATION_UUID";
     public static final String ARGS_JOURNEY_LEG = "ARGS_JOURNEY_LEG";
+    public static final String ARGS_JOURNEY_LEG_UUID = "ARGS_JOURNEY_LEG_UUID";
     public static final String ARGS_JOURNEY_UUID = "ARGS_JOURNEY_UUID";
     public static final String ARGS_SERVICE_ID = "ARGS_SERVICE_ID";
+    public static final String ARGS_SERVICE = "ARGS_SERVICE";
     public static final String API_BASE_URL = "http://192.168.1.69:3000";
     private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 

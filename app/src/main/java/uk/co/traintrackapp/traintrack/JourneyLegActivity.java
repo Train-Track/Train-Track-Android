@@ -34,16 +34,20 @@ public class JourneyLegActivity extends AppCompatActivity {
 
         final TrainTrack app = (TrainTrack) getApplication();
         Intent intent = getIntent();
-        final String journeyLegUuid = intent.getStringExtra("journeyLegUuid");
-        journey = app.getJourney(intent.getStringExtra("journeyUuid"));
+        final String journeyLegUuid = intent.getStringExtra(Utils.ARGS_JOURNEY_LEG_UUID);
+        journey = app.getJourney(intent.getStringExtra(Utils.ARGS_JOURNEY_UUID));
         if (journeyLegUuid == null) {
             Utils.log("This is a new, unsaved journey leg");
-            journeyLeg = (JourneyLeg) intent.getExtras().getSerializable("journeyLeg");
+            journeyLeg = (JourneyLeg) intent.getExtras().getSerializable(Utils.ARGS_JOURNEY_LEG);
             setContentView(R.layout.activity_journey_leg_form);
         } else {
             Utils.log("This is an existing saved journey leg: " + journeyLegUuid);
             journeyLeg = journey.getJourneyLeg(journeyLegUuid);
             setContentView(R.layout.activity_journey_leg);
+        }
+
+        if (journeyLeg == null) {
+            finish();
         }
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,10 +62,6 @@ public class JourneyLegActivity extends AppCompatActivity {
         final TextView arrivalStation = (TextView) findViewById(R.id.arrival_station);
         final TextView actualArrivalTime = (TextView) findViewById(R.id.arrival_time);
         final TextView arrivalPlatform = (TextView) findViewById(R.id.arrival_platform);
-
-        if (journeyLeg == null) {
-            finish();
-        }
 
         DateTime atd = journeyLeg.getActualDeparture();
         if (atd == null) {

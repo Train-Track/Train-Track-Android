@@ -1,6 +1,7 @@
 package uk.co.traintrackapp.traintrack.adapter.viewholders;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import uk.co.traintrackapp.traintrack.model.Service;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
     public TextView scheduledTime;
     public TextView estimatedTime;
     public TextView title;
@@ -34,17 +36,11 @@ public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.O
         if (service != null) {
             Intent intent = new Intent().setClass(v.getContext(),
                     ServiceActivity.class);
-            //intent.putExtra("journey_uuid", journeyUuid);
-            intent.putExtra(Utils.ARGS_SERVICE_ID, service.getServiceId());
-            intent.putExtra("origin_name", service.getOrigin().getName());
-            intent.putExtra(Utils.ARGS_STATION_UUID, service.getStation().getUuid());
-            //intent.putExtra("station_name", station.getName());
-            intent.putExtra("destination_name", service.getDestination().getName());
-            intent.putExtra("operator_code", service.getOperator().getCode());
-            intent.putExtra("operator_name", service.getOperator().getName());
-            intent.putExtra("platform", service.getPlatform());
-            intent.putExtra("time", service.getTime());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Utils.ARGS_SERVICE, service);
+            intent.putExtras(bundle);
             v.getContext().startActivity(intent);
         }
     }
+
 }
