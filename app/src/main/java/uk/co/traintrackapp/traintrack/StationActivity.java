@@ -66,12 +66,13 @@ public class StationActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         station = (Station) intent.getExtras().getSerializable(Utils.ARGS_STATION);
-        TrainTrack app = (TrainTrack) getApplication();
 
         if (station == null) {
             finish();
+            return;
         }
 
+        TrainTrack app = (TrainTrack) getApplication();
         User user = app.getUser();
         user.addRecentStation(station);
         user.save(this);

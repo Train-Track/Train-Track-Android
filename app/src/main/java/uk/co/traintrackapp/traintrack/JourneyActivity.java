@@ -2,7 +2,7 @@ package uk.co.traintrackapp.traintrack;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,8 +16,9 @@ import android.widget.Toast;
 import uk.co.traintrackapp.traintrack.adapter.JourneyLegRowAdapter;
 import uk.co.traintrackapp.traintrack.model.Journey;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class JourneyActivity extends ActionBarActivity {
+public class JourneyActivity extends AppCompatActivity {
 
     private Journey journey;
     private JourneyLegRowAdapter adapter;
@@ -26,11 +27,12 @@ public class JourneyActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journey);
-        TrainTrack app = (TrainTrack) getApplication();
 
-        final Intent intent = getIntent();
-        final String journeyUuid = intent.getStringExtra("journey_uuid");
-        journey = app.getJourney(journeyUuid);
+        journey = (Journey) getIntent().getExtras().getSerializable(Utils.ARGS_JOURNEY);
+        if (journey == null) {
+            finish();
+            return;
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,7 +43,7 @@ public class JourneyActivity extends ActionBarActivity {
         name.setText(journey.toString());
         final TextView date = (TextView) findViewById(R.id.date);
         //TODO change to journey date
-        date.setText(journey.getOrigin().getCrsCode());
+        date.setText("TODO");
         adapter = new JourneyLegRowAdapter(LayoutInflater.from(this),
                 journey.getJourneyLegs());
         final ListView list = (ListView) findViewById(R.id.list);
@@ -52,8 +54,9 @@ public class JourneyActivity extends ActionBarActivity {
                 JourneyLeg journeyLeg = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
+                //TODO add whole journey leg
                 intent.putExtra("journey_leg_uuid", journeyLeg.getUuid());
-                intent.putExtra("journey_uuid", journeyUuid);
+                intent.putExtra("journey_uuid", journey.getUuid());
                 startActivity(intent);
             }
 
@@ -75,9 +78,10 @@ public class JourneyActivity extends ActionBarActivity {
                         Toast.LENGTH_LONG).show();
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         StationActivity.class);
-                intent.putExtra("station_uuid", journey.getDestination()
-                        .getUuid());
-                intent.putExtra("journey_uuid", journey.getUuid());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Utils.ARGS_STATION, journey.getDestination());
+                intent.putExtra(Utils.ARGS_JOURNEY_UUID, journey.getUuid());
+                intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
                 return true;

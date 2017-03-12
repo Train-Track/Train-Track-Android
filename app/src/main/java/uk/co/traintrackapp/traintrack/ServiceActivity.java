@@ -41,7 +41,9 @@ public class ServiceActivity extends AppCompatActivity {
         service = (Service) intent.getExtras().getSerializable(Utils.ARGS_SERVICE);
         if (service == null) {
             finish();
+            return;
         }
+
         new GetServiceRequest().execute(service.getServiceId());
 
         //TODO These are both currently empty but we need them for later

@@ -55,8 +55,9 @@ public class JourneysFragment extends Fragment {
                 Journey journey = adapter.getItem(index);
                 Intent intent = new Intent().setClass(getActivity(),
                         JourneyActivity.class);
-                //TODO pass whole journey through
-                intent.putExtra(Utils.ARGS_JOURNEY_UUID, journey.getUuid());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Utils.ARGS_JOURNEY, journey);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

@@ -48,6 +48,7 @@ public class JourneyLegActivity extends AppCompatActivity {
 
         if (journeyLeg == null) {
             finish();
+            return;
         }
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

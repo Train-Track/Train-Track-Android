@@ -58,7 +58,7 @@ public class Journey implements Serializable {
         if (journeyLegs.size() > 0) {
             return journeyLegs.get(0).getDepartureStation();
         } else {
-            return null;
+            return new Station();
         }
     }
 
@@ -69,7 +69,7 @@ public class Journey implements Serializable {
         if (journeyLegs.size() > 0) {
             return journeyLegs.get(journeyLegs.size() - 1).getArrivalStation();
         } else {
-            return null;
+            return new Station();
         }
     }
 
