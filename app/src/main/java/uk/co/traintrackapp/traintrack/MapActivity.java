@@ -29,6 +29,7 @@ import uk.co.traintrackapp.traintrack.model.CallingPoint;
 import uk.co.traintrackapp.traintrack.model.Service;
 import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.model.Tiploc;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class MapActivity extends Activity implements OnMapReadyCallback {
 
@@ -54,21 +55,15 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         map = googleMap;
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            // TODO: Call ActivityCompat#requestPermissions
             return;
         } else {
             map.setMyLocationEnabled(true);
         }
 
-        String serviceId = getIntent().getStringExtra("service_id");
-        if (serviceId != null) {
-            new GetServiceRequest().execute(serviceId);
+        Service service = (Service) getIntent().getExtras().getSerializable(Utils.ARGS_SERVICE);
+        if (service != null) {
+            drawService(service);
         } else {
             new GetMapMarkers().execute();
         }
@@ -80,7 +75,9 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
                         StationActivity.class);
                 Station station = stationMarkers.get(marker);
                 if (station != null) {
-                    intent.putExtra("station_uuid", station.getUuid());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Utils.ARGS_STATION, station);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             }
@@ -88,62 +85,48 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
     }
 
-    private class GetServiceRequest extends AsyncTask<String, String, Service> {
-
-        @Override
-        protected Service doInBackground(String... service) {
-            return Service.getByServiceId(service[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Service s) {
-            super.onPostExecute(s);
-            if (s == null) {
-                return;
+    private void drawService(Service service) {
+        List<CallingPoint> callingPoints = service.getCallingPoints();
+        List<LatLng> line = new ArrayList<>();
+        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+        for (CallingPoint callingPoint : callingPoints) {
+            Station station = callingPoint.getStation();
+            Tiploc tiploc = callingPoint.getTiploc();
+            if ((station != null) && (station.getLatitude() != null) && (station.getLongitude() != null)) {
+                LatLng point = new LatLng(station.getLatitude(), station.getLongitude());
+                line.add(point);
+                bounds.include(point);
+                Marker m = map.addMarker(new MarkerOptions()
+                        .position(point)
+                        .title(station.toString())
+                        .snippet(callingPoint.getScheduledTime().toString("HH:mm"))
+                        .visible(true));
+                stationMarkers.put(m, station);
+            } else if ((tiploc != null) && (tiploc.getLatitude() != null) && (tiploc.getLongitude() != null)) {
+                LatLng point = new LatLng(tiploc.getLatitude(), tiploc.getLongitude());
+                line.add(point);
+                bounds.include(point);
+                Marker m = map.addMarker(new MarkerOptions()
+                        .position(point)
+                        .title(tiploc.toString())
+                        .snippet(callingPoint.getScheduledTime().toString("HH:mm"))
+                        .visible(true));
+                stationMarkers.put(m, null);
             }
-            List<CallingPoint> callingPoints = s.getCallingPoints();
-            List<LatLng> line = new ArrayList<>();
-            LatLngBounds.Builder bounds = new LatLngBounds.Builder();
-            for (CallingPoint callingPoint : callingPoints) {
-                Station station = callingPoint.getStation();
-                Tiploc tiploc = callingPoint.getTiploc();
-                if ((station != null) && (station.getLatitude() != null) && (station.getLongitude() != null)) {
-                    LatLng point = new LatLng(station.getLatitude(), station.getLongitude());
-                    line.add(point);
-                    bounds.include(point);
-                    Marker m = map.addMarker(new MarkerOptions()
-                            .position(point)
-                            .title(station.toString())
-                            .snippet(callingPoint.getScheduledTime().toString("HH:mm"))
-                            .visible(true));
-                    stationMarkers.put(m, station);
-                } else if ((tiploc != null) && (tiploc.getLatitude() != null) && (tiploc.getLongitude() != null)) {
-                    LatLng point = new LatLng(tiploc.getLatitude(), tiploc.getLongitude());
-                    line.add(point);
-                    bounds.include(point);
-                    Marker m = map.addMarker(new MarkerOptions()
-                            .position(point)
-                            .title(tiploc.toString())
-                            .snippet(callingPoint.getScheduledTime().toString("HH:mm"))
-                            .visible(true));
-                    stationMarkers.put(m, null);
-                }
 
+            //TODO Make these icons the right size
                 /*
-                //These icons are too big
                 if (callingPoint.getStation().isUnderground()) {
                     m.setIcon(undergroundIcon);
                 } else {
                     m.setIcon(nationalRailIcon);
                 }
                 */
-
-            }
-            map.addPolyline(new PolylineOptions().add(line.toArray(new LatLng[line.size()])).width(12)
-                    .color(Color.RED));
-            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(),
-                    100));
         }
+        map.addPolyline(new PolylineOptions().add(line.toArray(new LatLng[line.size()])).width(12)
+                .color(Color.RED));
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(),
+                100));
     }
 
     private class GetMapMarkers extends AsyncTask<String, String, ArrayList<Station>> {

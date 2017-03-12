@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -15,16 +15,16 @@ import com.astuetz.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 
-import uk.co.traintrackapp.traintrack.model.StationBoard;
 import uk.co.traintrackapp.traintrack.fragment.StationArrivalsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationDeparturesFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationDetailsFragment;
 import uk.co.traintrackapp.traintrack.fragment.StationUndergroundFragment;
 import uk.co.traintrackapp.traintrack.model.Station;
+import uk.co.traintrackapp.traintrack.model.StationBoard;
 import uk.co.traintrackapp.traintrack.model.User;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class StationActivity extends ActionBarActivity {
+public class StationActivity extends AppCompatActivity {
 
     private Station station;
     private StationBoard departuresBoard;
@@ -65,9 +65,13 @@ public class StationActivity extends ActionBarActivity {
         setContentView(R.layout.activity_station);
 
         final Intent intent = getIntent();
-        final String stationUuid = intent.getStringExtra("station_uuid");
+        station = (Station) intent.getExtras().getSerializable(Utils.ARGS_STATION);
         TrainTrack app = (TrainTrack) getApplication();
-        station = app.getStation(stationUuid);
+
+        if (station == null) {
+            finish();
+        }
+
         User user = app.getUser();
         user.addRecentStation(station);
         user.save(this);
@@ -106,11 +110,11 @@ public class StationActivity extends ActionBarActivity {
         }
     }
 
-    public class PagerAdapter extends FragmentPagerAdapter {
+    private class PagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<Fragment> fragments;
 
-        public PagerAdapter(FragmentManager fm) {
+        private PagerAdapter(FragmentManager fm) {
             super(fm);
             fragments = new ArrayList<>();
             fragments.add(StationDetailsFragment.newInstance());

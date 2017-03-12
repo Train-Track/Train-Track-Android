@@ -125,8 +125,9 @@ public class ServiceActivity extends AppCompatActivity {
                 return true;
             case R.id.map:
                 Intent intent = new Intent().setClass(this, MapActivity.class);
-                //TODO send whole service
-                intent.putExtra(Utils.ARGS_SERVICE_ID, service.getServiceId());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Utils.ARGS_SERVICE, service);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 return true;
             case android.R.id.home:
