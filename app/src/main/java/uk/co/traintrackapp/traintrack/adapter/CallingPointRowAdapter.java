@@ -6,19 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.model.CallingPoint;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class CallingPointRowAdapter extends BaseAdapter {
+public class CallingPointRowAdapter extends BaseAdapter implements Filterable {
 
-    private ArrayList<CallingPoint> callingPoints;
+    private List<CallingPoint> callingPoints;
+    private List<CallingPoint> origCallingPoints;
     private String stationCrs = null;
     private Context context;
 
@@ -90,6 +94,47 @@ public class CallingPointRowAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+            @Override
+            protected void publishResults(CharSequence showPassingPoints,
+                                          FilterResults results) {
+                callingPoints = (List<CallingPoint>) results.values;
+                notifyDataSetChanged();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence showPassingPoints) {
+                FilterResults results = new FilterResults();
+                List<CallingPoint> list = new ArrayList<>();
+
+                if (origCallingPoints == null) {
+                    origCallingPoints = new ArrayList<>(callingPoints);
+                }
+
+                if (showPassingPoints == null || showPassingPoints.length() == 0) {
+                    results.count = origCallingPoints.size();
+                    results.values = origCallingPoints;
+                } else {
+                    boolean show = Boolean.valueOf(showPassingPoints.toString());
+
+                    for (int i = 0; i < origCallingPoints.size(); i++) {
+                        CallingPoint callingPoint = origCallingPoints.get(i);
+                        // Add calling points if they are not passing points or passing points have been enabled
+                        if ((!callingPoint.isPassingPoint()) || (callingPoint.isPassingPoint() && show)) {
+                            list.add(callingPoint);
+                        }
+                    }
+                    results.count = list.size();
+                    results.values = list;
+                }
+                return results;
+            }
+        };
     }
 
     private static class ViewHolder {

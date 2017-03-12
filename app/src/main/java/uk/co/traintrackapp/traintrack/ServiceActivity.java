@@ -2,9 +2,11 @@ package uk.co.traintrackapp.traintrack;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -70,6 +72,11 @@ public class ServiceActivity extends AppCompatActivity {
         });
         callingPoints = service.getCallingPoints();
         adapter = new CallingPointRowAdapter(callingPoints, stationUuid, this);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean viewExtraData = prefs.getBoolean("pref_view_extra_data", false);
+        adapter.getFilter().filter(viewExtraData.toString());
+
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new OnItemClickListener() {
