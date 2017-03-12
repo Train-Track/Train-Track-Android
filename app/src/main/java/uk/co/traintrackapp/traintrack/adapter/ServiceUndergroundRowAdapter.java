@@ -67,13 +67,8 @@ public class ServiceUndergroundRowAdapter extends RecyclerView.Adapter<ServiceVi
                 holder.scheduledTime.setPaintFlags(0);
             }
         }
-        if (service.startsHere()) {
-            holder.subtitle.setText("Starts Here");
-        } else {
-            holder.subtitle.setText("From " + service.getOrigin().toString());
-        }
-        holder.subtitle.setText(holder.subtitle.getText() + " - "
-                + service.getOperator().toString());
+
+        holder.subtitle.setText(service.getTubeLine().toString());
         holder.platform.setText(service.getPlatform());
     }
 

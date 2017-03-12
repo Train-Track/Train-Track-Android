@@ -20,7 +20,7 @@ public class TubeLine implements Serializable {
     private ArrayList<Service> services;
     private String status;
 
-    private TubeLine() {
+    protected TubeLine() {
         this.id = 0;
         this.uuid = "";
         this.name = "";
@@ -67,7 +67,7 @@ public class TubeLine implements Serializable {
                 }
             }
 
-            if (json.has("status")) {
+            if (!json.isNull("status")) {
                 status = json.getString("status");
             }
 

@@ -23,6 +23,7 @@ public class Service implements Serializable {
     private Station origin;
     private Station destination;
     private Operator operator;
+    private TubeLine tubeLine;
     private String platform;
     private DateTime scheduledTimeArrival;
     private DateTime estimatedTimeArrival;
@@ -42,6 +43,7 @@ public class Service implements Serializable {
         this.origin = new Station();
         this.destination = new Station();
         this.operator = new Operator();
+        this.tubeLine = new TubeLine();
         this.platform = "";
         this.scheduledTimeArrival = null;
         this.estimatedTimeArrival = null;
@@ -90,6 +92,10 @@ public class Service implements Serializable {
 
             if (json.has("operator")) {
                 this.operator = new Operator(json.getJSONObject("operator"));
+            }
+
+            if (!json.isNull("line")) {
+                this.tubeLine = new TubeLine(json.getJSONObject("line"));
             }
 
             if (json.has("platform")) {
@@ -182,6 +188,14 @@ public class Service implements Serializable {
 
     public Operator getOperator() {
         return operator;
+    }
+
+    public TubeLine getTubeLine() {
+        return tubeLine;
+    }
+
+    public void setTubeLine(TubeLine tubeLine) {
+        this.tubeLine = tubeLine;
     }
 
     public String getPlatform() {

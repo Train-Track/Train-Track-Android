@@ -19,9 +19,8 @@ import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.StationActivity;
 import uk.co.traintrackapp.traintrack.adapter.ServiceUndergroundRowAdapter;
 import uk.co.traintrackapp.traintrack.model.Service;
-import uk.co.traintrackapp.traintrack.model.StationBoard;
-import uk.co.traintrackapp.traintrack.model.TubeLine;
 import uk.co.traintrackapp.traintrack.model.Station;
+import uk.co.traintrackapp.traintrack.model.StationBoard;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationUndergroundFragment extends Fragment {
@@ -77,10 +76,7 @@ public class StationUndergroundFragment extends Fragment {
     private void updateBoard(StationBoard board) {
         refresh.setRefreshing(false);
         services.clear();
-        //TODO: put them in some form of vertical tabs
-        for (TubeLine tubeLine : board.getTubeLines()) {
-            services.addAll(tubeLine.getServices());
-        }
+        services.addAll(board.getTrainServices());
         adapter.notifyDataSetChanged();
 
         ArrayList<String> nrccMessages = board.getNrccMessages();
