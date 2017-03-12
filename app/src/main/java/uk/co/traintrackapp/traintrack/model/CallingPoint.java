@@ -4,10 +4,12 @@ import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class CallingPoint {
+public class CallingPoint implements Serializable {
 
     public static final int START = R.drawable.start;
     public static final int STOP = R.drawable.stop;
@@ -25,6 +27,7 @@ public class CallingPoint {
     private boolean cancelled;
     private boolean passingPoint;
     private boolean noReport;
+    private String platform;
     private int icon;
 
     public CallingPoint() {
@@ -39,6 +42,7 @@ public class CallingPoint {
         this.cancelled = false;
         this.passingPoint = false;
         this.noReport = false;
+        this.platform = "";
     }
 
     public CallingPoint(JSONObject json) {
@@ -93,6 +97,10 @@ public class CallingPoint {
 
             if (json.has("no_report")) {
                 this.noReport = json.getBoolean("no_report");
+            }
+
+            if (!json.isNull("platform")) {
+                this.platform = json.getString("platform");
             }
 
         } catch (JSONException e) {
@@ -186,6 +194,14 @@ public class CallingPoint {
 
     public void setNoReport(boolean noReport) {
         this.noReport = noReport;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     public void setIcon(int icon) {
