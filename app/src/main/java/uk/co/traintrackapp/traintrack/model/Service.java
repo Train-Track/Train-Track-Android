@@ -16,6 +16,9 @@ public class Service implements Serializable {
 
     private String serviceId;
     private String serviceType;
+    private String trainId;
+    private String category;
+    private String uid;
     private boolean isCancelled;
     private String disruptionReason;
     private String overdueMessage;
@@ -36,6 +39,9 @@ public class Service implements Serializable {
     private Service() {
         this.serviceId = "";
         this.serviceType = "";
+        this.trainId = "";
+        this.category = "";
+        this.uid = "";
         this.isCancelled = false;
         this.disruptionReason = "";
         this.overdueMessage = "";
@@ -64,6 +70,18 @@ public class Service implements Serializable {
 
             if (json.has("service_type")) {
                 this.serviceType = json.getString("service_type");
+            }
+
+            if (!json.isNull("train_id")) {
+                this.trainId = json.getString("train_id");
+            }
+
+            if (!json.isNull("category")) {
+                this.category = json.getString("category");
+            }
+
+            if (!json.isNull("uid")) {
+                this.uid = json.getString("uid");
             }
 
             if (json.has("is_cancelled")) {
@@ -160,6 +178,30 @@ public class Service implements Serializable {
 
     public String getServiceType() {
         return serviceType;
+    }
+
+    public String getTrainId() {
+        return trainId;
+    }
+
+    public void setTrainId(String trainId) {
+        this.trainId = trainId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public boolean isCancelled() {
@@ -293,6 +335,9 @@ public class Service implements Serializable {
         return "Service{" +
                 "serviceId='" + serviceId + '\'' +
                 ", serviceType='" + serviceType + '\'' +
+                ", trainId='" + trainId + '\'' +
+                ", category='" + category + '\'' +
+                ", uid='" + uid + '\'' +
                 ", isCancelled=" + isCancelled +
                 ", disruptionReason='" + disruptionReason + '\'' +
                 ", overdueMessage='" + overdueMessage + '\'' +

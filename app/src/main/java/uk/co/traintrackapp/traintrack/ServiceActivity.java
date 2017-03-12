@@ -32,7 +32,12 @@ public class ServiceActivity extends AppCompatActivity {
     private ProgressBar progress;
     private ArrayList<CallingPoint> callingPoints;
     private TextView disruptionReason;
+    private TextView toc;
+    private TextView trainId;
+    private TextView category;
+    private TextView uid;
     private Service service;
+    private Boolean viewExtraData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,28 +59,23 @@ public class ServiceActivity extends AppCompatActivity {
 
         progress = (ProgressBar) findViewById(R.id.progress);
         disruptionReason = (TextView) findViewById(R.id.disruption_reason);
+        toc = (TextView) findViewById(R.id.toc);
+        trainId = (TextView) findViewById(R.id.train_id);
+        category = (TextView) findViewById(R.id.category);
+        uid = (TextView) findViewById(R.id.uid);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(service.getOrigin() + " to " + service.getDestination());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView toc = (TextView) findViewById(R.id.toc);
-        toc.setText(service.getOperator() + " - @" + service.getOperator().getTwitter());
-        toc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tweetUrl = "https://twitter.com/intent/tweet?text=@" + service.getOperator().getTwitter();
-                Intent tweet = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
-                startActivity(tweet);
-            }
-        });
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        viewExtraData = prefs.getBoolean("pref_view_extra_data", false);
         callingPoints = service.getCallingPoints();
         adapter = new CallingPointRowAdapter(callingPoints, stationUuid, this);
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean viewExtraData = prefs.getBoolean("pref_view_extra_data", false);
         adapter.getFilter().filter(viewExtraData.toString());
+
+        updateUIComponents();
 
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
@@ -172,15 +172,32 @@ public class ServiceActivity extends AppCompatActivity {
             super.onPostExecute(s);
             Utils.log("Got service.");
             service = s;
-            progress.setVisibility(View.GONE);
             callingPoints.clear();
             callingPoints.addAll(s.getCallingPoints());
             adapter.notifyDataSetChanged();
-            if (s.getDisruptionReason() != null) {
-                disruptionReason.setText(s.getDisruptionReason());
-                disruptionReason.setVisibility(View.VISIBLE);
-            }
+            progress.setVisibility(View.GONE);
+            updateUIComponents();
         }
+    }
+
+    private void updateUIComponents() {
+        if (viewExtraData) {
+            trainId.setText(service.getTrainId());
+            category.setText(service.getCategory());
+            uid.setText(service.getUid());
+        }
+        if (service.getDisruptionReason() != null) {
+            disruptionReason.setText(service.getDisruptionReason());
+        }
+        toc.setText(service.getOperator() + " - @" + service.getOperator().getTwitter());
+        toc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tweetUrl = "https://twitter.com/intent/tweet?text=@" + service.getOperator().getTwitter();
+                Intent tweet = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+                startActivity(tweet);
+            }
+        });
     }
 
 }
