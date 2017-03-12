@@ -8,6 +8,7 @@ import android.widget.TextView;
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.ServiceActivity;
 import uk.co.traintrackapp.traintrack.model.Service;
+import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public TextView scheduledTime;
@@ -34,9 +35,9 @@ public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.O
             Intent intent = new Intent().setClass(v.getContext(),
                     ServiceActivity.class);
             //intent.putExtra("journey_uuid", journeyUuid);
-            intent.putExtra("service_id", service.getServiceId());
+            intent.putExtra(Utils.ARGS_SERVICE_ID, service.getServiceId());
             intent.putExtra("origin_name", service.getOrigin().getName());
-            //intent.putExtra("station_uuid", station.getUuid());
+            intent.putExtra(Utils.ARGS_STATION_UUID, service.getStation().getUuid());
             //intent.putExtra("station_name", station.getName());
             intent.putExtra("destination_name", service.getDestination().getName());
             intent.putExtra("operator_code", service.getOperator().getCode());

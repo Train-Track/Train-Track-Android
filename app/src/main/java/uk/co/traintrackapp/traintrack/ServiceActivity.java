@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,10 +20,11 @@ import java.util.ArrayList;
 
 import uk.co.traintrackapp.traintrack.adapter.CallingPointRowAdapter;
 import uk.co.traintrackapp.traintrack.model.CallingPoint;
+import uk.co.traintrackapp.traintrack.model.JourneyLeg;
 import uk.co.traintrackapp.traintrack.model.Service;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
-public class ServiceActivity extends ActionBarActivity {
+public class ServiceActivity extends AppCompatActivity {
 
     private CallingPointRowAdapter adapter;
     private ProgressBar progress;
@@ -39,14 +40,14 @@ public class ServiceActivity extends ActionBarActivity {
         setContentView(R.layout.activity_service);
 
         final Intent intent = getIntent();
-        serviceId = intent.getStringExtra("service_id");
+        serviceId = intent.getStringExtra(Utils.ARGS_SERVICE_ID);
         new GetServiceRequest().execute(serviceId);
 
         final String journeyUuid = intent.getStringExtra("journey_uuid");
         final String stationUuid = intent.getStringExtra("station_uuid");
+        Utils.log("The station uuid: " + stationUuid);
         final String originName = intent.getStringExtra("origin_name");
-        final String destinationName = intent
-                .getStringExtra("destination_name");
+        final String destinationName = intent.getStringExtra("destination_name");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,20 +69,33 @@ public class ServiceActivity extends ActionBarActivity {
                     return;
                 }
 
-                CallingPoint callingPoint = adapter.getItem(index);
-
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
-                intent.putExtra("journey_uuid", journeyUuid);
-                intent.putExtra("service_id", service.getServiceId());
-                intent.putExtra("operator_code", service.getOperator().getCode());
-                intent.putExtra("departure_station_uuid", service.getStation().getUuid());
-                intent.putExtra("departure_time", service.getScheduledTimeDeparture());
-                intent.putExtra("departure_platform", service.getPlatform());
-                intent.putExtra("arrival_station_uuid",
-                        callingPoint.getStation().getUuid());
-                intent.putExtra("arrival_time", callingPoint.getScheduledTime());
-                intent.putExtra("arrival_platform", "");
+                Bundle bundle = new Bundle();
+                JourneyLeg journeyLeg = new JourneyLeg();
+                CallingPoint callingPoint = adapter.getItem(index);
+
+                // Find the calling point the journey leg is starting from
+                CallingPoint here = new CallingPoint();
+                for (CallingPoint cp : service.getCallingPoints()) {
+                    if ((cp.getStation() != null) && (cp.getStation().getUuid().equals(stationUuid))) {
+                        here = cp;
+                    }
+                }
+                Utils.log("The station details are: " + here);
+
+                journeyLeg.setOrigin(here.getStation());
+                journeyLeg.setScheduledDeparture(here.getScheduledTimeDeparture());
+                journeyLeg.setActualDeparture(here.getActualTimeDeparture());
+                journeyLeg.setDeparturePlatform(here.getPlatform());
+                journeyLeg.setDestination(callingPoint.getStation());
+                journeyLeg.setScheduledArrival(callingPoint.getScheduledTimeArrival());
+                journeyLeg.setActualArrival(callingPoint.getActualTimeArrival());
+                journeyLeg.setArrivalPlatform(callingPoint.getPlatform());
+                journeyLeg.setOperator(service.getOperator());
+                bundle.putSerializable("journeyLeg", journeyLeg);
+                intent.putExtras(bundle);
+                intent.putExtra("journeyUuid", journeyUuid);
                 startActivityForResult(intent, 1);
             }
 
@@ -126,7 +140,7 @@ public class ServiceActivity extends ActionBarActivity {
         }
     }
 
-    class GetServiceRequest extends AsyncTask<String, String, Service> {
+    private class GetServiceRequest extends AsyncTask<String, String, Service> {
 
         @Override
         protected Service doInBackground(String... service) {

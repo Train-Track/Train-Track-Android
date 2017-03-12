@@ -14,10 +14,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Utils {
 
@@ -25,6 +21,10 @@ public class Utils {
     public static final int FILESYSTEM = 2;
     public static final int BLUE = Color.parseColor("#33b5e5");
     public static final String ARGS_PAGE_TITLE = "ARGS_PAGE_TITLE";
+    public static final String ARGS_STATION_UUID = "ARGS_STATION_UUID";
+    public static final String ARGS_JOURNEY_LEG = "ARGS_JOURNEY_LEG";
+    public static final String ARGS_JOURNEY_UUID = "ARGS_JOURNEY_UUID";
+    public static final String ARGS_SERVICE_ID = "ARGS_SERVICE_ID";
     public static final String API_BASE_URL = "http://192.168.1.69:3000";
     private static final String JSON_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
@@ -122,64 +122,6 @@ public class Utils {
     }
 
     /**
-     * @param hourOfDay
-     *            0-23 hours
-     * @param minute
-     *            0 - 59 minutes
-     *
-     * @return date object
-     */
-    public static Date getDateWithTime(int hourOfDay, int minute) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR, hourOfDay);
-        cal.set(Calendar.MINUTE, minute);
-        return cal.getTime();
-    }
-
-    /**
-     * @param time
-     *            in the format hh:mm
-     *
-     * @return date object
-     */
-    public static Date getDateWithTime(String time) {
-        if (time.split(":").length != 2) {
-            return null;
-        }
-        int hourOfDay = Integer.valueOf(time.split(":")[0]);
-        int minute = Integer.valueOf(time.split(":")[1]);
-        return getDateWithTime(hourOfDay, minute);
-    }
-
-    /**
-     * Convert date to a date object
-     * @param date as a string 2015-03-02T09:07:00.000Z
-     * @return date
-     */
-    public static Date getDateFromString(String date) {
-        SimpleDateFormat formatter = new SimpleDateFormat(JSON_DATE_FORMAT);
-        try {
-            return formatter.parse(date);
-        } catch (ParseException e) {
-            Utils.log(e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Convert date to a string format
-     * @param date to a string 2015-03-02T09:07:00.000Z
-     * @return date
-     */
-    public static String getStringFromDate(Date date) {
-        if (date == null) {
-            return "";
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat(JSON_DATE_FORMAT);
-        return formatter.format(date);
-    }
-
-    /**
      * Convert an ISO8601 formatted date-time string into an object
      * @param input the date-time string
      * @return the date-time object
@@ -190,6 +132,19 @@ public class Utils {
             return null;
         }
         return formatter.parseDateTime(input);
+    }
+
+    /**
+     * Convert a date-time into an ISO8601 formatted string
+     * @param input the date-time object
+     * @return the formatted string
+     */
+    public static String getStringFromDateTime(DateTime input) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(JSON_DATE_FORMAT);
+        if (input == null) {
+            return null;
+        }
+        return formatter.print(input);
     }
 
 }
