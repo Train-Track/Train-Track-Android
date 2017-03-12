@@ -55,8 +55,8 @@ public class JourneyActivity extends AppCompatActivity {
                 Intent intent = new Intent().setClass(getApplicationContext(),
                         JourneyLegActivity.class);
                 //TODO add whole journey leg
-                intent.putExtra("journey_leg_uuid", journeyLeg.getUuid());
-                intent.putExtra("journey_uuid", journey.getUuid());
+                intent.putExtra(Utils.ARGS_JOURNEY_LEG_UUID, journeyLeg.getUuid());
+                intent.putExtra(Utils.ARGS_JOURNEY_UUID, journey.getUuid());
                 startActivity(intent);
             }
 
