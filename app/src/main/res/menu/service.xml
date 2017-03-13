@@ -7,14 +7,14 @@
         android:id="@+id/refresh"
         android:icon="@android:drawable/ic_menu_rotate"
         android:orderInCategory="99"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/refresh"/>
 
     <item
         android:id="@+id/map"
         android:icon="@android:drawable/ic_menu_mapmode"
         android:orderInCategory="98"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/map"/>
 
 </menu>
