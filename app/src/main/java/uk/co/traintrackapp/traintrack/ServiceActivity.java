@@ -31,6 +31,7 @@ public class ServiceActivity extends AppCompatActivity {
 
     private CallingPointRowAdapter adapter;
     private ProgressBar progress;
+    private ListView list;
     private List<CallingPoint> callingPoints = new ArrayList<>();
     private TextView disruptionReason;
     private TextView toc;
@@ -39,6 +40,8 @@ public class ServiceActivity extends AppCompatActivity {
     private TextView uid;
     private Service service;
     private Boolean viewExtraData;
+    private String journeyUuid;
+    private String stationUuid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +58,11 @@ public class ServiceActivity extends AppCompatActivity {
         new GetServiceRequest().execute(service.getServiceId());
 
         //TODO These are both currently empty but we need them for later
-        final String journeyUuid = intent.getStringExtra(Utils.ARGS_JOURNEY_UUID);
-        final String stationUuid = intent.getStringExtra(Utils.ARGS_STATION_UUID);
+        journeyUuid = intent.getStringExtra(Utils.ARGS_JOURNEY_UUID);
+        stationUuid = intent.getStringExtra(Utils.ARGS_STATION_UUID);
 
         progress = (ProgressBar) findViewById(R.id.progress);
+        list = (ListView) findViewById(R.id.list);
         disruptionReason = (TextView) findViewById(R.id.disruption_reason);
         toc = (TextView) findViewById(R.id.toc);
         trainId = (TextView) findViewById(R.id.train_id);
@@ -77,7 +81,6 @@ public class ServiceActivity extends AppCompatActivity {
 
         updateUIComponents();
 
-        ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> arg0, View view, int index,
@@ -194,6 +197,8 @@ public class ServiceActivity extends AppCompatActivity {
             service = s;
             callingPoints.clear();
             callingPoints.addAll(s.getCallingPoints());
+            adapter = new CallingPointRowAdapter(callingPoints, stationUuid, getBaseContext());
+            list.setAdapter(adapter);
             updateUIComponents();
         }
     }
