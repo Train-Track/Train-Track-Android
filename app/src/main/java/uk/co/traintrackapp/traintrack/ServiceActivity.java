@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import uk.co.traintrackapp.traintrack.adapter.CallingPointRowAdapter;
 import uk.co.traintrackapp.traintrack.model.CallingPoint;
@@ -30,7 +31,7 @@ public class ServiceActivity extends AppCompatActivity {
 
     private CallingPointRowAdapter adapter;
     private ProgressBar progress;
-    private ArrayList<CallingPoint> callingPoints;
+    private List<CallingPoint> callingPoints = new ArrayList<>();
     private TextView disruptionReason;
     private TextView toc;
     private TextView trainId;
@@ -71,9 +72,8 @@ public class ServiceActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         viewExtraData = prefs.getBoolean("pref_view_extra_data", false);
-        callingPoints = service.getCallingPoints();
+        callingPoints.addAll(service.getCallingPoints());
         adapter = new CallingPointRowAdapter(callingPoints, stationUuid, this);
-        adapter.getFilter().filter(viewExtraData.toString());
 
         updateUIComponents();
 
@@ -123,6 +123,13 @@ public class ServiceActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.service, menu);
+        MenuItem item = menu.findItem(R.id.view_extended_data);
+        item.setChecked(viewExtraData);
+        if (item.isChecked()) {
+            item.setTitle("Hide extended data");
+        } else {
+            item.setTitle("View extended data");
+        }
         return true;
     }
 
@@ -130,6 +137,7 @@ public class ServiceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
+                progress.setVisibility(View.VISIBLE);
                 new GetServiceRequest().execute(service.getServiceId());
                 return true;
             case R.id.map:
@@ -138,6 +146,18 @@ public class ServiceActivity extends AppCompatActivity {
                 bundle.putSerializable(Utils.ARGS_SERVICE, service);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                return true;
+            case R.id.view_extended_data:
+                if (item.isChecked()) {
+                    viewExtraData = false;
+                    item.setChecked(false);
+                    item.setTitle("View extended data");
+                } else {
+                    viewExtraData = true;
+                    item.setChecked(true);
+                    item.setTitle("Hide extended data");
+                }
+                updateUIComponents();
                 return true;
             case android.R.id.home:
                 finish();
@@ -174,17 +194,21 @@ public class ServiceActivity extends AppCompatActivity {
             service = s;
             callingPoints.clear();
             callingPoints.addAll(s.getCallingPoints());
-            adapter.notifyDataSetChanged();
-            progress.setVisibility(View.GONE);
             updateUIComponents();
         }
     }
 
     private void updateUIComponents() {
+        adapter.notifyDataSetChanged();
+        adapter.getFilter().filter(viewExtraData.toString());
+        progress.setVisibility(View.GONE);
         if (viewExtraData) {
+            //TODO Show the extra data
             trainId.setText(service.getTrainId());
             category.setText(service.getCategory());
             uid.setText(service.getUid());
+        } else {
+            //TODO Hide the extra data
         }
         if (service.getDisruptionReason() != null) {
             disruptionReason.setText(service.getDisruptionReason());

@@ -34,7 +34,7 @@ public class CallingPointRowAdapter extends BaseAdapter implements Filterable {
      * @param context
      *            the context the adapter is being used in
      */
-    public CallingPointRowAdapter(ArrayList<CallingPoint> callingPoints,
+    public CallingPointRowAdapter(List<CallingPoint> callingPoints,
                                   String stationCrs, Context context) {
         this.callingPoints = callingPoints;
         this.stationCrs = stationCrs;
