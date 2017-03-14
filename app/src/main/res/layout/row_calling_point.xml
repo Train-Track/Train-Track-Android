@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="14sp"
+    android:padding="0sp"
     android:background="?android:attr/selectableItemBackground">
 
     <TextView
@@ -15,7 +15,7 @@
         android:id="@+id/scheduled_time"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:padding="10sp"
+        android:padding="16sp"
         android:textIsSelectable="false"
         android:textSize="16sp" />
 
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="10sp"
+        android:padding="16sp"
         android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="10sp"
+        android:padding="16sp"
         android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
 </LinearLayout>
