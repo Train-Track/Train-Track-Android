@@ -50,7 +50,7 @@ public class StationArrivalsFragment extends Fragment {
         nrccMessage = (TextView) v.findViewById(R.id.nrcc_messages);
 
         RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
-        list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.setItemAnimator(new DefaultItemAnimator());
         adapter = new ServiceArrivalRowAdapter(services);
         list.setAdapter(adapter);
