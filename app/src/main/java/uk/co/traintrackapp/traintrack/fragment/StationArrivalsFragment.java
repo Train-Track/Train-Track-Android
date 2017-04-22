@@ -52,7 +52,7 @@ public class StationArrivalsFragment extends Fragment {
         RecyclerView list = (RecyclerView) v.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ServiceArrivalRowAdapter(services);
+        adapter = new ServiceArrivalRowAdapter(services, station);
         list.setAdapter(adapter);
 
         refresh = (PullRefreshLayout) v.findViewById(R.id.refresh);

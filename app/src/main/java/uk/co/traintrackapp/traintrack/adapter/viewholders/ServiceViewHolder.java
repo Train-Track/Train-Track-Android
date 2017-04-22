@@ -9,6 +9,7 @@ import android.widget.TextView;
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.ServiceActivity;
 import uk.co.traintrackapp.traintrack.model.Service;
+import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -19,6 +20,7 @@ public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.O
     public TextView subtitle;
     public TextView platform;
     public Service service;
+    public Station station;
 
     public ServiceViewHolder(View v) {
         super(v);
@@ -38,6 +40,7 @@ public class ServiceViewHolder extends RecyclerView.ViewHolder implements View.O
                     ServiceActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(Utils.ARGS_SERVICE, service);
+            bundle.putSerializable(Utils.ARGS_STATION, station);
             intent.putExtras(bundle);
             v.getContext().startActivity(intent);
         }

@@ -25,6 +25,7 @@ import uk.co.traintrackapp.traintrack.adapter.CallingPointRowAdapter;
 import uk.co.traintrackapp.traintrack.model.CallingPoint;
 import uk.co.traintrackapp.traintrack.model.JourneyLeg;
 import uk.co.traintrackapp.traintrack.model.Service;
+import uk.co.traintrackapp.traintrack.model.Station;
 import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class ServiceActivity extends AppCompatActivity {
@@ -41,7 +42,7 @@ public class ServiceActivity extends AppCompatActivity {
     private Service service;
     private Boolean viewExtraData;
     private String journeyUuid;
-    private String stationUuid;
+    private Station station;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +51,16 @@ public class ServiceActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         service = (Service) intent.getExtras().getSerializable(Utils.ARGS_SERVICE);
-        if (service == null) {
+        station = (Station) intent.getExtras().getSerializable(Utils.ARGS_STATION);
+        if ((station == null) || (service == null)) {
             finish();
             return;
         }
 
         new GetServiceRequest().execute(service.getServiceId());
 
-        //TODO These are both currently empty but we need them for later
+        //TODO This is currently empty but we need it for later
         journeyUuid = intent.getStringExtra(Utils.ARGS_JOURNEY_UUID);
-        stationUuid = intent.getStringExtra(Utils.ARGS_STATION_UUID);
 
         progress = (ProgressBar) findViewById(R.id.progress);
         list = (ListView) findViewById(R.id.list);
@@ -77,7 +78,7 @@ public class ServiceActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         viewExtraData = prefs.getBoolean("pref_view_extra_data", false);
         callingPoints.addAll(service.getCallingPoints());
-        adapter = new CallingPointRowAdapter(callingPoints, stationUuid, this);
+        adapter = new CallingPointRowAdapter(callingPoints, station.getUuid(), this);
 
         updateUIComponents();
 
@@ -94,7 +95,7 @@ public class ServiceActivity extends AppCompatActivity {
                 // Find the calling point the journey leg is starting from
                 CallingPoint here = new CallingPoint();
                 for (CallingPoint cp : service.getCallingPoints()) {
-                    if ((cp.getStation() != null) && (cp.getStation().getUuid().equals(stationUuid))) {
+                    if ((cp.getStation() != null) && (cp.getStation().equals(station))) {
                         here = cp;
                     }
                 }
@@ -197,7 +198,7 @@ public class ServiceActivity extends AppCompatActivity {
             service = s;
             callingPoints.clear();
             callingPoints.addAll(s.getCallingPoints());
-            adapter = new CallingPointRowAdapter(callingPoints, stationUuid, getBaseContext());
+            adapter = new CallingPointRowAdapter(callingPoints, station.getUuid(), getBaseContext());
             list.setAdapter(adapter);
             updateUIComponents();
         }

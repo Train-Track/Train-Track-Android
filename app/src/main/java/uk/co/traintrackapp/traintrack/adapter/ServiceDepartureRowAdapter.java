@@ -15,17 +15,21 @@ import java.util.List;
 import uk.co.traintrackapp.traintrack.R;
 import uk.co.traintrackapp.traintrack.adapter.viewholders.ServiceViewHolder;
 import uk.co.traintrackapp.traintrack.model.Service;
+import uk.co.traintrackapp.traintrack.model.Station;
 
 public class ServiceDepartureRowAdapter extends RecyclerView.Adapter<ServiceViewHolder> {
 
     private List<Service> services;
+    private Station station;
 
     /**
      * A row adapter that is for departures
      * @param services the services
+     * @param station the station where the services are departing from
      */
-    public ServiceDepartureRowAdapter(ArrayList<Service> services) {
+    public ServiceDepartureRowAdapter(List<Service> services, Station station) {
         this.services = services;
+        this.station = station;
     }
 
     @Override
@@ -40,6 +44,7 @@ public class ServiceDepartureRowAdapter extends RecyclerView.Adapter<ServiceView
     public void onBindViewHolder(ServiceViewHolder holder, int position) {
         Service service = services.get(position);
         holder.service = service;
+        holder.station = station;
         DateTime std = service.getScheduledTimeDeparture();
         if (std != null) {
             holder.scheduledTime.setText(std.toString("HH:mm"));
