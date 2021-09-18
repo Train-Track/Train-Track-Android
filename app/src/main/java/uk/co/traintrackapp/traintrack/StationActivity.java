@@ -3,15 +3,15 @@ package uk.co.traintrackapp.traintrack;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ import uk.co.traintrackapp.traintrack.utils.Utils;
 
 public class StationActivity extends AppCompatActivity {
 
-    private Station station;
+    private Station station = new Station();
     private StationBoard departuresBoard;
     private StationBoard arrivalsBoard;
     private StationBoard undergroundBoard;
@@ -84,8 +84,8 @@ public class StationActivity extends AppCompatActivity {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabsStrip.setViewPager(viewPager);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override

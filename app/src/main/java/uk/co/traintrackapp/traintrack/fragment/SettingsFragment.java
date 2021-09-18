@@ -1,21 +1,20 @@
 package uk.co.traintrackapp.traintrack.fragment;
 
 import android.os.Bundle;
+import androidx.preference.PreferenceFragmentCompat;
 
-import com.github.machinarius.preferencefragment.PreferenceFragment;
+import androidx.fragment.app.Fragment;
 
 import uk.co.traintrackapp.traintrack.R;
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
-    public static SettingsFragment newInstance() {
+    public static Fragment newInstance() {
         return new SettingsFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.settings, rootKey);
     }
-
 }

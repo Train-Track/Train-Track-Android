@@ -5,15 +5,14 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.baoyz.widget.PullRefreshLayout;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +30,7 @@ public class StationsListFragment extends Fragment {
     private static final String RECENT = "Recent";
     private StationRowAdapter adapter;
     private ArrayList<Station> stations;
-    private PullRefreshLayout refresh;
+    private LinearLayout refresh;
     private String tab;
 
     public static ArrayList<Fragment> getFragments() {
@@ -66,15 +65,17 @@ public class StationsListFragment extends Fragment {
         adapter = new StationRowAdapter(stations, distanceUnit);
         list.setAdapter(adapter);
 
-        refresh = (PullRefreshLayout) v.findViewById(R.id.refresh);
+        refresh = (LinearLayout) v.findViewById(R.id.refresh);
+        /*
         refresh.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new GetStationList().execute();
             }
         });
+        */
 
-        refresh.setRefreshing(true);
+        //refresh.setRefreshing(true);
         new GetStationList().execute();
 
         return v;
@@ -121,7 +122,7 @@ public class StationsListFragment extends Fragment {
             stations.clear();
             stations.addAll(newStations);
             adapter.notifyDataSetChanged();
-            refresh.setRefreshing(false);
+            //refresh.setRefreshing(false);
         }
     }
 

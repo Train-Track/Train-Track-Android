@@ -7,11 +7,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -55,8 +55,9 @@ public class StationsFragment extends Fragment {
 
         ViewPager viewPager = (ViewPager) v.findViewById(R.id.viewpager);
         viewPager.setAdapter(new PagerAdapter(getChildFragmentManager()));
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) v.findViewById(R.id.tabs);
-        tabsStrip.setViewPager(viewPager);
+
+        TabLayout tabLayout = v.findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
 
 /*
         final Button map = (Button) rootView.findViewById(R.id.map);
@@ -146,7 +147,7 @@ public class StationsFragment extends Fragment {
 
     public class PagerAdapter extends FragmentPagerAdapter {
 
-        private ArrayList<android.support.v4.app.Fragment> fragments;
+        private ArrayList<Fragment> fragments;
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);
@@ -160,7 +161,7 @@ public class StationsFragment extends Fragment {
         }
 
         @Override
-        public android.support.v4.app.Fragment getItem(int position) {
+        public Fragment getItem(int position) {
             return fragments.get(position);
         }
 

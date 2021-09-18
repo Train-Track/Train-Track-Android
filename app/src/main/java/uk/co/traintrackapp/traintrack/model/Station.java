@@ -1,6 +1,6 @@
 package uk.co.traintrackapp.traintrack.model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,8 +38,8 @@ public class Station implements Comparable, Serializable {
         this.uuid = "";
         this.name = DEFAULT_NAME;
         this.crs = "";
-        this.lat = null;
-        this.lng = null;
+        this.lat = 0.0;
+        this.lng = 0.0;
         this.isUnderground = false;
         this.isNationalRail = false;
         this.phone = "";
